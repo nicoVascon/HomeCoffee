@@ -34,7 +34,7 @@ public class HouseManager implements Serializable {
             Collections.sort(rooms);
         }
     }
-    /*public void adicionarDadosIniciais() {
+    public void adicionarDadosIniciais() {
         Room c1 = new Room(21223344, "Francisco Correia", "");
         Room c2 = new Room(92323232, "Fernando Lima", "");
         Room c3 = new Room(91566677, "Vítor Damas", "");
@@ -45,7 +45,7 @@ public class HouseManager implements Serializable {
         adicionarContacto(c3);
         adicionarContacto(c4);
         adicionarContacto(c5);
-    }*/
+    }
     /*public void atualizarContacto(int pos, Room contacto) {
         if (!contactos.contains(contacto) || contacto.getNumero() ==
                 contactos.get(pos).getNumero()) {
