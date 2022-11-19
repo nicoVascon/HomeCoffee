@@ -12,18 +12,18 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textViewGreeting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:height="50dp"
-            android:text="TextView" />
+            android:text="Hi Carlos" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textViewWelcome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:height="30dp"
-            android:text="TextView" />
+            android:text="Welcome to your house in Lisbon" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,21 +31,23 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/textViewYourRooms"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="Your Rooms" />
 
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:onClick="btn_AddRoom"
+                android:text="Add" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/RecyclerViewMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
