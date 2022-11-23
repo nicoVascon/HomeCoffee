@@ -51,7 +51,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
     public class RoomsHolder extends RecyclerView.ViewHolder {
 
         public final TextView txtName;
-        public final TextView txtNumber;
+       // public final TextView txtNumber;
         public final ImageView imgPhoto;
         final RecycleRoomsAdapter mAdapter;
 
@@ -60,7 +60,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
             super(itemView);
 
             txtName = itemView.findViewById(R.id.textViewItemName);
-            txtNumber = itemView.findViewById(R.id.textViewItemNum);
+            //txtNumber = itemView.findViewById(R.id.textViewItemNum);
             imgPhoto= itemView.findViewById(R.id.imageViewItemPhoto);
             this.mAdapter = adapter;
 
