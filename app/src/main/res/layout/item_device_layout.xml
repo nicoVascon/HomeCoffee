@@ -38,8 +38,8 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imageViewItemPhoto"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/imageViewDevicePhoto"
+                        android:layout_width="128dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
@@ -50,7 +50,7 @@
                         tools:srcCompat="@tools:sample/avatars" />
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/textViewNumDev"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-black"
@@ -58,7 +58,7 @@
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/imageViewItemPhoto" />
+                        app:layout_constraintTop_toBottomOf="@+id/imageViewDevicePhoto" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>

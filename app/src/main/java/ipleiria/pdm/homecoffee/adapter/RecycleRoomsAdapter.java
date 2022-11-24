@@ -3,7 +3,6 @@ package ipleiria.pdm.homecoffee.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileInputStream;
 
 import ipleiria.pdm.homecoffee.HouseManager;
-import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.Room;
 
@@ -27,27 +24,17 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
     private Context context;
     private LayoutInflater mInflater;
 
-
     public RecycleRoomsAdapter(Context context){
         mInflater = LayoutInflater.from(context);
         this.gestorContactos = HouseManager.getInstance();
         this.context=context;
     }
 
-
     public RoomsHolder onCreateViewHolder(@NonNull ViewGroup parent, int
             viewType) {
         View mItemView = mInflater.inflate(R.layout.item_layout,parent, false);
         return new RoomsHolder(mItemView, this);
     }
-
-
-
-
-
-
-
-
     public class RoomsHolder extends RecyclerView.ViewHolder {
 
         public final TextView txtName;
@@ -61,7 +48,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
 
             txtName = itemView.findViewById(R.id.textViewItemName);
             txtNumber = itemView.findViewById(R.id.textViewItemNum);
-            imgPhoto= itemView.findViewById(R.id.imageViewItemPhoto);
+            imgPhoto= itemView.findViewById(R.id.imageViewDevicePhoto);
             this.mAdapter = adapter;
 
 

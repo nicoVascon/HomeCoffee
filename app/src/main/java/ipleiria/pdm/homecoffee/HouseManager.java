@@ -15,6 +15,52 @@ import java.util.Collections;
 
 public class HouseManager implements Serializable {
     private ArrayList<Room> rooms;
+    private ArrayList<Device> devices;
+
+    // ------------------------------------- Devices -------------------------------------
+    public void addDevice(Device device) {
+        if (!devices.isEmpty() && !devices.contains(device)) {
+            devices.add(device);
+            Collections.sort(devices);
+        }
+    }
+
+    public void removeDevice(int pos) {
+        devices.remove(pos);
+    }
+
+    public Device getDevice(int pos) {
+        return devices.get(pos);
+    }
+
+    public ArrayList<Device> getDevices() {
+        return devices;
+    }
+
+    public ArrayList<Device> searchDevices(String name) {
+        ArrayList<Device> result = new ArrayList<>();
+        for (Device device : devices) {
+            if ((device.getName().toUpperCase()).contains(name.toUpperCase()))
+                result.add(device);
+        }
+        return result;
+    }
+
+    public void addInitialDevices() {
+        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY,
+                "imgs/humiditySensor.jpg");
+        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE,
+                "imgs/temperatureSensor.jpg");
+        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT,
+                "imgs/lightSensor.jpg");
+        Device dev4 = new Device(852, "Sensor de Pressão", DeviceType.PRESSURE,
+                "imgs/pressureSensor.jpg");
+        addDevice(dev1);
+        addDevice(dev2);
+        addDevice(dev3);
+        addDevice(dev4);
+    }
+
     //---------------------------------------------------
     //Código adicionado para garantir que há só uma instância da classe GestorContactos
     private static HouseManager INSTANCE = null;
@@ -26,6 +72,7 @@ public class HouseManager implements Serializable {
     }
     private HouseManager() {
         rooms = new ArrayList<>();
+        devices = new ArrayList<>();
     }
     //-----------------------------------------------------
     public void adicionarContacto(Room room) {

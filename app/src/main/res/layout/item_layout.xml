@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/imageViewItemPhoto"
+                android:id="@+id/imageViewDevicePhoto"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 tools:srcCompat="@tools:sample/avatars" />

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.Devices.DevicesFragment">
 
     <TextView
         android:id="@+id/textView_DevicesTitle"
@@ -17,7 +17,7 @@
         style="@style/Title" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textViewDevicesConState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/txt_DevicesConnected"
@@ -34,18 +34,19 @@
         android:scrollbarSize="4sp"
         android:text="@string/btn_OnDevices"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        app:layout_constraintBottom_toTopOf="@+id/textViewDevicesConState"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMain"
+        android:id="@+id/recyclerViewDevices"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layoutAnimation="@anim/recyclerview_animation"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewDevicesConState" />
+    <!--android:layoutAnimation="@anim/recyclerview_animation"-->
 </androidx.constraintlayout.widget.ConstraintLayout>
