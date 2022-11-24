@@ -8,4 +8,6 @@
     <string name="txt_connectionStateDisconected">Desconectado</string>
     <string name="txt_connectionStateConnected">Conectado</string>
     <string name="btn_OffDevices">Desligado</string>
+    <string name="navigation_drawer_open">Abrir navigation drawer</string>
+    <string name="navigation_drawer_close">Fechar navigation drawer</string>
 </resources>
