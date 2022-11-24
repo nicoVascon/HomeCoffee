@@ -35,11 +35,11 @@ public class HouseManager implements Serializable {
         }
     }
     public void adicionarDadosIniciais() {
-        Room c1 = new Room(21223344, "Francisco Correia", "");
-        Room c2 = new Room(92323232, "Fernando Lima", "");
-        Room c3 = new Room(91566677, "Vítor Damas", "");
-        Room c4 = new Room(96765987, "Rui Jordão", "");
-        Room c5 = new Room(24489056, "Ana Moreira", "");
+        Room c1 = new Room(21223344, "Sala", "");
+        Room c2 = new Room(92323232, "Cozinha", "");
+        Room c3 = new Room(91566677, "Quarto", "");
+        Room c4 = new Room(96765987, "Escritório", "");
+        Room c5 = new Room(24489056, "Casa de banho", "");
         adicionarContacto(c1);
         adicionarContacto(c2);
         adicionarContacto(c3);

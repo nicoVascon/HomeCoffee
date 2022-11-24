@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Home Coffee</string>
+    <string name="txt_DevicesFragTitle">Dispositivos</string>
+    <string name="btn_OnDevices">Ligado</string>
+    <string name="txt_DevicesConnected">Conectado</string>
+    <string name="txt_DevicesDisconnected">Desconectado</string>
+    <string name="txt_connectionStateDisconected">Desconectado</string>
+    <string name="txt_connectionStateConnected">Conectado</string>
+    <string name="btn_OffDevices">Desligado</string>
+</resources>

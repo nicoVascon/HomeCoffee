@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Home Coffee</string>
+    <string name="app_name">Home Coffee</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>
@@ -12,4 +12,11 @@
     <string name="menu_slideshow" translatable="false">Slideshow</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="txt_DevicesFragTitle">Devices</string>
+    <string name="btn_OnDevices">On</string>
+    <string name="txt_DevicesConnected">Connected</string>
+    <string name="txt_DevicesDisconnected">Disconnected</string>
+    <string name="txt_connectionStateConnected">Connected</string>
+    <string name="txt_connectionStateDisconected">Disconnected</string>
+    <string name="btn_OffDevices">Off</string>
 </resources>
