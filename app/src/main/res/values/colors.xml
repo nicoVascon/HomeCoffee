@@ -8,4 +8,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="brown">#CC601A</color>
+    <color name="devIconBackground">#1794F3</color>
 </resources>

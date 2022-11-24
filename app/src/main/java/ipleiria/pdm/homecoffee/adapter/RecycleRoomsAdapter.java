@@ -40,14 +40,6 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
         View mItemView = mInflater.inflate(R.layout.item_layout,parent, false);
         return new RoomsHolder(mItemView, this);
     }
-
-
-
-
-
-
-
-
     public class RoomsHolder extends RecyclerView.ViewHolder {
 
         public final TextView txtName;
@@ -80,7 +72,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
         holder.txtName.setText(mCurrent.getNome());
         //holder.txtNumber.setText(Integer.toString(mCurrent.getNumero()));
         if (mCurrent.getPathPhoto().trim().isEmpty()) {
-            holder.imgPhoto.setImageResource(R.drawable.ic_no_photo);
+            holder.imgPhoto.setImageResource(R.drawable.ic_bedroom_default);
         } else {
             try {
                 File f=new File(context.getFilesDir() + "/" +
@@ -88,7 +80,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
                 Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
                 holder.imgPhoto.setImageBitmap(b);
             } catch (Exception e) {
-                holder.imgPhoto.setImageResource(R.drawable.ic_no_photo);
+                holder.imgPhoto.setImageResource(R.drawable.ic_bedroom_default);
             }
         }
         holder.itemView.setLongClickable(true);
