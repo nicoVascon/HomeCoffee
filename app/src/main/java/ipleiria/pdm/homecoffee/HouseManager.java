@@ -19,7 +19,7 @@ public class HouseManager implements Serializable {
 
     // ------------------------------------- Devices -------------------------------------
     public void addDevice(Device device) {
-        if (!devices.isEmpty() && !devices.contains(device)) {
+        if (devices.isEmpty() || !devices.contains(device)) {
             devices.add(device);
             Collections.sort(devices);
         }

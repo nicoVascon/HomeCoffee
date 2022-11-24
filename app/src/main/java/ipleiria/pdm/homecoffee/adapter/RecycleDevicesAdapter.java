@@ -34,8 +34,8 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
 
     public RecycleDevicesAdapter.DevicesHolder onCreateViewHolder(@NonNull ViewGroup parent, int
             viewType) {
-        View mItemView = mInflater.inflate(R.layout.item_layout,parent, false);
-        return new RecycleDevicesAdapter.DevicesHolder(mItemView, this);
+        View mItemView = mInflater.inflate(R.layout.item_device_layout,parent, false);
+        return new DevicesHolder(mItemView, this);
     }
 
     public class DevicesHolder extends RecyclerView.ViewHolder {
@@ -60,7 +60,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
 
     @Override
     public void onBindViewHolder(@NonNull RecycleDevicesAdapter.DevicesHolder holder, int position) {
-        Device devCurrent = gestorContactos.getDevice(position);
+        Device devCurrent = gestorContactos.getDevices().get(position);
         holder.txtDevName.setText(devCurrent.getName());
         holder.txtConnectionState.setText(devCurrent.isConnectionState() ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
         holder.switchDev.setChecked(devCurrent.isConnectionState());
@@ -69,6 +69,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             holder.imgPhoto.setImageResource(R.drawable.ic_no_photo);
         } else {
             try {
+                String boas = context.getFilesDir().toString();
                 File f=new File(context.getFilesDir() + "/" +
                         devCurrent.getPathPhoto());
                 Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
