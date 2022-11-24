@@ -53,12 +53,15 @@ public class HouseManager implements Serializable {
                 "imgs/temperatureSensor.jpg");
         Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT,
                 "imgs/lightSensor.jpg");
-        Device dev4 = new Device(852, "Sensor de Pressão", DeviceType.PRESSURE,
+        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE,
+                "imgs/pressureSensor.jpg");
+        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION,
                 "imgs/pressureSensor.jpg");
         addDevice(dev1);
         addDevice(dev2);
         addDevice(dev3);
         addDevice(dev4);
+        addDevice(dev5);
     }
 
     //---------------------------------------------------

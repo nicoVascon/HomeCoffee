@@ -1,8 +1,6 @@
 package ipleiria.pdm.homecoffee.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +11,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.io.FileInputStream;
-
 import ipleiria.pdm.homecoffee.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
-import ipleiria.pdm.homecoffee.Room;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
     private HouseManager gestorContactos;
@@ -69,11 +63,22 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             holder.imgPhoto.setImageResource(R.drawable.ic_no_photo);
         } else {
             try {
-                String boas = context.getFilesDir().toString();
-                File f=new File(context.getFilesDir() + "/" +
-                        devCurrent.getPathPhoto());
-                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                holder.imgPhoto.setImageBitmap(b);
+                switch (devCurrent.getType()){
+                    case HUMIDITY:
+                        holder.imgPhoto.setImageResource(R.drawable.humiditysensor);
+                        break;
+                    case TEMPERATURE:
+                        holder.imgPhoto.setImageResource(R.drawable.temperaturesensor);
+                        break;
+                    case LIGHT:
+                        holder.imgPhoto.setImageResource(R.drawable.lightsensor);
+                        break;
+                    case ACCELERATION:
+                        holder.imgPhoto.setImageResource(R.drawable.accelerationsensor);
+                        break;
+                    case PRESSURE:
+                        holder.imgPhoto.setImageResource(R.drawable.preassuresensor);
+                }
             } catch (Exception e) {
                 holder.imgPhoto.setImageResource(R.drawable.ic_no_photo);
             }
