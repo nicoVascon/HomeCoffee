@@ -10,12 +10,17 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class HouseManager implements Serializable {
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
+
+    static final long serialVersionUID = 2L;
 
     // ------------------------------------- Devices -------------------------------------
     public void addDevice(Device device) {
@@ -46,17 +51,42 @@ public class HouseManager implements Serializable {
         return result;
     }
 
+    public void saveDeviceConnectionState(){
+        for (Device device : devices){
+            device.setConnectionStateSaved(device.isConnectionState());
+        }
+    }
+
+    public void recoverSavedDeviceConnectionState(){
+        for (Device device : devices){
+            device.setConnectionState(device.isConnectionStateSaved());
+        }
+    }
+
+    public int numberOfDevicesConnect(){
+        int devicesConnected = 0;
+        for (Device device : devices){
+            if (device.isConnectionState()){
+                devicesConnected ++;
+            }
+        }
+        return devicesConnected;
+    }
+
+    public void changeDevicesConnectionState(boolean connectionState){
+        if (devices != null){
+            for (Device device : devices){
+                device.setConnectionState(connectionState);
+            }
+        }
+    }
+
     public void addInitialDevices() {
-        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY,
-                "imgs/humiditySensor.jpg");
-        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE,
-                "imgs/temperatureSensor.jpg");
-        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT,
-                "imgs/lightSensor.jpg");
-        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE,
-                "imgs/pressureSensor.jpg");
-        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION,
-                "imgs/pressureSensor.jpg");
+        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY);
+        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE);
+        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT);
+        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE);
+        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION);
         addDevice(dev1);
         addDevice(dev2);
         addDevice(dev3);
@@ -129,34 +159,46 @@ public class HouseManager implements Serializable {
         }
         return str.toString();
     }
-    public void gravarFicheiro(Context context) {
+    public static void gravarFicheiro(Context context) {
         try {
             FileOutputStream fileOutputStream =
-                    context.openFileOutput("rooms.bin", Context.MODE_PRIVATE);
+                    context.openFileOutput("houseManager.bin", Context.MODE_PRIVATE);
             ObjectOutputStream objectOutputStream = new
                     ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(rooms);
+            objectOutputStream.writeObject(INSTANCE);
+            objectOutputStream.writeObject(new Boolean(DevicesFragment.isDevicesEnable()));
             objectOutputStream.close();
             fileOutputStream.close();
         } catch (IOException e) {
-            Toast.makeText(context, "Could not write GestorContactos to internal storage.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Could not write HouseManager to internal storage.", Toast.LENGTH_LONG).show();
         }
     }
-    public void lerFicheiro(Context context) {
+    public static void lerFicheiro(Context context) {
+        boolean error = false;
         try {
             FileInputStream fileInputStream =
-                    context.openFileInput("contactos.bin");
+                    context.openFileInput("houseManager.bin");
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-            rooms = (ArrayList<Room>) objectInputStream.readObject();
+            INSTANCE = (HouseManager) objectInputStream.readObject();
+            Boolean DevicesEnable = (Boolean) objectInputStream.readObject();
+            DevicesFragment.setDevicesEnable(DevicesEnable);
             objectInputStream.close();
             fileInputStream.close();
         } catch (FileNotFoundException e) {
-            Toast.makeText(context, "Could not read GestorContactos from internal storage.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Could not read HouseManager from internal storage.", Toast.LENGTH_LONG).show();
+            error = true;
         } catch (IOException e) {
-            Toast.makeText(context, "Error reading GestorContactos from internal storage.", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(context, "Error reading HouseManager from internal storage.", Toast.LENGTH_LONG).show();
+            error = true;
         } catch (ClassNotFoundException e) {
-            Toast.makeText(context, "Error reading GestorContactos from internal storage.", Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Error reading HouseManager from internal storage.", Toast.LENGTH_LONG).show();
+            error = true;
+        }
+
+        if (error){
+            INSTANCE = HouseManager.getInstance();
+            INSTANCE.adicionarDadosIniciais();
+            INSTANCE.addInitialDevices();
         }
     }
 }

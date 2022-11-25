@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity implements
 //        NavigationUI.setupWithNavController(navigationView, navController);
 
         if (savedInstanceState == null) {
+            HouseManager.lerFicheiro(this);
             houseManager = HouseManager.getInstance();
-            houseManager.lerFicheiro(this);
             //houseManager.setrImage(android.R.drawable.btn_star_big_on);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
                     MODE_NIGHT_NO);
@@ -98,10 +98,6 @@ public class MainActivity extends AppCompatActivity implements
             houseManager = (HouseManager)
                     savedInstanceState.getSerializable("contactos");
         }
-
-
-        HouseManager.getInstance().adicionarDadosIniciais();
-        HouseManager.getInstance().addInitialDevices();
 
     }
 /*
@@ -206,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements
                 || super.onSupportNavigateUp();
     }
 
-
-
-
+    public Fragment getF() {
+        return f;
+    }
 }
