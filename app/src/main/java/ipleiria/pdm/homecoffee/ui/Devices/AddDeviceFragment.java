@@ -11,11 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import ipleiria.pdm.homecoffee.Device;
 import ipleiria.pdm.homecoffee.DeviceType;
+import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
+import ipleiria.pdm.homecoffee.adapter.SpinnerDeviceTypeAdapter;
 
 public class AddDeviceFragment extends Fragment {
     private Spinner deviceTypeSpinner;
@@ -30,6 +30,8 @@ public class AddDeviceFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
+
         deviceTypeSpinner = getView().findViewById(R.id.deviceType_spinner);
 
         ArrayList<String> arrayList = new ArrayList<>();
@@ -37,7 +39,9 @@ public class AddDeviceFragment extends Fragment {
             arrayList.add(deviceType.toString());
         }
 
-        ArrayAdapter<DeviceType> adapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1, DeviceType.values());
+        //ArrayAdapter<DeviceType> adapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1, DeviceType.values());
+        ArrayAdapter<DeviceType> adapter = new SpinnerDeviceTypeAdapter(this.getContext(), R.layout.spinneritem_adddevice_devicetype_layout, DeviceType.values());
+
         deviceTypeSpinner.setAdapter(adapter);
     }
 }

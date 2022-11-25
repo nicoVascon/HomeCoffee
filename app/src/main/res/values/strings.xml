@@ -25,4 +25,8 @@
     <string name="btn_addDevice">ADD</string>
     <string name="spinner_contDescription">Device Type</string>
     <string name="txt_devChannelAdd">Device Channel</string>
+    <string name="toolbar_addDevTitle">Add Device</string>
+    <string name="toolbar_devicesTitle">My Devices</string>
+    <string name="toolbar_galleryTitle">Gallery</string>
+    <string name="toolbar_slideshowTitle" translatable="false">Slides How</string>
 </resources>

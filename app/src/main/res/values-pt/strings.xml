@@ -15,4 +15,7 @@
     <string name="btn_addDevice">ADICIONAR</string>
     <string name="spinner_contDescription">Tipo de Dispositivo</string>
     <string name="txt_devChannelAdd">Canal do Dispositivo</string>
+    <string name="toolbar_addDevTitle">Adicionar Dispositivo</string>
+    <string name="toolbar_devicesTitle">Meus Dispositivos</string>
+    <string name="toolbar_galleryTitle">Galeria</string>
 </resources>

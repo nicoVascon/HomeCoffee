@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -30,43 +31,24 @@ import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
-public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener  {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
 
-    private AppBarConfiguration mAppBarConfiguration;
-    //private ActivityMainBinding binding;
+    private static TextView toolBarTitle;
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
-
-
-
     private HouseManager houseManager;
     private Fragment f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-       /* binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        */
+        toolBarTitle = toolbar.findViewById(R.id.toolbar_title);
+        toolBarTitle.setText(getResources().getString(R.string.app_name));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -76,16 +58,6 @@ public class MainActivity extends AppCompatActivity implements
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_devices)
-//                .setOpenableLayout(drawer)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.container_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-//        NavigationUI.setupWithNavController(navigationView, navController);
 
         if (savedInstanceState == null) {
             HouseManager.lerFicheiro(this);
@@ -100,37 +72,12 @@ public class MainActivity extends AppCompatActivity implements
         }
 
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
 
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (!(f instanceof MainFragment)) {
-                f = new MainFragment();
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_main, f).commit();
-            }else{
-                super.onBackPressed();
-            }
-
-        }
-    }
-    */
     public void setInitialFragment() {
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
     }
-
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -182,8 +129,6 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -191,18 +136,14 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-
-
-
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    public static void setToolBarTitle(String title){
+        toolBarTitle.setText(title);
     }
 
-    public Fragment getF() {
-        return f;
-    }
+//    @Override
+//    public boolean onSupportNavigateUp() {
+//        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
+//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
+//                || super.onSupportNavigateUp();
+//    }
 }

@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import ipleiria.pdm.homecoffee.MainActivity;
+import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.databinding.FragmentSlideshowBinding;
 
 public class SlideshowFragment extends Fragment {
@@ -20,6 +22,8 @@ public class SlideshowFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         SlideshowViewModel slideshowViewModel =
                 new ViewModelProvider(this).get(SlideshowViewModel.class);
+
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_slideshowTitle));
 
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         View root = binding.getRoot();

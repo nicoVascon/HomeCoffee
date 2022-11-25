@@ -1,8 +1,6 @@
 package ipleiria.pdm.homecoffee.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +10,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.File;
-import java.io.FileInputStream;
 
 import ipleiria.pdm.homecoffee.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
-import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
-import ipleiria.pdm.homecoffee.Room;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
@@ -56,10 +48,10 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             super(itemView);
 
             txtConnectionState = itemView.findViewById(R.id.textViewConnectionState);
-            txtDevName = itemView.findViewById(R.id.textViewDeviceName);
-            txtNumDev = itemView.findViewById(R.id.textViewNumDev);
+            txtDevName = itemView.findViewById(R.id.textViewDeviceName_spinner);
+            txtNumDev = itemView.findViewById(R.id.textViewNumDevType_spinner);
             switchDev = itemView.findViewById(R.id.switch_device);
-            imgPhoto= itemView.findViewById(R.id.imageViewDevicePhoto);
+            imgPhoto= itemView.findViewById(R.id.imageViewDeviceTypePhoto_spinner);
             this.dAdapter = adapter;
 
 

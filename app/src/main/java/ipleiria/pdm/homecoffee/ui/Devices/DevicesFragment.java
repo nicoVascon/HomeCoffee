@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import ipleiria.pdm.homecoffee.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -45,6 +46,8 @@ public class DevicesFragment extends Fragment {
     public void onStart() {
         super.onStart();
         houseManager = HouseManager.getInstance();
+
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devicesTitle));
 
         mRecyclerView = getView().findViewById(R.id.recyclerViewDevices);
         dAdapter = new RecycleDevicesAdapter(this.getActivity(), this);

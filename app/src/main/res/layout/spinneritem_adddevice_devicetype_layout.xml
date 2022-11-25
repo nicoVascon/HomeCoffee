@@ -27,9 +27,11 @@
                 android:id="@+id/cardView_spinner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/devIconBackground"
+                android:layout_marginEnd="5dp"
+                app:cardBackgroundColor="@color/devTypeSpinnerIconBackground"
                 app:cardCornerRadius="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/textViewDeviceName_spinner"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -41,9 +43,7 @@
                         android:id="@+id/imageViewDeviceTypePhoto_spinner"
                         android:layout_width="128dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginEnd="10dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -65,56 +65,19 @@
 
             <!--android:scaleType="fitXY"-->
             <!--android:scaleType="centerCrop"-->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ConstraintLayout"
+
+            <TextView
+                android:id="@+id/textViewDeviceName_spinner"
+                style="@style/Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="5dp"
+                android:text="DeviceName"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/cardView_spinner"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/textViewConnectionState"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txt_connectionStateConnected"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toTopOf="@+id/textViewDeviceName_spinner"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_chainStyle="packed" />
-
-                <TextView
-                    android:id="@+id/textViewDeviceName_spinner"
-                    style="@style/Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
-                    android:text="DeviceName"
-                    android:textSize="16sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/switch_device"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewConnectionState" />
-
-                <Switch
-                    android:id="@+id/switch_device"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:height="48dp"
-                    android:gravity="center|right"
-                    android:scaleX="1"
-                    android:scaleY="1"
-                    android:text="@string/btn_OnDevices"
-                    android:textSize="18sp"
-                    android:visibility="visible"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,20 +14,25 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import ipleiria.pdm.homecoffee.HouseManager;
+import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.databinding.FragmentHomeBinding;
+import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceFragment;
 
 public class HomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
-    private HouseManager gestorContactos;
+    //private FragmentHomeBinding binding;
+    private HouseManager houseManager;
     private RecyclerView mRecyclerView;
     private RecycleRoomsAdapter mAdapter;
 
+    private Button addRoomButton;
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
+        /*HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
@@ -34,12 +40,16 @@ public class HomeFragment extends Fragment {
 
         final TextView textView = binding.textViewGreeting;
         //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;
+        return root;*/
+
+        return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        houseManager = HouseManager.getInstance();
+
         // fbutton = getView().findViewById(R.id.floatingActionButton);
         // fbutton.setImageResource(HouseManager.getInstance().getrImage());
         mRecyclerView = getView().findViewById(R.id.RecyclerViewMain);
@@ -51,6 +61,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        //binding = null;
     }
 }
