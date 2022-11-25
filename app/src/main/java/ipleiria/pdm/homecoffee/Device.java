@@ -6,14 +6,13 @@ public class Device implements Serializable, Comparable<Device> {
     private int numero;
     private String name;
     private boolean connectionState;
+    private boolean connectionStateSaved;
     private DeviceType type;
-    private String pathPhoto;
 
-    public Device(int numero, String nome, DeviceType type, String pathPhoto) {
+    public Device(int numero, String nome, DeviceType type) {
         this.numero = numero;
         this.name = nome;
         this.type = type;
-        this.pathPhoto = pathPhoto;
     }
 
     public int getNumero() {
@@ -40,20 +39,20 @@ public class Device implements Serializable, Comparable<Device> {
         this.connectionState = connectionState;
     }
 
+    public boolean isConnectionStateSaved() {
+        return connectionStateSaved;
+    }
+
+    public void setConnectionStateSaved(boolean connectionStateSaved) {
+        this.connectionStateSaved = connectionStateSaved;
+    }
+
     public DeviceType getType() {
         return type;
     }
 
     public void setType(DeviceType type) {
         this.type = type;
-    }
-
-    public String getPathPhoto() {
-        return pathPhoto;
-    }
-
-    public void setPathPhoto(String pathPhoto) {
-        this.pathPhoto = pathPhoto;
     }
 
     @Override

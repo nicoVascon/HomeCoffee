@@ -3,11 +3,16 @@
     <string name="app_name">Home Coffee</string>
     <string name="txt_DevicesFragTitle">Dispositivos</string>
     <string name="btn_OnDevices">Ligado</string>
-    <string name="txt_DevicesConnected">Conectado</string>
-    <string name="txt_DevicesDisconnected">Desconectado</string>
+    <string name="txt_DevicesConnected">" Dispositivos Conectados"</string>
+    <string name="txt_DevicesDisconnected">Todos os dispositivos estão desconectados</string>
     <string name="txt_connectionStateDisconected">Desconectado</string>
     <string name="txt_connectionStateConnected">Conectado</string>
     <string name="btn_OffDevices">Desligado</string>
     <string name="navigation_drawer_open">Abrir navigation drawer</string>
     <string name="navigation_drawer_close">Fechar navigation drawer</string>
+    <string name="btn_enable_dev">Habilitado</string>
+    <string name="btn_disabled_dev">Desabilitado</string>
+    <string name="btn_addDevice">ADICIONAR</string>
+    <string name="spinner_contDescription">Tipo de Dispositivo</string>
+    <string name="txt_devChannelAdd">Canal do Dispositivo</string>
 </resources>

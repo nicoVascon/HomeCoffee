@@ -3,34 +3,45 @@ package ipleiria.pdm.homecoffee;
 import java.io.Serializable;
 
 public class Room implements Serializable, Comparable<Room> {
-    private Device device;
-    private String nome;
-    private String pathPhoto;
 
-    public Room(int numero, String nome, String pathPhoto) {
+    private String nome;
+    //private String pathPhoto;
+    private RoomType room_type;
+
+    public Room( String nome, RoomType room_type) {
 
         this.nome = nome;
-        this.pathPhoto = pathPhoto;
+        //this.pathPhoto = pathPhoto;
+        this.room_type=room_type;
     }
 
     public String getNome() {
         return nome;
     }
-    public String getPathPhoto() {
+    /*public String getPathPhoto() {
         return pathPhoto;
+    }*/
+
+    public RoomType getType() {
+        return room_type;
     }
-    //@Override
-    //public boolean equals(Object obj) {
-    //   return this.numero == ((Room) obj).numero;
-    //}
+
+    public void setType(RoomType type) {
+        this.room_type = type;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.nome == ((Room) obj).nome;
+    }
+
     @Override
     public String toString() {
-        return nome + " - "     ;
+        return nome + " - " + room_type;
     }
 
-
     @Override
-    public int compareTo(Room room) {
+    public int compareTo(Room device) {
         return 0;
     }
 }

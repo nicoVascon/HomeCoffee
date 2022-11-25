@@ -13,7 +13,7 @@
         android:layout_margin="5dp"
         android:animateLayoutChanges="true"
         android:animationCache="true"
-        app:cardBackgroundColor="#F3CB90"
+        app:cardBackgroundColor="#FFD08B"
         app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
         app:contentPadding="5dp">
@@ -51,6 +51,7 @@
                 android:gravity="center"
                 android:textAlignment="center"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:autoSizeMaxTextSize="25dp"
                 app:autoSizeTextType="uniform"
                 app:layout_constraintBottom_toBottomOf="parent"
