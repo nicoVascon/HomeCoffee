@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class HouseManager implements Serializable {
@@ -115,11 +115,11 @@ public class HouseManager implements Serializable {
         }
     }
     public void adicionarDadosIniciais() {
-        Room c1 = new Room(21223344, "Sala", "");
-        Room c2 = new Room(92323232, "Cozinha", "");
-        Room c3 = new Room(91566677, "Quarto", "");
-        Room c4 = new Room(96765987, "Escritório", "");
-        Room c5 = new Room(24489056, "Casa de banho", "");
+        Room c1 = new Room( "Sala",RoomType.LIVING_ROOM);
+        Room c2 = new Room( "Cozinha",RoomType.KITCHEN);
+        Room c3 = new Room( "Quarto",RoomType.BEDROOM);
+        Room c4 = new Room( "Escritório",RoomType.OFFICE);
+        Room c5 = new Room( "Casa de banho", RoomType.BATHROOM);
         adicionarContacto(c1);
         adicionarContacto(c2);
         adicionarContacto(c3);
@@ -137,7 +137,7 @@ public class HouseManager implements Serializable {
 
         return rooms.get(pos);
     }
-    public ArrayList<Room> getContactos() {
+    public ArrayList<Room> getRooms() {
         return rooms;
     }
     public void removerContacto(int pos) {

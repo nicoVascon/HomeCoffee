@@ -28,5 +28,11 @@
     <string name="toolbar_addDevTitle">Add Device</string>
     <string name="toolbar_devicesTitle">My Devices</string>
     <string name="toolbar_galleryTitle">Gallery</string>
-    <string name="toolbar_slideshowTitle" translatable="false">Slides How</string>
+    <string name="toolbar_slideshowTitle" translatable="false">Slide Show</string>
+    <string name="toolbar_addRomTitle">Add Room</string>
+    <string name="txt_devNameAdd">Device Name</string>
+    <string name="btn_devAddNext">NEXT</string>
+    <string name="txt_AddDevSelectRoomTitle">Select Room</string>
+    <string name="toastMessage_MissingDevName">You must to introduce a Device Name</string>
+    <string name="toastMessage_MissingDevChannel">You must to introduce the Device Channel</string>
 </resources>

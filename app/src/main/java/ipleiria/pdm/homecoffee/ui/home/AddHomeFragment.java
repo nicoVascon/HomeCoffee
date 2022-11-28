@@ -14,7 +14,8 @@ import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
 
-import ipleiria.pdm.homecoffee.DeviceType;
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
@@ -33,6 +34,8 @@ public class AddHomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addRomTitle));
 
         roomTypeSpinner = getView().findViewById(R.id.roomType_spinner);
 
@@ -75,7 +78,11 @@ public class AddHomeFragment extends Fragment {
         Room newRoom = new Room(nome,type);
         HouseManager.getInstance().adicionarContacto(newRoom);
         ((MainActivity) getActivity()).setInitialFragment();
+    }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.addFragmentViseted(FragmentsEnum.ADD_ROOM_FRAGMENT);
     }
 }

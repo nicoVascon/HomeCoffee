@@ -18,4 +18,10 @@
     <string name="toolbar_addDevTitle">Adicionar Dispositivo</string>
     <string name="toolbar_devicesTitle">Meus Dispositivos</string>
     <string name="toolbar_galleryTitle">Galeria</string>
+    <string name="toolbar_addRomTitle">Adicionar Divisão</string>
+    <string name="txt_devNameAdd">Nome do Dispositivo</string>
+    <string name="txt_AddDevSelectRoomTitle">Seleciona o Quarto</string>
+    <string name="btn_devAddNext">SEGUINTE</string>
+    <string name="toastMessage_MissingDevName">Tem de introducir um Nome de Dispositivo</string>
+    <string name="toastMessage_MissingDevChannel">Tem de introducir o Canal do Dispositivo</string>
 </resources>

@@ -8,12 +8,31 @@
     tools:context=".ui.Devices.AddDeviceFragment">
 
     <TextView
+        android:id="@+id/textViewDevNameAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_devNameAdd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextDevNameAdd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewDevNameAdd" />
+
+    <TextView
         android:id="@+id/textViewDevChannelAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/txt_devChannelAdd"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editTextDevNameAdd"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDevNameAdd" />
 
     <EditText
         android:id="@+id/editTextDevChannelAdd"
@@ -29,10 +48,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:contentDescription="@string/spinner_contDescription"
+        android:drawSelectorOnTop="true"
         android:minHeight="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDevChannelAdd"
-        android:drawSelectorOnTop="true"/>
+        app:layout_constraintTop_toBottomOf="@+id/editTextDevChannelAdd" />
+
+    <Button
+        android:id="@+id/button_devNextAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/btn_devAddNext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deviceType_spinner" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

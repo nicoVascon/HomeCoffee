@@ -6,12 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
-import ipleiria.pdm.homecoffee.DeviceType;
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.R;
 
 public class SpinnerDeviceTypeAdapter extends ArrayAdapter<DeviceType> {

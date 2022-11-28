@@ -2,6 +2,8 @@ package ipleiria.pdm.homecoffee;
 
 import java.io.Serializable;
 
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
+
 public class Device implements Serializable, Comparable<Device> {
     private int numero;
     private String name;

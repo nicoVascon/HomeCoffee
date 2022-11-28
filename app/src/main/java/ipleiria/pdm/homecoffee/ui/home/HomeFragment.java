@@ -5,20 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
-import ipleiria.pdm.homecoffee.databinding.FragmentHomeBinding;
-import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -32,15 +29,6 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        /*HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        final TextView textView = binding.textViewGreeting;
-        //homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
-        return root;*/
 
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -50,17 +38,27 @@ public class HomeFragment extends Fragment {
         super.onStart();
         houseManager = HouseManager.getInstance();
 
-        // fbutton = getView().findViewById(R.id.floatingActionButton);
-        // fbutton.setImageResource(HouseManager.getInstance().getrImage());
+        MainActivity.setToolBarTitle(getResources().getString(R.string.app_name));
+
         mRecyclerView = getView().findViewById(R.id.RecyclerViewMain);
         mAdapter = new RecycleRoomsAdapter(this.getActivity());
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(),2));
+
+        addRoomButton = getView().findViewById(R.id.buttonAddRoom);
+        addRoomButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddHomeFragment()).commit();
+            }
+        });
+
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        MainActivity.addFragmentViseted(FragmentsEnum.HOME_FRAGMENT);
         //binding = null;
     }
 }
