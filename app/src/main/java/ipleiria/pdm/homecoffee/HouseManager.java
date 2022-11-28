@@ -19,7 +19,7 @@ public class HouseManager implements Serializable {
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
 
-    static final long serialVersionUID = 2L;
+    static final long serialVersionUID = 3L;
 
     // ------------------------------------- Devices -------------------------------------
     public void addDevice(Device device) {
