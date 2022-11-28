@@ -13,7 +13,7 @@
         android:layout_margin="5dp"
         android:animateLayoutChanges="true"
         android:animationCache="true"
-        app:cardBackgroundColor="?attr/colorButtonNormal"
+        app:cardBackgroundColor="#E5F7FA"
         app:cardCornerRadius="20dp"
         app:cardElevation="5dp">
 
@@ -68,8 +68,9 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ConstraintLayout"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginStart="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/cardView"
@@ -81,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/txt_connectionStateConnected"
                     android:textSize="14sp"
+
                     app:layout_constraintBottom_toTopOf="@+id/textViewDeviceName"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -90,10 +92,15 @@
                     android:id="@+id/textViewDeviceName"
                     style="@style/Title"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="5dp"
+                    android:layout_height="0dp"
+                    android:autoText="false"
+                    android:elegantTextHeight="true"
+                    android:maxLines="2"
                     android:text="DeviceName"
                     android:textSize="16sp"
+                    app:autoSizeMaxTextSize="16sp"
+                    app:autoSizeTextType="uniform"
+                    app:guidelineUseRtl="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/switch_device"
                     app:layout_constraintStart_toStartOf="parent"
@@ -101,17 +108,22 @@
 
                 <Switch
                     android:id="@+id/switch_device"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="10dp"
+                    android:width="100dp"
                     android:height="48dp"
+                    android:autoText="false"
+                    android:elegantTextHeight="true"
                     android:gravity="center|right"
                     android:scaleX="1"
                     android:scaleY="1"
                     android:text="@string/btn_OnDevices"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:visibility="visible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textViewDeviceName"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

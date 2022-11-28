@@ -14,10 +14,15 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="txt_DevicesFragTitle">Devices</string>
     <string name="btn_OnDevices">On</string>
-    <string name="txt_DevicesConnected">Connected</string>
-    <string name="txt_DevicesDisconnected">Disconnected</string>
+    <string name="txt_DevicesConnected">" Devices Connected"</string>
+    <string name="txt_DevicesDisconnected">All Devices Are Disconnected</string>
     <string name="txt_connectionStateConnected">Connected</string>
     <string name="txt_connectionStateDisconected">Disconnected</string>
     <string name="btn_OffDevices">Off</string>
     <string name="menu_devices" translatable="false">Devices</string>
+    <string name="btn_enable_dev">Enabled</string>
+    <string name="btn_disabled_dev">Disabled</string>
+    <string name="btn_addDevice">ADD</string>
+    <string name="spinner_contDescription">Device Type</string>
+    <string name="txt_devChannelAdd">Device Channel</string>
 </resources>

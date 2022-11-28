@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,16 +21,19 @@ import ipleiria.pdm.homecoffee.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.Room;
+import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
     private HouseManager gestorContactos;
     private Context context;
     private LayoutInflater mInflater;
+    DevicesFragment devicesFragment;
 
-    public RecycleDevicesAdapter(Context context){
+    public RecycleDevicesAdapter(Context context, DevicesFragment devicesFragment){
         mInflater = LayoutInflater.from(context);
         this.gestorContactos = HouseManager.getInstance();
         this.context=context;
+        this.devicesFragment = devicesFragment;
     }
 
     public RecycleDevicesAdapter.DevicesHolder onCreateViewHolder(@NonNull ViewGroup parent, int
@@ -55,6 +59,27 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             switchDev = itemView.findViewById(R.id.switch_device);
             imgPhoto= itemView.findViewById(R.id.imageViewDevicePhoto);
             this.dAdapter = adapter;
+
+
+            switchDev.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Device itemDevice = getDevice();
+
+                    itemDevice.setConnectionState(isChecked);
+
+                    if (DevicesFragment.isDevicesEnable()){
+                        devicesFragment.updateDevicesConnectionState();
+//                        dAdapter.notifyDataSetChanged();
+                    }
+                    txtConnectionState.setText(isChecked ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
+                    buttonView.setText(isChecked ? R.string.btn_OnDevices : R.string.btn_OffDevices);
+                }
+            });
+        }
+
+        public Device getDevice(){
+            return gestorContactos.getDevice(this.getLayoutPosition());
         }
     }
 
@@ -62,32 +87,32 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
     public void onBindViewHolder(@NonNull RecycleDevicesAdapter.DevicesHolder holder, int position) {
         Device devCurrent = gestorContactos.getDevices().get(position);
         holder.txtDevName.setText(devCurrent.getName());
+        if (!DevicesFragment.isDevicesEnable()){
+            devCurrent.setConnectionState(false);
+            holder.switchDev.setEnabled(false);
+        } else{
+            holder.switchDev.setEnabled(true);
+        }
         holder.txtConnectionState.setText(devCurrent.isConnectionState() ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
         holder.switchDev.setChecked(devCurrent.isConnectionState());
+        holder.switchDev.setText(devCurrent.isConnectionState() ? R.string.btn_OnDevices : R.string.btn_OffDevices);
         holder.txtNumDev.setText(Integer.toString(devCurrent.getNumero()));
-        if (devCurrent.getPathPhoto().trim().isEmpty()) {
-            holder.imgPhoto.setImageResource(R.drawable.ic_bedroom_default);
-        } else {
-            try {
-                switch (devCurrent.getType()){
-                    case HUMIDITY:
-                        holder.imgPhoto.setImageResource(R.drawable.humiditysensor);
-                        break;
-                    case TEMPERATURE:
-                        holder.imgPhoto.setImageResource(R.drawable.temperaturesensor);
-                        break;
-                    case LIGHT:
-                        holder.imgPhoto.setImageResource(R.drawable.lightsensor);
-                        break;
-                    case ACCELERATION:
-                        holder.imgPhoto.setImageResource(R.drawable.accelerationsensor);
-                        break;
-                    case PRESSURE:
-                        holder.imgPhoto.setImageResource(R.drawable.preassuresensor);
-                }
-            } catch (Exception e) {
-                holder.imgPhoto.setImageResource(R.drawable.ic_bedroom_default);
-            }
+        switch (devCurrent.getType()){
+            case HUMIDITY:
+                holder.imgPhoto.setImageResource(R.drawable.humiditysensor);
+                break;
+            case TEMPERATURE:
+                holder.imgPhoto.setImageResource(R.drawable.temperaturesensor);
+                break;
+            case LIGHT:
+                holder.imgPhoto.setImageResource(R.drawable.lightsensor);
+                break;
+            case ACCELERATION:
+                holder.imgPhoto.setImageResource(R.drawable.accelerationsensor);
+                break;
+            case PRESSURE:
+                holder.imgPhoto.setImageResource(R.drawable.preassuresensor);
+                break;
         }
         holder.itemView.setLongClickable(true);
         holder.itemView.setClickable(true);
@@ -95,5 +120,9 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
     @Override
     public int getItemCount() {
         return gestorContactos.getDevices().size();
+    }
+
+    public Context getContext() {
+        return context;
     }
 }

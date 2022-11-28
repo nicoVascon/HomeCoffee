@@ -3,7 +3,6 @@ package ipleiria.pdm.homecoffee.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,14 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.io.FileInputStream;
 
 import ipleiria.pdm.homecoffee.HouseManager;
-import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.Room;
 
@@ -68,10 +65,10 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RoomsHolder holder, int position) {
-        Room mCurrent = gestorContactos.getContactos().get(position);
+        Room mCurrent = gestorContactos.getRooms().get(position);
         holder.txtName.setText(mCurrent.getNome());
         //holder.txtNumber.setText(Integer.toString(mCurrent.getNumero()));
-        if (mCurrent.getPathPhoto().trim().isEmpty()) {
+       /* if (mCurrent.getPathPhoto().trim().isEmpty()) {
             holder.imgPhoto.setImageResource(R.drawable.ic_bedroom_default);
         } else {
             try {
@@ -82,12 +79,42 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
             } catch (Exception e) {
                 holder.imgPhoto.setImageResource(R.drawable.ic_bedroom_default);
             }
-        }
+        }*/
+        /*if (mCurrent.getPathPhoto().trim().isEmpty()) {
+            holder.imgPhoto.setImageResource(R.drawable.ic_bedroom_default);
+        } else {
+        */
+
+
+            switch (mCurrent.getType()) {
+                case BEDROOM:
+                    holder.imgPhoto.setImageResource(R.drawable.bedroom_alternative);
+                    break;
+                case KITCHEN:
+                    holder.imgPhoto.setImageResource(R.drawable.kitchen);
+                    break;
+                case LIVING_ROOM:
+                    holder.imgPhoto.setImageResource(R.drawable.living_room);
+                    break;
+                case OFFICE:
+                    holder.imgPhoto.setImageResource(R.drawable.office);
+                    break;
+                case BATHROOM:
+                    holder.imgPhoto.setImageResource(R.drawable.bathroom);
+                    break;
+            }
+
+
         holder.itemView.setLongClickable(true);
         holder.itemView.setClickable(true);
     }
     @Override
     public int getItemCount() {
-        return gestorContactos.getContactos().size();
+        return gestorContactos.getRooms().size();
+    }
+
+
+    public Context getContext() {
+        return context;
     }
 }
