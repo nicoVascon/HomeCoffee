@@ -73,11 +73,11 @@ public class AddDeviceFragment extends Fragment {
         String newDevChannelAsString = editTextNewDevChannel.getText().toString();
 
         if (newDevName.isEmpty()){
-            Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevName, Toast.LENGTH_LONG);
+            Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevName, Toast.LENGTH_LONG).show();
             return;
         }
         if (newDevChannelAsString.isEmpty()){
-            Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevChannel, Toast.LENGTH_LONG);
+            Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevChannel, Toast.LENGTH_LONG).show();
             return;
         }
         newDevChannel = Integer.parseInt(newDevChannelAsString);
