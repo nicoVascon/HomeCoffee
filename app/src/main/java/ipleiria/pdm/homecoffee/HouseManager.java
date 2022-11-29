@@ -116,7 +116,7 @@ public class HouseManager implements Serializable {
         devices = new ArrayList<>();
     }
     //-----------------------------------------------------
-    public void adicionarContacto(Room room) {
+    public void addRoom(Room room) {
         if (!rooms.contains(room)) {
             rooms.add(room);
             Collections.sort(rooms);
@@ -128,11 +128,11 @@ public class HouseManager implements Serializable {
         Room c3 = new Room( "Quarto",RoomType.BEDROOM);
         Room c4 = new Room( "Escritório",RoomType.OFFICE);
         Room c5 = new Room( "Casa de banho", RoomType.BATHROOM);
-        adicionarContacto(c1);
-        adicionarContacto(c2);
-        adicionarContacto(c3);
-        adicionarContacto(c4);
-        adicionarContacto(c5);
+        addRoom(c1);
+        addRoom(c2);
+        addRoom(c3);
+        addRoom(c4);
+        addRoom(c5);
     }
     /*public void atualizarContacto(int pos, Room contacto) {
         if (!contactos.contains(contacto) || contacto.getNumero() ==

@@ -27,7 +27,6 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -110,7 +109,7 @@ public class AddHomeFragment extends Fragment {
             loading.dismiss();
             Toast.makeText(context, response, Toast.LENGTH_LONG).show();
 
-            HouseManager.getInstance().adicionarContacto(newRoom);
+            HouseManager.getInstance().addRoom(newRoom);
             ((MainActivity) context).setInitialFragment();
 
         }, error ->
