@@ -1,6 +1,5 @@
 package ipleiria.pdm.homecoffee;
 
-import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ID;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_IMAGE;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_NAME;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_USERS;
@@ -28,7 +27,7 @@ public class JsonParser {
             HouseManager.getInstance().getRooms().clear();
             for (int i = 0; i < rooms.length(); i++) {
                 JSONObject jo = rooms.getJSONObject(i);
-                HouseManager.getInstance().adicionarContacto(new Room(jo.getString(KEY_NAME), RoomType.valueOf(jo.getString(KEY_IMAGE))));
+                HouseManager.getInstance().addRoom(new Room(jo.getString(KEY_NAME), RoomType.valueOf(jo.getString(KEY_IMAGE))));
             }
 
         } catch (JSONException e) {

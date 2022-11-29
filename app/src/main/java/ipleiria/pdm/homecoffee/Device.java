@@ -2,17 +2,21 @@ package ipleiria.pdm.homecoffee;
 
 import java.io.Serializable;
 
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
+
 public class Device implements Serializable, Comparable<Device> {
     private int numero;
     private String name;
     private boolean connectionState;
     private boolean connectionStateSaved;
     private DeviceType type;
+    private Room room;
 
-    public Device(int numero, String nome, DeviceType type) {
+    public Device(int numero, String nome, DeviceType type, Room room) {
         this.numero = numero;
         this.name = nome;
         this.type = type;
+        this.room = room;
     }
 
     public int getNumero() {

@@ -2,10 +2,9 @@ package ipleiria.pdm.homecoffee;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.annotation.NonNull;
@@ -14,59 +13,39 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
-import ipleiria.pdm.homecoffee.databinding.ActivityMainBinding;
+import java.util.LinkedList;
+
+import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
+import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
+import ipleiria.pdm.homecoffee.ui.home.AddHomeFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
-public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener  {
-
-    private AppBarConfiguration mAppBarConfiguration;
-    //private ActivityMainBinding binding;
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
+    private static TextView toolBarTitle;
+    private static LinkedList<FragmentsEnum> lastsFragmentsOpened;
+    private static boolean wasBackPressed;
+    private static Fragment currentFragment;
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
-
-
-
     private HouseManager houseManager;
-    private Fragment f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        //binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-       /* binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        setSupportActionBar(binding.appBarMain.toolbar);
-        binding.appBarMain.fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = binding.drawerLayout;
-        NavigationView navigationView = binding.navView;
-        */
+        toolBarTitle = toolbar.findViewById(R.id.toolbar_title);
+        toolBarTitle.setText(getResources().getString(R.string.app_name));
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -76,16 +55,6 @@ public class MainActivity extends AppCompatActivity implements
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-//        mAppBarConfiguration = new AppBarConfiguration.Builder(
-//                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_devices)
-//                .setOpenableLayout(drawer)
-//                .build();
-//        NavController navController = Navigation.findNavController(this, R.id.container_fragment);
-//        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-//        NavigationUI.setupWithNavController(navigationView, navController);
 
         if (savedInstanceState == null) {
             HouseManager.lerFicheiro(this);
@@ -99,38 +68,15 @@ public class MainActivity extends AppCompatActivity implements
                     savedInstanceState.getSerializable("contactos");
         }
 
-    }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        lastsFragmentsOpened = new LinkedList<>();
+        //saveLastFragmentOpened = true;
     }
 
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            if (!(f instanceof MainFragment)) {
-                f = new MainFragment();
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment_content_main, f).commit();
-            }else{
-                super.onBackPressed();
-            }
-
-        }
-    }
-    */
     public void setInitialFragment() {
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
     }
-
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
@@ -145,23 +91,25 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Bundle bundle = currentFragment.getArguments();
         switch (item.getItemId()) {
             case R.id.nav_home:
-                f = new HomeFragment();
+                currentFragment = new HomeFragment();
                 break;
             case R.id.nav_gallery:
-                f = new GalleryFragment();
+                currentFragment = new GalleryFragment();
                 break;
             case R.id.nav_slideshow:
-                f = new SlideshowFragment();
+                currentFragment = new SlideshowFragment();
                 break;
             case R.id.nav_devices:
-                f = new DevicesFragment();
+                currentFragment = new DevicesFragment();
                 break;
             default:
-                f = new MainFragment();
+                currentFragment = new HomeFragment();
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, f).commit();
+        currentFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentFragment).commit();
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -171,18 +119,46 @@ public class MainActivity extends AppCompatActivity implements
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (!(f instanceof MainFragment)) {
-                f = new MainFragment();
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, f).commit();
+            if (!(currentFragment instanceof HomeFragment)) {
+                Bundle bundle = currentFragment.getArguments();
+                switch (lastsFragmentsOpened.pop()){
+                    case HOME_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_home);
+                        currentFragment = new HomeFragment();
+                        break;
+                    case DEVICES_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_devices);
+                        currentFragment = new DevicesFragment();
+                        break;
+                    case ADD_DEVICES_FRAGMENT:
+                        currentFragment = new AddDeviceFragment();
+                        break;
+                    case ADD_ROOM_FRAGMENT:
+                        currentFragment = new AddHomeFragment();
+                        break;
+                    case GALLERY_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_gallery);
+                        currentFragment = new GalleryFragment();
+                        break;
+                    case SLIDES_HOW_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_slideshow);
+                        currentFragment = new SlideshowFragment();
+                        break;
+                    case ADD_DEVICES_SELECT_ROOM_FRAGMENT:
+                        currentFragment = new AddDeviceSelectRoomFragment();
+                        break;
+                    default:
+                        currentFragment = new HomeFragment();
+                }
+                wasBackPressed = true;
+                currentFragment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentFragment).commit();
             }else{
                 super.onBackPressed();
             }
 
         }
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -191,18 +167,23 @@ public class MainActivity extends AppCompatActivity implements
         return true;
     }
 
-
-
-
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
+    public static void setToolBarTitle(String title){
+        toolBarTitle.setText(title);
     }
 
-    public Fragment getF() {
-        return f;
+    public static void addFragmentViseted(FragmentsEnum fragment){
+        if (wasBackPressed){
+            wasBackPressed = false;
+            return;
+        }
+        lastsFragmentsOpened.addFirst(fragment);
+    }
+
+    public static void clearFragmentsVisitedList(){
+        lastsFragmentsOpened.clear();
+    }
+
+    public static void setCurrentFragment(Fragment currentFragment) {
+        MainActivity.currentFragment = currentFragment;
     }
 }

@@ -2,11 +2,8 @@ package ipleiria.pdm.homecoffee.ui.Devices;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,16 +15,11 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
+import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
-import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
-import ipleiria.pdm.homecoffee.databinding.FragmentDevicesBinding;
-import ipleiria.pdm.homecoffee.databinding.FragmentGalleryBinding;
-import ipleiria.pdm.homecoffee.ui.gallery.GalleryViewModel;
 
 public class DevicesFragment extends Fragment {
     private HouseManager houseManager;
@@ -47,12 +39,15 @@ public class DevicesFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        MainActivity.addFragmentViseted(FragmentsEnum.DEVICES_FRAGMENT);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         houseManager = HouseManager.getInstance();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devicesTitle));
 
         mRecyclerView = getView().findViewById(R.id.recyclerViewDevices);
         dAdapter = new RecycleDevicesAdapter(this.getActivity(), this);

@@ -1,21 +1,14 @@
 package ipleiria.pdm.homecoffee.ui.home;
 
-import static android.app.Activity.RESULT_OK;
-import static java.sql.DriverManager.println;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ACTION;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ID;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_IMAGE;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_NAME;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.USER_URL;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,10 +18,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -38,12 +27,12 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import ipleiria.pdm.homecoffee.DeviceType;
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
@@ -62,6 +51,8 @@ public class AddHomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addRomTitle));
 
         roomTypeSpinner = getView().findViewById(R.id.roomType_spinner);
 
@@ -118,7 +109,7 @@ public class AddHomeFragment extends Fragment {
             loading.dismiss();
             Toast.makeText(context, response, Toast.LENGTH_LONG).show();
 
-            HouseManager.getInstance().adicionarContacto(newRoom);
+            HouseManager.getInstance().addRoom(newRoom);
             ((MainActivity) context).setInitialFragment();
 
         }, error ->
@@ -151,33 +142,11 @@ public class AddHomeFragment extends Fragment {
 
         //HouseManager.getInstance().adicionarContacto(newRoom);
         ((MainActivity) getActivity()).setInitialFragment();
-
-
     }
 
-/*
-    public ActivityResultLauncher<Intent> activityResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null && result.getData().getData() != null) {
-                        Uri filePath = result.getData().getData();
-                        //try {
-                            //Getting the Bitmap from Gallery
-                            //Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                            //rbitmap = getResizedBitmap(bitmap, 250);//Setting the Bitmap to ImageView
-                            //userImage = getStringImage(rbitmap);
-                            //imageViewUserImage.setImageBitmap(rbitmap);
-                       // } catch (IOException e) {
-                         //   e.printStackTrace();
-                        //}
-                    }
-                }
-            }
-
-    );
-    */
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.addFragmentViseted(FragmentsEnum.ADD_ROOM_FRAGMENT);
+    }
 }

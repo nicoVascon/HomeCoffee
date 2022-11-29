@@ -13,13 +13,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class HouseManager implements Serializable {
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
 
-    static final long serialVersionUID = 3L;
+    static final long serialVersionUID = 2L;
 
     // ------------------------------------- Devices -------------------------------------
     public void addDevice(Device device) {
@@ -81,11 +82,19 @@ public class HouseManager implements Serializable {
     }
 
     public void addInitialDevices() {
-        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY);
-        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE);
-        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT);
-        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE);
-        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION);
+        Room initialRoom;
+        if (!rooms.isEmpty()){
+            initialRoom = rooms.get(0);
+        }else{
+            initialRoom = new Room( "Sala",RoomType.LIVING_ROOM);
+            rooms.add(initialRoom);
+        }
+
+        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
+        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
+        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT, initialRoom);
+        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE, initialRoom);
+        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
         addDevice(dev1);
         addDevice(dev2);
         addDevice(dev3);
@@ -107,7 +116,7 @@ public class HouseManager implements Serializable {
         devices = new ArrayList<>();
     }
     //-----------------------------------------------------
-    public void adicionarContacto(Room room) {
+    public void addRoom(Room room) {
         if (!rooms.contains(room)) {
             rooms.add(room);
             Collections.sort(rooms);
@@ -119,11 +128,11 @@ public class HouseManager implements Serializable {
         Room c3 = new Room( "Quarto",RoomType.BEDROOM);
         Room c4 = new Room( "Escritório",RoomType.OFFICE);
         Room c5 = new Room( "Casa de banho", RoomType.BATHROOM);
-        adicionarContacto(c1);
-        adicionarContacto(c2);
-        adicionarContacto(c3);
-        adicionarContacto(c4);
-        adicionarContacto(c5);
+        addRoom(c1);
+        addRoom(c2);
+        addRoom(c3);
+        addRoom(c4);
+        addRoom(c5);
     }
     /*public void atualizarContacto(int pos, Room contacto) {
         if (!contactos.contains(contacto) || contacto.getNumero() ==
@@ -132,8 +141,7 @@ public class HouseManager implements Serializable {
             Collections.sort(contactos);
         }
     }*/
-    public Room obterContacto(int pos) {
-
+    public Room getRoom(int pos) {
         return rooms.get(pos);
     }
     public ArrayList<Room> getRooms() {

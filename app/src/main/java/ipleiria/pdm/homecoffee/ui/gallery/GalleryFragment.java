@@ -10,6 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
+import ipleiria.pdm.homecoffee.MainActivity;
+import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.databinding.FragmentGalleryBinding;
 
 public class GalleryFragment extends Fragment {
@@ -20,7 +23,6 @@ public class GalleryFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         GalleryViewModel galleryViewModel =
                 new ViewModelProvider(this).get(GalleryViewModel.class);
-
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -30,8 +32,16 @@ public class GalleryFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_galleryTitle));
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+        MainActivity.addFragmentViseted(FragmentsEnum.GALLERY_FRAGMENT);
     }
 }
