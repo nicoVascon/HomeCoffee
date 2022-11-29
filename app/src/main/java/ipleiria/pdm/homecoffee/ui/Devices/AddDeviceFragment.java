@@ -63,7 +63,6 @@ public class AddDeviceFragment extends Fragment {
         editTextNewDevName = getView().findViewById(R.id.editTextDevNameAdd);
         editTextNewDevChannel = getView().findViewById(R.id.editTextDevChannelAdd);
 
-        Context context = this.getContext();
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +71,6 @@ public class AddDeviceFragment extends Fragment {
         });
 
         ArrayAdapter<DeviceType> adapter = new SpinnerDeviceTypeAdapter(this.getContext(), R.layout.spinneritem_adddevice_devicetype_layout, DeviceType.values());
-
         deviceTypeSpinner.setAdapter(adapter);
 
         editTextNewDevName.setText(newDevName);

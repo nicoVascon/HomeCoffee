@@ -1,5 +1,13 @@
 package ipleiria.pdm.homecoffee.ui.home;
 
+import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ACTION;
+import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ID;
+import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_IMAGE;
+import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_NAME;
+import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.USER_URL;
+
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +20,17 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.RetryPolicy;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
@@ -76,7 +94,54 @@ public class AddHomeFragment extends Fragment {
         }
 
         Room newRoom = new Room(nome,type);
-        HouseManager.getInstance().adicionarContacto(newRoom);
+
+
+        if (HouseManager.getInstance().getRooms().contains(newRoom)) {
+            Toast.makeText(this.getActivity(), "Room already exists!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Context context = this.getActivity();
+
+        final ProgressDialog loading = ProgressDialog.show(this.getActivity(), "Uploading...", "Please wait...", false, false);
+
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, USER_URL, response -> {
+            loading.dismiss();
+            Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+
+            HouseManager.getInstance().adicionarContacto(newRoom);
+            ((MainActivity) context).setInitialFragment();
+
+        }, error ->
+            Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show())
+        {
+                @Override
+                protected Map<String, String> getParams () {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put(KEY_ACTION, "insert");
+                    //Onde esta 1 era userId
+                    params.put(KEY_ID, "userId");
+                    params.put(KEY_NAME, nome);
+                    params.put(KEY_IMAGE, String.valueOf(type));
+
+                    return params;
+                }
+        };
+
+        int socketTimeout = 30000; // 30 seconds. You can change it
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+
+        stringRequest.setRetryPolicy(policy);
+
+        RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
+
+        requestQueue.add(stringRequest);
+
+
+        //HouseManager.getInstance().adicionarContacto(newRoom);
         ((MainActivity) getActivity()).setInitialFragment();
     }
 
