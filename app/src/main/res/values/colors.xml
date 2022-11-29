@@ -11,4 +11,5 @@
     <color name="devIconBackground">#1794F3</color>
     <color name="devTypeSpinnerIconBackground">#56F113</color>
     <color name="customEfectColor">#F6BC67</color>
+    <color name="roomIconBackground">#FFD08B</color>
 </resources>

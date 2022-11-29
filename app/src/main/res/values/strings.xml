@@ -35,4 +35,6 @@
     <string name="txt_AddDevSelectRoomTitle">Select Room</string>
     <string name="toastMessage_MissingDevName">You must to introduce a Device Name</string>
     <string name="toastMessage_MissingDevChannel">You must to introduce the Device Channel</string>
+    <string name="toastMessage_MissingDevRoom">You must to Select a Room</string>
+    <string name="toolbar_devDetails">Device Details</string>
 </resources>

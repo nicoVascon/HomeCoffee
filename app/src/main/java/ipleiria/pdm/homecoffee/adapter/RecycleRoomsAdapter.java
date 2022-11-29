@@ -26,6 +26,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
     private Context context;
     private LayoutInflater mInflater;
 
+    private View lastSelectedItemView;
 
     public RecycleRoomsAdapter(Context context){
         mInflater = LayoutInflater.from(context);
@@ -80,14 +81,20 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CardView cardView = v.findViewById(R.id.cardViewRoomItem);
-                cardView.setCardBackgroundColor(context.getResources().getColor(R.color.devIconBackground));
-                onItemClick(itemPosition);
+                onItemClick(v, itemPosition);
             }
         });
     }
 
-    public void onItemClick(int position){}
+    public void onItemClick(View v, int position){
+        if (lastSelectedItemView != null){
+            CardView lastCardView = lastSelectedItemView.findViewById(R.id.cardViewRoomItem);
+            lastCardView.setCardBackgroundColor(context.getResources().getColor(R.color.roomIconBackground));
+        }
+        lastSelectedItemView = v;
+        CardView cardView = v.findViewById(R.id.cardViewRoomItem);
+        cardView.setCardBackgroundColor(context.getResources().getColor(R.color.devIconBackground));
+    }
 
     @Override
     public int getItemCount() {

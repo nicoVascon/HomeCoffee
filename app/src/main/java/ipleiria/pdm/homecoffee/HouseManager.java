@@ -82,11 +82,19 @@ public class HouseManager implements Serializable {
     }
 
     public void addInitialDevices() {
-        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY);
-        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE);
-        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT);
-        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE);
-        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION);
+        Room initialRoom;
+        if (!rooms.isEmpty()){
+            initialRoom = rooms.get(0);
+        }else{
+            initialRoom = new Room( "Sala",RoomType.LIVING_ROOM);
+            rooms.add(initialRoom);
+        }
+
+        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
+        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
+        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT, initialRoom);
+        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE, initialRoom);
+        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
         addDevice(dev1);
         addDevice(dev2);
         addDevice(dev3);
@@ -133,8 +141,7 @@ public class HouseManager implements Serializable {
             Collections.sort(contactos);
         }
     }*/
-    public Room obterContacto(int pos) {
-
+    public Room getRoom(int pos) {
         return rooms.get(pos);
     }
     public ArrayList<Room> getRooms() {

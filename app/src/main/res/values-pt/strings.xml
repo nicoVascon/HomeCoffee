@@ -24,4 +24,6 @@
     <string name="btn_devAddNext">SEGUINTE</string>
     <string name="toastMessage_MissingDevName">Tem de introducir um Nome de Dispositivo</string>
     <string name="toastMessage_MissingDevChannel">Tem de introducir o Canal do Dispositivo</string>
+    <string name="toastMessage_MissingDevRoom">Tem de Selecionar um Quarto</string>
+    <string name="toolbar_devDetails">Detalhes do Dispositivo</string>
 </resources>

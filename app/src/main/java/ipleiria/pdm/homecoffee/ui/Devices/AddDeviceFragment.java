@@ -36,11 +36,19 @@ public class AddDeviceFragment extends Fragment {
 
     private String newDevName;
     private int newDevChannel;
-    private DeviceType newDevType;
+    private DeviceType newDevType = DeviceType.values()[0];
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            newDevName = bundle.getString(AddDeviceFragment.RESULT_NEW_DEV_NAME);
+            newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
+            int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
+            newDevType = DeviceType.values()[devTypePosition];
+        }
+        MainActivity.setCurrentFragment(this);
         return inflater.inflate(R.layout.fragment_add_device, container, false);
     }
 
@@ -66,6 +74,10 @@ public class AddDeviceFragment extends Fragment {
         ArrayAdapter<DeviceType> adapter = new SpinnerDeviceTypeAdapter(this.getContext(), R.layout.spinneritem_adddevice_devicetype_layout, DeviceType.values());
 
         deviceTypeSpinner.setAdapter(adapter);
+
+        editTextNewDevName.setText(newDevName);
+        editTextNewDevChannel.setText(String.valueOf(newDevChannel));
+        deviceTypeSpinner.setSelection(newDevType.ordinal());
     }
 
     private void next(){
@@ -82,21 +94,24 @@ public class AddDeviceFragment extends Fragment {
         }
         newDevChannel = Integer.parseInt(newDevChannelAsString);
         newDevType = (DeviceType) deviceTypeSpinner.getSelectedItem();
+        Bundle bundle = getArguments();
+        if(bundle == null){
+            bundle = new Bundle();
+        }
+        this.setArguments(bundle);
+        bundle.putString(RESULT_NEW_DEV_NAME, newDevName);
+        bundle.putInt(RESULT_NEW_DEV_CHANNEL, newDevChannel);
+        bundle.putInt(RESULT_NEW_DEV_TYPE, newDevType.ordinal());
 
-        ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddDeviceSelectRoomFragment()).commit();
+        Fragment newFragment = new AddDeviceSelectRoomFragment();
+        newFragment.setArguments(bundle);
+        ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
+                replace(R.id.fragment_container, newFragment).commit();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(RESULT_NEW_DEV_NAME, newDevName);
-        outState.putInt(RESULT_NEW_DEV_CHANNEL, newDevChannel);
-        outState.putInt(RESULT_NEW_DEV_TYPE, newDevType.ordinal());
     }
 }

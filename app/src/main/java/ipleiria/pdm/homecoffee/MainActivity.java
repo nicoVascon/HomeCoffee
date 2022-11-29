@@ -31,12 +31,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private static TextView toolBarTitle;
     private static LinkedList<FragmentsEnum> lastsFragmentsOpened;
     private static boolean wasBackPressed;
+    private static Fragment currentFragment;
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
     private HouseManager houseManager;
-    private Fragment currentFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Bundle bundle = currentFragment.getArguments();
         switch (item.getItemId()) {
             case R.id.nav_home:
                 currentFragment = new HomeFragment();
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 currentFragment = new HomeFragment();
         }
+        currentFragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentFragment).commit();
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -119,11 +120,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (!(currentFragment instanceof HomeFragment)) {
+                Bundle bundle = currentFragment.getArguments();
                 switch (lastsFragmentsOpened.pop()){
                     case HOME_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_home);
                         currentFragment = new HomeFragment();
                         break;
                     case DEVICES_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_devices);
                         currentFragment = new DevicesFragment();
                         break;
                     case ADD_DEVICES_FRAGMENT:
@@ -133,9 +137,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         currentFragment = new AddHomeFragment();
                         break;
                     case GALLERY_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_gallery);
                         currentFragment = new GalleryFragment();
                         break;
                     case SLIDES_HOW_FRAGMENT:
+                        navigationView.setCheckedItem(R.id.nav_slideshow);
                         currentFragment = new SlideshowFragment();
                         break;
                     case ADD_DEVICES_SELECT_ROOM_FRAGMENT:
@@ -145,8 +151,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         currentFragment = new HomeFragment();
                 }
                 wasBackPressed = true;
+                currentFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentFragment).commit();
-                //saveLastFragmentOpened = true;
             }else{
                 super.onBackPressed();
             }
@@ -173,14 +179,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lastsFragmentsOpened.addFirst(fragment);
     }
 
-    public static void setWasBackPressed(boolean wasBackPressed) {
-        MainActivity.wasBackPressed = wasBackPressed;
+    public static void setCurrentFragment(Fragment currentFragment) {
+        MainActivity.currentFragment = currentFragment;
     }
-
-    //    @Override
-//    public boolean onSupportNavigateUp() {
-//        NavController navController = Navigation.findNavController(this, R.id.fragment_container);
-//        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-//                || super.onSupportNavigateUp();
-//    }
 }
