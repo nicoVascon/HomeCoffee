@@ -179,6 +179,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lastsFragmentsOpened.addFirst(fragment);
     }
 
+    public static void clearFragmentsVisitedList(){
+        lastsFragmentsOpened.clear();
+    }
+
     public static void setCurrentFragment(Fragment currentFragment) {
         MainActivity.currentFragment = currentFragment;
     }

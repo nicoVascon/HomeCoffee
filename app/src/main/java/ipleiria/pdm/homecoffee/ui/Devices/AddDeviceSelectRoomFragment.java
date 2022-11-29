@@ -100,6 +100,7 @@ public class AddDeviceSelectRoomFragment extends Fragment {
             ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new DevicesFragment()).commit();
             setArguments(null);
+            MainActivity.clearFragmentsVisitedList();
             return;
         }
         Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevRoom, Toast.LENGTH_LONG).show();
