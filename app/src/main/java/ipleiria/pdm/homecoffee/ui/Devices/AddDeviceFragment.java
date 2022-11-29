@@ -48,14 +48,14 @@ public class AddDeviceFragment extends Fragment {
             int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
             newDevType = DeviceType.values()[devTypePosition];
         }
-        MainActivity.setCurrentFragment(this);
+
         return inflater.inflate(R.layout.fragment_add_device, container, false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
+        MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
 
         deviceTypeSpinner = getView().findViewById(R.id.deviceType_spinner);

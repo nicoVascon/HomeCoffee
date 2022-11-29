@@ -23,9 +23,6 @@ public class GalleryFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         GalleryViewModel galleryViewModel =
                 new ViewModelProvider(this).get(GalleryViewModel.class);
-
-        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_galleryTitle));
-
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -37,6 +34,8 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_galleryTitle));
     }
 
     @Override

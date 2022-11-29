@@ -37,7 +37,7 @@ public class HomeFragment extends Fragment {
     public void onStart() {
         super.onStart();
         houseManager = HouseManager.getInstance();
-
+        MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.app_name));
 
         mRecyclerView = getView().findViewById(R.id.RecyclerViewMain);

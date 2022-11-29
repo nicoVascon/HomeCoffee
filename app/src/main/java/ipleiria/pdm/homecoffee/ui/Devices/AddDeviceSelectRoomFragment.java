@@ -48,7 +48,6 @@ public class AddDeviceSelectRoomFragment extends Fragment {
             System.out.println(e.getMessage());
             ((MainActivity) this.getActivity()).setInitialFragment();
         }
-        MainActivity.setCurrentFragment(this);
     }
 
     @Override
@@ -60,6 +59,7 @@ public class AddDeviceSelectRoomFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
 
         addButton = getView().findViewById(R.id.button_devAdd_SelectRoom);

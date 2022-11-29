@@ -24,8 +24,6 @@ public class SlideshowFragment extends Fragment {
         SlideshowViewModel slideshowViewModel =
                 new ViewModelProvider(this).get(SlideshowViewModel.class);
 
-        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_slideshowTitle));
-
         binding = FragmentSlideshowBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -37,6 +35,8 @@ public class SlideshowFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_slideshowTitle));
     }
 
     @Override

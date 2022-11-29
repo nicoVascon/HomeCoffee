@@ -26,7 +26,7 @@ public class DeviceDetailsFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
+        MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devDetails));
     }
 }
