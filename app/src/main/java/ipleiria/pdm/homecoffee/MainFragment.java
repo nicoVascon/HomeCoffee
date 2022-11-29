@@ -24,13 +24,12 @@ public class MainFragment extends Fragment {
     private RecycleDevicesAdapter dAdapter;
     private FloatingActionButton fbutton;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
-
-
 
 
 }
