@@ -49,4 +49,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
     implementation 'com.squareup.picasso:picasso:2.8'
     implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'me.angrybyte.slider:slider:1.4.2'
 }

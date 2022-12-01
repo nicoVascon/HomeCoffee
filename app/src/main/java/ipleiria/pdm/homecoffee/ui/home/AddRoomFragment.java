@@ -36,7 +36,7 @@ import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
-import ipleiria.pdm.homecoffee.Room;
+import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 
 public class AddRoomFragment extends Fragment {

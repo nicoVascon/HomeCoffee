@@ -1,30 +1,31 @@
-package ipleiria.pdm.homecoffee;
+package ipleiria.pdm.homecoffee.model;
 
 import java.io.Serializable;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 
 public class Device implements Serializable, Comparable<Device> {
-    private int numero;
+    private int channel;
     private String name;
     private boolean connectionState;
     private boolean connectionStateSaved;
     private DeviceType type;
     private Room room;
+    private double value;
 
-    public Device(int numero, String nome, DeviceType type, Room room) {
-        this.numero = numero;
-        this.name = nome;
+    public Device(int channel, String name, DeviceType type, Room room) {
+        this.channel = channel;
+        this.name = name;
         this.type = type;
         this.room = room;
     }
 
-    public int getNumero() {
-        return numero;
+    public int getChannel() {
+        return channel;
     }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
+    public void setChannel(int channel) {
+        this.channel = channel;
     }
 
     public String getName() {
@@ -59,14 +60,22 @@ public class Device implements Serializable, Comparable<Device> {
         this.type = type;
     }
 
+    public double getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value = value;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        return this.numero == ((Device) obj).numero;
+        return this.channel == ((Device) obj).channel;
     }
 
     @Override
     public String toString() {
-        return name + " - " + numero;
+        return name + " - " + channel;
     }
 
     @Override

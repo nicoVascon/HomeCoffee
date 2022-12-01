@@ -20,11 +20,13 @@ import java.util.ArrayList;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
+import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.SpinnerDeviceTypeAdapter;
+import ipleiria.pdm.homecoffee.interfaces.SaveData;
 
-public class AddDeviceFragment extends Fragment {
+public class AddDeviceFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_NAME = "RESULT_NEW_DEV_NAME";
     public static final String RESULT_NEW_DEV_CHANNEL = "RESULT_NEW_DEV_CHANNEL";
     public static final String RESULT_NEW_DEV_TYPE = "RESULT_NEW_DEV_TYPE";
@@ -41,13 +43,7 @@ public class AddDeviceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Bundle bundle = getArguments();
-        if (bundle != null){
-            newDevName = bundle.getString(AddDeviceFragment.RESULT_NEW_DEV_NAME);
-            newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
-            int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
-            newDevType = DeviceType.values()[devTypePosition];
-        }
+        recoverData();
 
         return inflater.inflate(R.layout.fragment_add_device, container, false);
     }
@@ -90,40 +86,43 @@ public class AddDeviceFragment extends Fragment {
             Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevChannel, Toast.LENGTH_LONG).show();
             return;
         }
-        newDevChannel = Integer.parseInt(newDevChannelAsString);
-        newDevType = (DeviceType) deviceTypeSpinner.getSelectedItem();
-        Bundle bundle = getArguments();
-        if(bundle == null){
-            bundle = new Bundle();
-        }
-        this.setArguments(bundle);
-        bundle.putString(RESULT_NEW_DEV_NAME, newDevName);
-        bundle.putInt(RESULT_NEW_DEV_CHANNEL, newDevChannel);
-        bundle.putInt(RESULT_NEW_DEV_TYPE, newDevType.ordinal());
+        saveData();
 
-        Fragment newFragment = new AddDeviceSelectRoomFragment();
-        newFragment.setArguments(bundle);
         ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
-                replace(R.id.fragment_container, newFragment).commit();
+                replace(R.id.fragment_container, new AddDeviceSelectRoomFragment()).commit();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
 
+        MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
+    }
+
+    @Override
+    public void saveData() {
         newDevName = editTextNewDevName.getText().toString().trim();
         String newDevChannelAsString = editTextNewDevChannel.getText().toString();
         newDevChannel = newDevChannelAsString.isEmpty() ? 0: Integer.parseInt(newDevChannelAsString);
         newDevType = (DeviceType) deviceTypeSpinner.getSelectedItem();
-        Bundle bundle = getArguments();
+        Bundle bundle = HouseManager.getBundle();
         if(bundle == null){
             bundle = new Bundle();
+            HouseManager.setBundle(bundle);
         }
-        this.setArguments(bundle);
         bundle.putString(RESULT_NEW_DEV_NAME, newDevName);
         bundle.putInt(RESULT_NEW_DEV_CHANNEL, newDevChannel);
         bundle.putInt(RESULT_NEW_DEV_TYPE, newDevType.ordinal());
-        MainActivity.getCurrentFragment().setArguments(bundle);
-        MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
+    }
+
+    @Override
+    public void recoverData() {
+        Bundle bundle = HouseManager.getBundle();
+        if (bundle != null){
+            newDevName = bundle.getString(AddDeviceFragment.RESULT_NEW_DEV_NAME);
+            newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
+            int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
+            newDevType = DeviceType.values()[devTypePosition];
+        }
     }
 }

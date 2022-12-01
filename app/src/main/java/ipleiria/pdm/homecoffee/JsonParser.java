@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ipleiria.pdm.homecoffee.Enums.RoomType;
+import ipleiria.pdm.homecoffee.model.Room;
 
 public class JsonParser {
 

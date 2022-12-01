@@ -1,4 +1,4 @@
-package ipleiria.pdm.homecoffee;
+package ipleiria.pdm.homecoffee.model;
 
 import java.io.Serializable;
 

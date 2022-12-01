@@ -14,7 +14,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="txt_DevicesFragTitle">Devices</string>
     <string name="btn_OnDevices">On</string>
-    <string name="txt_DevicesConnected">" Devices Connected"</string>
+    <string name="txt_DevicesConnected">" Device(s) Connected"</string>
     <string name="txt_DevicesDisconnected">All Devices Are Disconnected</string>
     <string name="txt_connectionStateConnected">Connected</string>
     <string name="txt_connectionStateDisconected">Disconnected</string>

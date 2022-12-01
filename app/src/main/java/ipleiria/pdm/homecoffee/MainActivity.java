@@ -19,11 +19,13 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.LinkedList;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
+import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
@@ -119,7 +121,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             if (!(currentFragment instanceof HomeFragment)) {
-                Bundle bundle = currentFragment.getArguments();
+                if (currentFragment instanceof SaveData){
+                    ((SaveData) currentFragment).saveData();
+                }
                 switch (lastsFragmentsOpened.pop()){
                     case HOME_FRAGMENT:
                         navigationView.setCheckedItem(R.id.nav_home);
@@ -150,7 +154,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         currentFragment = new HomeFragment();
                 }
                 wasBackPressed = true;
-                currentFragment.setArguments(bundle);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, currentFragment).commit();
             }else{
                 super.onBackPressed();
