@@ -1,4 +1,4 @@
-package ipleiria.pdm.homecoffee;
+package ipleiria.pdm.homecoffee.Enums;
 
 public enum RoomType {
     BEDROOM,

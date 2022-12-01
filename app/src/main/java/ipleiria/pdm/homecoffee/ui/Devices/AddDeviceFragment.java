@@ -110,6 +110,20 @@ public class AddDeviceFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        newDevName = editTextNewDevName.getText().toString().trim();
+        String newDevChannelAsString = editTextNewDevChannel.getText().toString();
+        newDevChannel = newDevChannelAsString.isEmpty() ? 0: Integer.parseInt(newDevChannelAsString);
+        newDevType = (DeviceType) deviceTypeSpinner.getSelectedItem();
+        Bundle bundle = getArguments();
+        if(bundle == null){
+            bundle = new Bundle();
+        }
+        this.setArguments(bundle);
+        bundle.putString(RESULT_NEW_DEV_NAME, newDevName);
+        bundle.putInt(RESULT_NEW_DEV_CHANNEL, newDevChannel);
+        bundle.putInt(RESULT_NEW_DEV_TYPE, newDevType.ordinal());
+        MainActivity.getCurrentFragment().setArguments(bundle);
         MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
     }
 }

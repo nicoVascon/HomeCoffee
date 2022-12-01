@@ -1,6 +1,7 @@
 package ipleiria.pdm.homecoffee;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import java.io.FileInputStream;
@@ -14,9 +15,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class HouseManager implements Serializable {
+    private static HouseManager INSTANCE = null;
+
+    public Bundle bundle;
+
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
 
@@ -86,7 +92,7 @@ public class HouseManager implements Serializable {
         if (!rooms.isEmpty()){
             initialRoom = rooms.get(0);
         }else{
-            initialRoom = new Room( "Sala",RoomType.LIVING_ROOM);
+            initialRoom = new Room( "Sala", RoomType.LIVING_ROOM);
             rooms.add(initialRoom);
         }
 
@@ -100,20 +106,6 @@ public class HouseManager implements Serializable {
         addDevice(dev3);
         addDevice(dev4);
         addDevice(dev5);
-    }
-
-    //---------------------------------------------------
-    //Código adicionado para garantir que há só uma instância da classe GestorContactos
-    private static HouseManager INSTANCE = null;
-    public static synchronized HouseManager getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new HouseManager();
-        }
-        return INSTANCE;
-    }
-    private HouseManager() {
-        rooms = new ArrayList<>();
-        devices = new ArrayList<>();
     }
     //-----------------------------------------------------
     public void addRoom(Room room) {
@@ -157,6 +149,19 @@ public class HouseManager implements Serializable {
                 res.add(c);
         }
         return res;
+    }
+
+    // ------------------------------------- House Manager -------------------------------------
+    //Código adicionado para garantir que há só uma instância da classe GestorContactos
+    public static synchronized HouseManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new HouseManager();
+        }
+        return INSTANCE;
+    }
+    private HouseManager() {
+        rooms = new ArrayList<>();
+        devices = new ArrayList<>();
     }
     @Override
     public String toString() {

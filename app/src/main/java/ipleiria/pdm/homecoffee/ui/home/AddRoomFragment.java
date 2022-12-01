@@ -37,9 +37,9 @@ import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.Room;
-import ipleiria.pdm.homecoffee.RoomType;
+import ipleiria.pdm.homecoffee.Enums.RoomType;
 
-public class AddHomeFragment extends Fragment {
+public class AddRoomFragment extends Fragment {
 
     private Spinner roomTypeSpinner;
 

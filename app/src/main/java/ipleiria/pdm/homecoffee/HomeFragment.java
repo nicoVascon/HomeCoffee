@@ -1,4 +1,4 @@
-package ipleiria.pdm.homecoffee.ui.home;
+package ipleiria.pdm.homecoffee;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
+import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -49,7 +50,7 @@ public class HomeFragment extends Fragment {
         addRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddHomeFragment()).commit();
+                ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddRoomFragment()).commit();
             }
         });
 

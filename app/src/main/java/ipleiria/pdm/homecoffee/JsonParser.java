@@ -8,6 +8,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ipleiria.pdm.homecoffee.Enums.RoomType;
+
 public class JsonParser {
 
     private JSONArray rooms = null;

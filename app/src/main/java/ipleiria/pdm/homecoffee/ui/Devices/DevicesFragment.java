@@ -78,10 +78,13 @@ public class DevicesFragment extends Fragment {
         });
 
         addDeviceButton = getView().findViewById(R.id.btn_addDevice);
+        Bundle bundle = getArguments();
         addDeviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddDeviceFragment()).commit();
+                Fragment newFragment = new AddDeviceFragment();
+                newFragment.setArguments(bundle);
+                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newFragment).commit();
             }
         });
 

@@ -2,6 +2,8 @@ package ipleiria.pdm.homecoffee;
 
 import java.io.Serializable;
 
+import ipleiria.pdm.homecoffee.Enums.RoomType;
+
 public class Room implements Serializable, Comparable<Room> {
 
     private String nome;
