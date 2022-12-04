@@ -109,10 +109,11 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
         holder.itemView.setLongClickable(true);
         holder.itemView.setClickable(true);
+        int itemPosition = position;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClick(v, position);
+                onItemClick(v, itemPosition);
             }
         });
     }

@@ -35,6 +35,7 @@ public class DevicesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
+        System.out.println("oiiiiii");
         return inflater.inflate(R.layout.fragment_devices, container, false);
     }
 

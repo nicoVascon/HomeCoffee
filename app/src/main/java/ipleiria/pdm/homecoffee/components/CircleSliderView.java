@@ -1,4 +1,4 @@
-package ipleiria.pdm.homecoffee;
+package ipleiria.pdm.homecoffee.components;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -78,7 +78,7 @@ public class CircleSliderView extends View {
     private boolean mInCircleButton;
     private boolean mInCircleButton1;
     private boolean ismInCircleButton;
-    private int mCurrentTime; // seconds
+    private double mCurrentTime; // seconds
 
 
 
@@ -238,10 +238,10 @@ public class CircleSliderView extends View {
             // TimerNumber
             canvas.save();
         }
-        int i = mCurrentTime / 150;
+        double i = mCurrentTime / 150;
         String oi = (i < 10 ? "0" + i : i) + ":" + ((mCurrentTime - 150 * i) * 10 / 25 < 10 ? "0" + ((mCurrentTime - 150 * i) * 10 / 25) : ((mCurrentTime - 150 * i) * 10 / 25));
-        canvas.drawText((i < 10 ? "0" + i : i) + " " + ((mCurrentTime - 150 * i) * 10 / 25 < 10 ?
-                "0" + ((mCurrentTime - 150 * i) * 10 / 25) : ((mCurrentTime - 150 * i) * 10 / 25)), mCx, mCy + getFontHeight(mTimerNumberPaint) / 2, mTimerNumberPaint);
+//        canvas.drawText((i < 10 ? "0" + i : i) + " " + ((mCurrentTime - 150 * i) * 10 / 25 < 10 ?
+//                "0" + ((mCurrentTime - 150 * i) * 10 / 25) : ((mCurrentTime - 150 * i) * 10 / 25)), mCx, mCy + getFontHeight(mTimerNumberPaint) / 2, mTimerNumberPaint);
         //canvas.drawText(setText(mCurrentTime), mCx, mCy + getFontHeight(mTimerNumberPaint) / 2, mTimerColonPaint);
 
         if (null != mListener) {
@@ -300,7 +300,7 @@ public class CircleSliderView extends View {
                     if (mCurrentRadian < 0) {
                         mCurrentRadian += (float) (2 * Math.PI);
                     }
-                    mCurrentTime = (int) (60 / (2 * Math.PI) * mCurrentRadian * 60);
+                    mCurrentTime = (double) (60 / (2 * Math.PI) * mCurrentRadian * 60);
                     invalidate();
                 } else if (mInCircleButton1 && isEnabled()) {
 //                    float temp = getRadian(event.getX(), event.getY());
@@ -407,7 +407,7 @@ public class CircleSliderView extends View {
             Bundle bundle = (Bundle) state;
             super.onRestoreInstanceState(bundle.getParcelable(INSTANCE_STATUS));
             mCurrentRadian = bundle.getFloat(STATUS_RADIAN);
-            mCurrentTime = (int) (60 / (2 * Math.PI) * mCurrentRadian * 60);
+            mCurrentTime = (double) (60 / (2 * Math.PI) * mCurrentRadian * 60);
             return;
         }
         super.onRestoreInstanceState(state);
@@ -431,7 +431,23 @@ public class CircleSliderView extends View {
 
         void end(String ending);
 
-        String setText(int value);
+        String setText(double value);
+    }
+
+    public double getmCurrentTime() {
+        return mCurrentTime;
+    }
+
+    public void setmCurrentTime(double mCurrentTime) {
+        this.mCurrentTime = mCurrentTime;
+    }
+
+    public float getmCurrentRadian() {
+        return mCurrentRadian;
+    }
+
+    public void setmCurrentRadian(float mCurrentRadian) {
+        this.mCurrentRadian = mCurrentRadian;
     }
 }
 

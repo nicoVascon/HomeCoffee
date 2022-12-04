@@ -12,7 +12,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-import ipleiria.pdm.homecoffee.CircleSliderView;
+import ipleiria.pdm.homecoffee.components.CircleSliderView;
+import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
@@ -78,6 +79,8 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         graphView.addSeries(series);
 
         CircleSliderView circleSliderView = getView().findViewById(R.id.circletimerview);
+        circleSliderView.setmCurrentTime(selectedDevice.getValue()*3600/100);
+        circleSliderView.setmCurrentRadian((float) ((selectedDevice.getValue()/100)*2*Math.PI));
 
         circleSliderView.setOnTimeChangedListener(new CircleSliderView.OnTimeChangedListener() {
             @Override
@@ -91,7 +94,7 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
             }
 
             @Override
-            public String setText(int value) {
+            public String setText(double value) {
                 double percentValue = value*100 / MAX_VALUE;
                 selectedDevice.setValue(percentValue);
                 return String.format("%.2f", percentValue) + " %";
@@ -109,5 +112,11 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         Bundle bundle = HouseManager.getBundle();
         int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
         this.selectedDevice = HouseManager.getInstance().getDevice(selectedDevPosition);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        MainActivity.addFragmentViseted(FragmentsEnum.DEVICE_DETAILS_FRAGMENT);
     }
 }

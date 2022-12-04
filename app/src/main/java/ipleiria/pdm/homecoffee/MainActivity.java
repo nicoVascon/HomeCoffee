@@ -1,6 +1,8 @@
 package ipleiria.pdm.homecoffee;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceSelectRoomFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
@@ -30,8 +33,9 @@ import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
     private static TextView toolBarTitle;
-    private static LinkedList<FragmentsEnum> lastsFragmentsOpened;
+    private static LinkedList<FragmentsEnum> lastsFragmentsOpened = new LinkedList<>();;
     private static boolean wasBackPressed;
+    private static boolean wasRotated;
     private static Fragment currentFragment;
 
     private DrawerLayout drawer;
@@ -68,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             houseManager = (HouseManager)
                     savedInstanceState.getSerializable("contactos");
         }
-
-        lastsFragmentsOpened = new LinkedList<>();
         //saveLastFragmentOpened = true;
     }
 
@@ -150,6 +152,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     case ADD_DEVICES_SELECT_ROOM_FRAGMENT:
                         currentFragment = new AddDeviceSelectRoomFragment();
                         break;
+                    case DEVICE_DETAILS_FRAGMENT:
+                        currentFragment = new DeviceDetailsFragment();
+                        break;
                     default:
                         currentFragment = new HomeFragment();
                 }
@@ -160,6 +165,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -176,6 +186,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static void addFragmentViseted(FragmentsEnum fragment){
         if (wasBackPressed){
             wasBackPressed = false;
+            return;
+        }
+        if (wasRotated){
+            wasRotated = false;
             return;
         }
         lastsFragmentsOpened.addFirst(fragment);

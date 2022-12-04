@@ -12,4 +12,12 @@
     <style name="Button.LightOrange" parent="ThemeOverlay.AppCompat">
         <item name="colorAccent">#F6BC67</item>
     </style>
+
+
+    <!-- Experiências -->
+    <style name="MyToolbarTheme"
+        parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
 </resources>
