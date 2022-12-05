@@ -75,8 +75,6 @@ public class DevicesFragment extends Fragment {
         allDevSwitch.setChecked(devicesEnable);
         allDevSwitch.setText(devicesEnable ? R.string.btn_enable_dev : R.string.btn_disabled_dev);
 
-        updateDevicesConnectionState();
-
         allDevSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -102,6 +100,7 @@ public class DevicesFragment extends Fragment {
             }
         });
 
+        updateDevicesConnectionState();
     }
 
     public void updateDevicesConnectionState(){

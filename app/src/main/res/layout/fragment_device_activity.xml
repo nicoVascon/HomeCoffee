@@ -7,13 +7,41 @@
     android:layout_height="match_parent"
     tools:context=".ui.Devices.DeviceDetailsFragment">
 
-    <com.jjoe64.graphview.GraphView
+    <ipleiria.pdm.homecoffee.components.GraphView_Custom
         android:id="@+id/lineChart_DevActivityFragment"
-        android:layout_width="380dp"
-        android:layout_height="226dp"
+        android:layout_width="308dp"
+        android:layout_height="198dp"
         android:layout_alignParentTop="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/btn_setAxis_week"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lineChart_DevActivityFragment" />
+
+    <Button
+        android:id="@+id/btn_day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_setAxis_day"
+        app:layout_constraintEnd_toStartOf="@+id/btn_hour"
+        app:layout_constraintStart_toEndOf="@+id/btn_week"
+        app:layout_constraintTop_toTopOf="@+id/btn_week" />
+
+    <Button
+        android:id="@+id/btn_hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="@string/btn_setAxis_hour"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_day" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

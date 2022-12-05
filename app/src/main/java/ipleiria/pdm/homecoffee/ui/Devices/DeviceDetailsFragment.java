@@ -1,17 +1,26 @@
 package ipleiria.pdm.homecoffee.ui.Devices;
 
+import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.badge.BadgeDrawable;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import ipleiria.pdm.homecoffee.Tests.Tab3Fragment;
+import ipleiria.pdm.homecoffee.adapter.TabAdapter;
 import ipleiria.pdm.homecoffee.components.CircleSliderView;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -19,11 +28,24 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 
 public class DeviceDetailsFragment extends Fragment implements SaveData {
-    private GraphView graphView;
-
     private Device selectedDevice;
+
+    private TabAdapter adapter;
+    private TabLayout tabLayout;
+    private ViewPager2 viewPager;
+
+    private String[] tabsTitles = {"Control", "Activity", "Schedule", "Settings"};
+    private int[] tabsSelectedIcon = {
+            R.drawable.camera_tab_icon2,
+            R.drawable.statistics_tab_icon,
+            R.drawable.schedule_tab_icon,
+            R.drawable.settings_cute_tab_icon
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,63 +65,72 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devDetails));
 
-        // on below line we are initializing our graph view.
-        graphView = this.getView().findViewById(R.id.idGraphView);
+//        Bundle bundle = HouseManager.getBundle();
+//        if (bundle == null){
+//            bundle = new Bundle();
+//            HouseManager.setBundle(bundle);
+//        }
+//        bundle.putInt(DevicesFragment.RESULT_DEV_POSITION, 1);
 
-        // on below line we are adding data to our graph view.
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-                // on below line we are adding
-                // each point on our x and y axis.
-                new DataPoint(0, 1),
-                new DataPoint(1, 3),
-                new DataPoint(2, 4),
-                new DataPoint(3, 9),
-                new DataPoint(4, 6),
-                new DataPoint(5, 3),
-                new DataPoint(6, 6),
-                new DataPoint(7, 1),
-                new DataPoint(8, 2)
+        viewPager = (ViewPager2) getView().findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) getView().findViewById(R.id.tabLayout);
+        adapter = new TabAdapter(this);
+        //adapter.addFragment(new Tab1Fragment(), "Tab 1");
+        adapter.addFragment(new DeviceControlFragment(), "Tab 1");
+//        adapter.addFragment(new Tab2Fragment(), "Tab 2");
+        adapter.addFragment(new DeviceActivityFragment(), "Tab 2");
+        adapter.addFragment(new Tab3Fragment(), "Tab 3");
+//        adapter.addFragment(new Tab3Fragment(), "Tab 4");
+        adapter.addFragment(new DeviceSettingsFragment(), "Tab 3");
+        viewPager.setAdapter(adapter);
+
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.white));
+        tabLayout.setSelectedTabIndicatorColor(getResources().getColor(R.color.app_color));
+        tabLayout.setTabTextColors(getResources().getColor(R.color.gray), getResources().getColor(R.color.app_color));
+        tabLayout.setTabIconTint(null);
+        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+            tab.setIcon(tabsSelectedIcon[position]);
+            tab.setText(tabsTitles[position]);
+            if (position > 0){
+                int tabIconColor = ContextCompat.getColor(this.getContext(), R.color.gray);
+                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+            }
+        }).attach();
+
+
+        Context context = this.getContext();
+        viewPager.setUserInputEnabled(false);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                tab.getIcon().setColorFilter(null);
+                if (tab.getPosition() == 0){
+                    viewPager.setUserInputEnabled(false);
+                }else{
+                    viewPager.setUserInputEnabled(true);
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                int tabIconColor = ContextCompat.getColor(context, R.color.gray);
+                tab.getIcon().setColorFilter(tabIconColor, PorterDuff.Mode.SRC_IN);
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
         });
+        // Optional :)
+        String contentDescription = "Tab Layout Fixe";
+        tabLayout.setContentDescription(contentDescription);
+        String contentDescriptionTab1 = "Tab 1 Muito Fixe";
+        tabLayout.getTabAt(0).setContentDescription(contentDescriptionTab1);
 
-        // after adding data to our line graph series.
-        // on below line we are setting
-        // title for our graph view.
-        graphView.setTitle("My Graph View");
+        BadgeDrawable badge = tabLayout.getTabAt(1).getOrCreateBadge();
+        badge.setNumber(25);
 
-        // on below line we are setting
-        // text color to our graph view.
-        graphView.setTitleColor(R.color.purple_200);
-
-        // on below line we are setting
-        // our title text size.
-        graphView.setTitleTextSize(18);
-
-        // on below line we are adding
-        // data series to our graph view.
-        graphView.addSeries(series);
-
-        CircleSliderView circleSliderView = getView().findViewById(R.id.circletimerview);
-        circleSliderView.setmCurrentTime(selectedDevice.getValue()*3600/100);
-        circleSliderView.setmCurrentRadian((float) ((selectedDevice.getValue()/100)*2*Math.PI));
-
-        circleSliderView.setOnTimeChangedListener(new CircleSliderView.OnTimeChangedListener() {
-            @Override
-            public void start(String starting) {
-                System.out.println("Oiiiiiiii Starting " + starting);
-            }
-
-            @Override
-            public void end(String ending) {
-                System.out.println("Oiiiiiiii ending " + ending);
-            }
-
-            @Override
-            public String setText(double value) {
-                double percentValue = value*100 / MAX_VALUE;
-                selectedDevice.setValue(percentValue);
-                return String.format("%.2f", percentValue) + " %";
-            }
-        });
     }
 
     @Override

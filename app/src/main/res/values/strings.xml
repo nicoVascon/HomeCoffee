@@ -37,4 +37,9 @@
     <string name="toastMessage_MissingDevChannel">You must to introduce the Device Channel</string>
     <string name="toastMessage_MissingDevRoom">You must to Select a Room</string>
     <string name="toolbar_devDetails">Device Details</string>
+    <string name="btn_setAxis_week">Week</string>
+    <string name="btn_setAxis_day">Day</string>
+    <string name="btn_setAxis_hour">Hour</string>
+    <string name="textView_DevNameLabel">Name</string>
+    <string name="textView_DevChannelLabel">Channel</string>
 </resources>

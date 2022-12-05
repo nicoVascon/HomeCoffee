@@ -26,4 +26,9 @@
     <string name="toastMessage_MissingDevChannel">Tem de introducir o Canal do Dispositivo</string>
     <string name="toastMessage_MissingDevRoom">Tem de Selecionar um Quarto</string>
     <string name="toolbar_devDetails">Detalhes do Dispositivo</string>
+    <string name="btn_setAxis_week">Semana</string>
+    <string name="btn_setAxis_day">Dia</string>
+    <string name="btn_setAxis_hour">Hora</string>
+    <string name="textView_DevNameLabel">Nome</string>
+    <string name="textView_DevChannelLabel">Canal</string>
 </resources>

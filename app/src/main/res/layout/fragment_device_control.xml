@@ -5,48 +5,50 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Devices.DevicesFragment">
+    tools:context=".ui.Devices.DevicesFragment"
+    android:id="@+id/scrollView">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout_ControlFragment"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView_DeviceName_ControlFragment"
-            style="@style/Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/txt_DevicesFragTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout_ControlFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <Switch
-            android:id="@+id/switch_DevState_ControlFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:scrollbarSize="4sp"
-            android:text="@string/btn_OnDevices"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/textView_DeviceName_ControlFragment"
+                style="@style/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/txt_DevicesFragTitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <ipleiria.pdm.homecoffee.components.CircleSliderView
-        android:id="@+id/circleSliderView_valueControler"
-        android:layout_width="255dp"
-        android:layout_height="272dp"
-        android:layout_margin="40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.583"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_ControlFragment" />
+            <Switch
+                android:id="@+id/switch_DevState_ControlFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:scrollbarSize="4sp"
+                android:text="@string/btn_OnDevices"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <ipleiria.pdm.homecoffee.components.CircleSliderView
+            android:id="@+id/circleSliderView_valueControler"
+            android:layout_width="255dp"
+            android:layout_height="272dp"
+            android:layout_gravity="center"
+            android:layout_margin="40dp" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
