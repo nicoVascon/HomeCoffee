@@ -4,9 +4,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,6 +31,7 @@ import ipleiria.pdm.homecoffee.databinding.ActivityMainBinding;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
+import ipleiria.pdm.homecoffee.ui.login.LoginFragment;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
 public class MainActivity extends AppCompatActivity implements
@@ -76,6 +80,26 @@ public class MainActivity extends AppCompatActivity implements
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        View header = navigationView.getHeaderView(0);
+        TextView textHeader = header.findViewById(R.id.textViewUser);
+        /*
+        if (HouseManager.getInstance().getUser() == null) {
+            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    User user = documentSnapshot.toObject(User.class);
+                    HouseManager.getInstance().setUser(user);
+                    textHeader.setText(HouseManager.getInstance().getUser().getUsername());
+
+                }
+            });
+
+        } else
+            textHeader.setText(HouseManager.getInstance().getUser().getUsername());
+        */
+
+
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -127,6 +151,12 @@ public class MainActivity extends AppCompatActivity implements
     */
     public void setInitialFragment() {
         getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container, new LoginFragment()).commit();
+        navigationView.setCheckedItem(R.id.nav_home);
+    }
+
+    public void setHomeFragment() {
+        getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
     }
@@ -159,7 +189,8 @@ public class MainActivity extends AppCompatActivity implements
                 f = new DevicesFragment();
                 break;
             default:
-                f = new MainFragment();
+                f = new HomeFragment();
+                //f = new MainFragment();
         }
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, f).commit();
         drawer.closeDrawer(GravityCompat.START);
@@ -204,5 +235,10 @@ public class MainActivity extends AppCompatActivity implements
 
     public Fragment getF() {
         return f;
+    }
+
+    public void btn_logout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        finish();
     }
 }

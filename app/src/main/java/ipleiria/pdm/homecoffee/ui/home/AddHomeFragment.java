@@ -119,7 +119,8 @@ public class AddHomeFragment extends Fragment {
             Toast.makeText(context, response, Toast.LENGTH_LONG).show();
 
             HouseManager.getInstance().adicionarContacto(newRoom);
-            ((MainActivity) context).setInitialFragment();
+            //((MainActivity) context).setInitialFragment();
+            ((MainActivity) context).setHomeFragment();
 
         }, error ->
             Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show())
@@ -150,7 +151,8 @@ public class AddHomeFragment extends Fragment {
 
 
         //HouseManager.getInstance().adicionarContacto(newRoom);
-        ((MainActivity) getActivity()).setInitialFragment();
+        //((MainActivity) getActivity()).setInitialFragment();
+        ((MainActivity) getActivity()).setHomeFragment();
 
 
     }

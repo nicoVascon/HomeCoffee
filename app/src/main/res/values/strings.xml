@@ -25,4 +25,15 @@
     <string name="btn_addDevice">ADD</string>
     <string name="spinner_contDescription">Device Type</string>
     <string name="txt_devChannelAdd">Device Channel</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="register">Create an account</string>
+    <string name="logout">Log out of account</string>
 </resources>
