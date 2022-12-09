@@ -141,6 +141,11 @@ public class HouseManager implements Serializable {
     public ArrayList<Room> getRooms() {
         return rooms;
     }
+
+    public int getRoomIndex(Room room){
+        return rooms.indexOf(room);
+    }
+
     public void removerContacto(int pos) {
         rooms.remove(pos);
     }

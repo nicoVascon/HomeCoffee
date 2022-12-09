@@ -25,6 +25,8 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.SpinnerDeviceTypeAdapter;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
+import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 
 public class AddDeviceFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_NAME = "RESULT_NEW_DEV_NAME";
@@ -52,7 +54,11 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     public void onStart() {
         super.onStart();
         MainActivity.setCurrentFragment(this);
-        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
+        if(DeviceSettingsFragment.editingDevice){
+            MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_editDevTitle));
+        }else {
+            MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
+        }
 
         deviceTypeSpinner = getView().findViewById(R.id.deviceType_spinner);
         btn_next = getView().findViewById(R.id.button_devNextAdd);
@@ -119,10 +125,20 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     public void recoverData() {
         Bundle bundle = HouseManager.getBundle();
         if (bundle != null){
-            newDevName = bundle.getString(AddDeviceFragment.RESULT_NEW_DEV_NAME);
-            newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
-            int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
-            newDevType = DeviceType.values()[devTypePosition];
+            if(bundle.containsKey(AddDeviceFragment.RESULT_NEW_DEV_NAME)){
+                newDevName = bundle.getString(AddDeviceFragment.RESULT_NEW_DEV_NAME);
+                newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
+                int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
+                newDevType = DeviceType.values()[devTypePosition];
+            }else if (DeviceSettingsFragment.editingDevice) {
+                int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
+                Device deviceToEdit = HouseManager.getInstance().getDevice(selectedDevPosition);
+                newDevName = deviceToEdit.getName();
+                newDevChannel = deviceToEdit.getChannel();
+                newDevType = deviceToEdit.getType();
+                int selectedDevRoomPosition = HouseManager.getInstance().getRoomIndex(deviceToEdit.getRoom());
+                bundle.putInt(AddDeviceSelectRoomFragment.RESULT_NEW_DEV_ROOM, selectedDevRoomPosition);
+            }
         }
     }
 }

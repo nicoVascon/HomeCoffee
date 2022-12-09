@@ -22,6 +22,7 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 
 public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_ROOM = "RESULT_NEW_DEV_ROOM";
@@ -52,9 +53,19 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                add();
+                if(DeviceSettingsFragment.editingDevice){
+                    edit();
+                }else {
+                    add();
+                }
             }
         });
+        if(DeviceSettingsFragment.editingDevice){
+            addButton.setText(getResources().getString(R.string.btn_save));
+            MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_editDevTitle));
+        }else {
+            addButton.setText(getResources().getString(R.string.btn_addDevice));
+        }
         mRecyclerView = getView().findViewById(R.id.RecyclerViewAddDevSelectRoom);
         mAdapter = new RecycleRoomsAdapter(this.getActivity()){
             @Override
@@ -81,12 +92,27 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(),2));
     }
 
+    private void edit(){
+        if (newDevRoom != null){
+            int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
+            Device selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+            selectedDevice.setName(newDevName);
+            selectedDevice.setChannel(newDevChannel);
+            selectedDevice.setType(newDevType);
+            selectedDevice.setRoom(newDevRoom);
+            ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
+                    replace(R.id.fragment_container, new DeviceDetailsFragment(DeviceDetailsFragment.SETTINGS_TAB_INDEX)).commit();
+            return;
+        }
+        Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevRoom, Toast.LENGTH_LONG).show();
+    }
+
     private void add(){
         if (newDevRoom != null){
             HouseManager.getInstance().addDevice(new Device(newDevChannel, newDevName, newDevType, newDevRoom));
             ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new DevicesFragment()).commit();
-            setArguments(null);
+            HouseManager.setBundle(null);
             MainActivity.clearFragmentsVisitedList();
             return;
         }

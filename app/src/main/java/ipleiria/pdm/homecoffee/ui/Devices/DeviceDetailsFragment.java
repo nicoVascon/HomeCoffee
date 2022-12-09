@@ -33,11 +33,15 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 
 public class DeviceDetailsFragment extends Fragment implements SaveData {
+    public static final int SETTINGS_TAB_INDEX = 3;
+    public static boolean addAsVisitedFragment = true;
+
     private Device selectedDevice;
 
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
+    private int initialTab;
 
     private String[] tabsTitles = {"Control", "Activity", "Schedule", "Settings"};
     private int[] tabsSelectedIcon = {
@@ -46,6 +50,15 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
             R.drawable.schedule_tab_icon,
             R.drawable.settings_cute_tab_icon
     };
+
+    public DeviceDetailsFragment(){
+        super();
+    }
+
+    public DeviceDetailsFragment(int initialTab){
+        super();
+        this.initialTab = initialTab;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,6 +144,9 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         BadgeDrawable badge = tabLayout.getTabAt(1).getOrCreateBadge();
         badge.setNumber(25);
 
+        //Set initial Tab
+        tabLayout.getTabAt(initialTab).select();
+        viewPager.setCurrentItem(initialTab, false);
     }
 
     @Override
@@ -148,6 +164,10 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if(!addAsVisitedFragment){
+            addAsVisitedFragment = true;
+            return;
+        }
         MainActivity.addFragmentViseted(FragmentsEnum.DEVICE_DETAILS_FRAGMENT);
     }
 }

@@ -68,6 +68,14 @@ public class Device implements Serializable, Comparable<Device> {
         this.value = value;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return this.channel == ((Device) obj).channel;

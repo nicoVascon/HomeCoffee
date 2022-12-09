@@ -20,6 +20,7 @@ import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 
 public class DevicesFragment extends Fragment {
     public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
@@ -95,6 +96,7 @@ public class DevicesFragment extends Fragment {
         addDeviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                DeviceSettingsFragment.editingDevice = false;
                 ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
                         replace(R.id.fragment_container, new AddDeviceFragment()).commit();
             }

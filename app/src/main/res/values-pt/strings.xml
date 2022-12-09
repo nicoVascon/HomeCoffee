@@ -31,4 +31,14 @@
     <string name="btn_setAxis_hour">Hora</string>
     <string name="textView_DevNameLabel">Nome</string>
     <string name="textView_DevChannelLabel">Canal</string>
+    <string name="textView_DevTypeLabel">Tipo de Dispositivo</string>
+    <string name="textView_DevRoomLabel">Quarto do Dispositivo</string>
+    <string name="btn_edit">Editar</string>
+    <string name="btn_delete">Eliminar</string>
+    <string name="btn_save">Guardar</string>
+    <string name="toolbar_editDevTitle">Editar Dispositivo</string>
+    <string name="txt_AlertDialog_deleteDev">Tem certeza de que deseja eliminar este dispositivo?</string>
+    <string name="txt_yes">Sim</string>
+    <string name="txt_no">Não</string>
+    <string name="txt_AlertDialog_deleteTitle">Eliminar</string>
 </resources>
