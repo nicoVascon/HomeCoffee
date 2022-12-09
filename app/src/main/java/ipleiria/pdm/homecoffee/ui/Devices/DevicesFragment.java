@@ -20,8 +20,11 @@ import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 
 public class DevicesFragment extends Fragment {
+    public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
+
     private HouseManager houseManager;
     private RecyclerView mRecyclerView;
     private RecycleDevicesAdapter dAdapter;
@@ -33,6 +36,7 @@ public class DevicesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
+        System.out.println("oiiiiii");
         return inflater.inflate(R.layout.fragment_devices, container, false);
     }
 
@@ -50,7 +54,20 @@ public class DevicesFragment extends Fragment {
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devicesTitle));
 
         mRecyclerView = getView().findViewById(R.id.recyclerViewDevices);
-        dAdapter = new RecycleDevicesAdapter(this.getActivity(), this);
+        dAdapter = new RecycleDevicesAdapter(this.getActivity(), this){
+            @Override
+            public void onItemClick(View view, int position) {
+                super.onItemClick(view, position);
+                Bundle bundle = HouseManager.getBundle();
+                if (bundle == null){
+                    bundle = new Bundle();
+                    HouseManager.setBundle(bundle);
+                }
+                bundle.putInt(RESULT_DEV_POSITION, position);
+                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                        replace(R.id.fragment_container, new DeviceDetailsFragment()).commit();
+            }
+        };
         mRecyclerView.setAdapter(dAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
@@ -58,8 +75,6 @@ public class DevicesFragment extends Fragment {
         allDevSwitch = getView().findViewById(R.id.switchAllDevState);
         allDevSwitch.setChecked(devicesEnable);
         allDevSwitch.setText(devicesEnable ? R.string.btn_enable_dev : R.string.btn_disabled_dev);
-
-        updateDevicesConnectionState();
 
         allDevSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -78,16 +93,16 @@ public class DevicesFragment extends Fragment {
         });
 
         addDeviceButton = getView().findViewById(R.id.btn_addDevice);
-        Bundle bundle = getArguments();
         addDeviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment newFragment = new AddDeviceFragment();
-                newFragment.setArguments(bundle);
-                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, newFragment).commit();
+                DeviceSettingsFragment.editingDevice = false;
+                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                        replace(R.id.fragment_container, new AddDeviceFragment()).commit();
             }
         });
 
+        updateDevicesConnectionState();
     }
 
     public void updateDevicesConnectionState(){

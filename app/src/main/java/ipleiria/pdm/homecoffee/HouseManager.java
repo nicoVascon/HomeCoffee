@@ -17,11 +17,13 @@ import java.util.Collections;
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Room;
 
 public class HouseManager implements Serializable {
     private static HouseManager INSTANCE = null;
 
-    public Bundle bundle;
+    private static Bundle bundle;
 
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
@@ -139,6 +141,11 @@ public class HouseManager implements Serializable {
     public ArrayList<Room> getRooms() {
         return rooms;
     }
+
+    public int getRoomIndex(Room room){
+        return rooms.indexOf(room);
+    }
+
     public void removerContacto(int pos) {
         rooms.remove(pos);
     }
@@ -162,7 +169,17 @@ public class HouseManager implements Serializable {
     private HouseManager() {
         rooms = new ArrayList<>();
         devices = new ArrayList<>();
+        bundle = new Bundle();
     }
+
+    public static Bundle getBundle() {
+        return bundle;
+    }
+
+    public static void setBundle(Bundle bundle) {
+        HouseManager.bundle = bundle;
+    }
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();

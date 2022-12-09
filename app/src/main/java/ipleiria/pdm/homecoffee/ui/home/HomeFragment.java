@@ -1,4 +1,4 @@
-package ipleiria.pdm.homecoffee;
+package ipleiria.pdm.homecoffee.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

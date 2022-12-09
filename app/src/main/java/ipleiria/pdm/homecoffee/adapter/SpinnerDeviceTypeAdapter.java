@@ -22,7 +22,6 @@ public class SpinnerDeviceTypeAdapter extends ArrayAdapter<DeviceType> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View layout = inflater.inflate(R.layout.spinneritem_adddevice_devicetype_layout, parent, false);
         TextView txtDevName_devType = layout.findViewById(R.id.textViewDeviceName_spinner);
-        TextView txtNumDevices_devType = layout.findViewById(R.id.textViewNumDevType_spinner);
         ImageView imgPhoto_devType = layout.findViewById(R.id.imageViewDeviceTypePhoto_spinner);
 
         DeviceType deviceType = DeviceType.values()[position];
@@ -44,7 +43,6 @@ public class SpinnerDeviceTypeAdapter extends ArrayAdapter<DeviceType> {
                 imgPhoto_devType.setImageResource(R.drawable.preassuresensor);
                 break;
         }
-        txtNumDevices_devType.setText("10");
         return layout;
     }
 

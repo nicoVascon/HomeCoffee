@@ -14,7 +14,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="txt_DevicesFragTitle">Devices</string>
     <string name="btn_OnDevices">On</string>
-    <string name="txt_DevicesConnected">" Devices Connected"</string>
+    <string name="txt_DevicesConnected">" Device(s) Connected"</string>
     <string name="txt_DevicesDisconnected">All Devices Are Disconnected</string>
     <string name="txt_connectionStateConnected">Connected</string>
     <string name="txt_connectionStateDisconected">Disconnected</string>
@@ -37,4 +37,19 @@
     <string name="toastMessage_MissingDevChannel">You must to introduce the Device Channel</string>
     <string name="toastMessage_MissingDevRoom">You must to Select a Room</string>
     <string name="toolbar_devDetails">Device Details</string>
+    <string name="btn_setAxis_week">Week</string>
+    <string name="btn_setAxis_day">Day</string>
+    <string name="btn_setAxis_hour">Hour</string>
+    <string name="textView_DevNameLabel">Name</string>
+    <string name="textView_DevChannelLabel">Channel</string>
+    <string name="textView_DevTypeLabel">Device Type</string>
+    <string name="textView_DevRoomLabel">Device Room</string>
+    <string name="btn_edit">Edit</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_save">Save</string>
+    <string name="toolbar_editDevTitle">Edit Device</string>
+    <string name="txt_AlertDialog_deleteDev">Are you sure you want to delete this device?</string>
+    <string name="txt_yes">Yes</string>
+    <string name="txt_no">No</string>
+    <string name="txt_AlertDialog_deleteTitle">Delete</string>
 </resources>

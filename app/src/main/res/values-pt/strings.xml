@@ -3,7 +3,7 @@
     <string name="app_name">Home Coffee</string>
     <string name="txt_DevicesFragTitle">Dispositivos</string>
     <string name="btn_OnDevices">Ligado</string>
-    <string name="txt_DevicesConnected">" Dispositivos Conectados"</string>
+    <string name="txt_DevicesConnected">" Dispositivo(s) Conectado(s)"</string>
     <string name="txt_DevicesDisconnected">Todos os dispositivos estão desconectados</string>
     <string name="txt_connectionStateDisconected">Desconectado</string>
     <string name="txt_connectionStateConnected">Conectado</string>
@@ -26,4 +26,19 @@
     <string name="toastMessage_MissingDevChannel">Tem de introducir o Canal do Dispositivo</string>
     <string name="toastMessage_MissingDevRoom">Tem de Selecionar um Quarto</string>
     <string name="toolbar_devDetails">Detalhes do Dispositivo</string>
+    <string name="btn_setAxis_week">Semana</string>
+    <string name="btn_setAxis_day">Dia</string>
+    <string name="btn_setAxis_hour">Hora</string>
+    <string name="textView_DevNameLabel">Nome</string>
+    <string name="textView_DevChannelLabel">Canal</string>
+    <string name="textView_DevTypeLabel">Tipo de Dispositivo</string>
+    <string name="textView_DevRoomLabel">Quarto do Dispositivo</string>
+    <string name="btn_edit">Editar</string>
+    <string name="btn_delete">Eliminar</string>
+    <string name="btn_save">Guardar</string>
+    <string name="toolbar_editDevTitle">Editar Dispositivo</string>
+    <string name="txt_AlertDialog_deleteDev">Tem certeza de que deseja eliminar este dispositivo?</string>
+    <string name="txt_yes">Sim</string>
+    <string name="txt_no">Não</string>
+    <string name="txt_AlertDialog_deleteTitle">Eliminar</string>
 </resources>

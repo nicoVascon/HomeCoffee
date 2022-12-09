@@ -12,4 +12,9 @@
     <color name="devTypeSpinnerIconBackground">#56F113</color>
     <color name="customEfectColor">#F6BC67</color>
     <color name="roomIconBackground">#FFD08B</color>
+    <color name="tabBarColor">#EA2525</color>
+    <color name="app_color">#FF9800</color>
+    <color name="gray">#798E9C</color>
+    <color name="lineChartAreaColor1">#FF0000</color>
+
 </resources>

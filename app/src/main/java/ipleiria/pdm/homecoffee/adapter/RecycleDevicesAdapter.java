@@ -1,8 +1,6 @@
 package ipleiria.pdm.homecoffee.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.io.FileInputStream;
-
-import ipleiria.pdm.homecoffee.Device;
+import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
-import ipleiria.pdm.homecoffee.Room;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
@@ -60,7 +54,6 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             imgPhoto= itemView.findViewById(R.id.imageViewDevicePhoto);
             this.dAdapter = adapter;
 
-
             switchDev.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -96,7 +89,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         holder.txtConnectionState.setText(devCurrent.isConnectionState() ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
         holder.switchDev.setChecked(devCurrent.isConnectionState());
         holder.switchDev.setText(devCurrent.isConnectionState() ? R.string.btn_OnDevices : R.string.btn_OffDevices);
-        holder.txtNumDev.setText(Integer.toString(devCurrent.getNumero()));
+        holder.txtNumDev.setText(String.format("%.2f", devCurrent.getValue()) + " %");
         switch (devCurrent.getType()){
             case HUMIDITY:
                 holder.imgPhoto.setImageResource(R.drawable.humiditysensor);
@@ -116,7 +109,18 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
         holder.itemView.setLongClickable(true);
         holder.itemView.setClickable(true);
+        int itemPosition = position;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick(v, itemPosition);
+            }
+        });
     }
+
+    public void onItemClick(View view, int position){
+    }
+
     @Override
     public int getItemCount() {
         return gestorContactos.getDevices().size();
