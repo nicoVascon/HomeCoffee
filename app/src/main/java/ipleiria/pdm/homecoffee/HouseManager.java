@@ -28,7 +28,9 @@ public class HouseManager implements Serializable {
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
 
-    static final long serialVersionUID = 2L;
+    private User user;
+
+    static final long serialVersionUID = 3L;
 
     // ------------------------------------- Devices -------------------------------------
     public void addDevice(Device device) {
@@ -229,5 +231,13 @@ public class HouseManager implements Serializable {
             INSTANCE.adicionarDadosIniciais();
             INSTANCE.addInitialDevices();
         }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

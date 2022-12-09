@@ -41,4 +41,15 @@
     <string name="txt_yes">Sim</string>
     <string name="txt_no">Não</string>
     <string name="txt_AlertDialog_deleteTitle">Eliminar</string>
+
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Entrar ou registar</string>
+    <string name="action_sign_in_short">Log in</string>
+    <string name="welcome">"Bem vindo!"</string>
+    <string name="invalid_username">Username invalido</string>
+    <string name="invalid_password">Password tem que ter mais do que 5 caracteres</string>
+    <string name="login_failed">"Login falhou"</string>
+    <string name="register">Cria uma conta</string>
+    <string name="logout">Log out da conta</string>
 </resources>

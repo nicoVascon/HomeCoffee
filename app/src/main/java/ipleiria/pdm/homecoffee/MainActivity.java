@@ -5,7 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Menu;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,10 +20,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-
-import com.google.android.material.navigation.NavigationView;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.LinkedList;
 
@@ -29,6 +41,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
+import ipleiria.pdm.homecoffee.ui.login.LoginFragment;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
@@ -61,13 +74,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
+        View header = navigationView.getHeaderView(0);
+        TextView textHeader = header.findViewById(R.id.textViewUser);
+
         if (savedInstanceState == null) {
             HouseManager.lerFicheiro(this);
             houseManager = HouseManager.getInstance();
             //houseManager.setrImage(android.R.drawable.btn_star_big_on);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
                     MODE_NIGHT_NO);
-            setInitialFragment();
+            //setInitialFragment();
+            setLoginFragment();
         } else {
             houseManager = (HouseManager)
                     savedInstanceState.getSerializable("contactos");
@@ -76,9 +94,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setInitialFragment() {
+        getSupportActionBar().show();
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        drawer.closeDrawer(GravityCompat.START);
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
+    }
+
+    public void setLoginFragment() {
+        getSupportFragmentManager().beginTransaction().replace(
+                R.id.fragment_container, new LoginFragment()).commit();
+        getSupportActionBar().hide();
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
@@ -206,5 +234,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static Fragment getCurrentFragment() {
         return currentFragment;
+    }
+
+    public void btn_logout(View view) {
+        FirebaseAuth.getInstance().signOut();
+        setLoginFragment();
+        drawer.closeDrawer(GravityCompat.START);
+        //finish();
     }
 }

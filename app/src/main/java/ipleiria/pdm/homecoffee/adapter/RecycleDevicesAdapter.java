@@ -12,9 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
+import java.io.FileInputStream;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
+import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {

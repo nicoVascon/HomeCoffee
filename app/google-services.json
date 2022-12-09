@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "170868426406",
+    "firebase_url": "https://loginexample-4ceaf-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "loginexample-4ceaf",
+    "storage_bucket": "loginexample-4ceaf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:170868426406:android:ccffa08f4e743b13c81667",
+        "android_client_info": {
+          "package_name": "ipleiria.pdm.homecoffee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "170868426406-c82nif94e6cso5l6sl3sf8m1kor96u0t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVHKVU4MMPtvS41BAloOOchlrkgXZMKy4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "170868426406-c82nif94e6cso5l6sl3sf8m1kor96u0t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
