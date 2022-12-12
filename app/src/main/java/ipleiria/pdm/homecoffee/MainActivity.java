@@ -1,5 +1,9 @@
 package ipleiria.pdm.homecoffee;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -65,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolBarTitle.setText(getResources().getString(R.string.app_name));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+
+        HouseManager.lerFicheiro(this);
+        houseManager = HouseManager.getInstance();
+
+
+
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -79,13 +89,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView textHeader = header.findViewById(R.id.textViewUser);
 
         if (savedInstanceState == null) {
-            HouseManager.lerFicheiro(this);
-            houseManager = HouseManager.getInstance();
+
+
             //houseManager.setrImage(android.R.drawable.btn_star_big_on);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
                     MODE_NIGHT_NO);
             //setInitialFragment();
-            setLoginFragment();
+            if(houseManager.isLoginMade()!=TRUE){
+
+                setLoginFragment();
+
+            }
+            else {
+                setInitialFragment();
+
+            }
         } else {
             houseManager = (HouseManager)
                     savedInstanceState.getSerializable("contactos");
@@ -103,10 +121,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setLoginFragment() {
-        getSupportFragmentManager().beginTransaction().replace(
-                R.id.fragment_container, new LoginFragment()).commit();
-        getSupportActionBar().hide();
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        //getSupportFragmentManager().beginTransaction().replace(
+        //        R.id.fragment_container, new LoginFragment()).commit();
+        System.out.println("Estou a ir para o Login, LoginFragment()");
+        Intent switchActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(switchActivityIntent);
+        finish();
+        //getSupportActionBar().hide();
+        //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
