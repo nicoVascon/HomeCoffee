@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
+
 public class SplashActivity extends AppCompatActivity {
 
     @Override

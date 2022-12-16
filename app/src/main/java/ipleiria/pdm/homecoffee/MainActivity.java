@@ -1,20 +1,15 @@
 package ipleiria.pdm.homecoffee;
 
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Menu;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,14 +22,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.LinkedList;
 
@@ -47,7 +35,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
-import ipleiria.pdm.homecoffee.ui.login.LoginFragment;
+import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
@@ -130,24 +118,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setInitialFragment() {
-        getSupportActionBar().show();
-       // drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        drawer.closeDrawer(GravityCompat.START);
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
     }
 
     public void setLoginFragment() {
-
-        //getSupportFragmentManager().beginTransaction().replace(
-        //        R.id.fragment_container, new LoginFragment()).commit();
         System.out.println("Estou a ir para o Login, LoginFragment()");
         Intent switchActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(switchActivityIntent);
         finish();
-        //getSupportActionBar().hide();
-        //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override

@@ -1,12 +1,14 @@
 package ipleiria.pdm.homecoffee.ui.login;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +22,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
+import ipleiria.pdm.homecoffee.RegisterActivity;
+import ipleiria.pdm.homecoffee.User;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
-import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
-
-public class LoginFragment extends Fragment {
+public class LoginActivity extends AppCompatActivity {
 
     private RecycleRoomsAdapter mAdapter;
 
@@ -36,47 +39,57 @@ public class LoginFragment extends Fragment {
 
     FirebaseAuth firebaseAuth;
     private TextView register;
-
-    public LoginFragment() {
-        // Required empty public constructor
-    }
-
-
-
+    private HouseManager houseManager;
 
     @Override
-    public void onStart() {
-        super.onStart();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
+        System.out.println("Criei o login activity");
 
-
-        mAdapter = new RecycleRoomsAdapter(this.getActivity());
+        mAdapter = new RecycleRoomsAdapter(this);
         firebaseAuth = FirebaseAuth.getInstance();
 
-        loginButton = getView().findViewById(R.id.register_account);
-        username = getView().findViewById(R.id.username);
-        password = getView().findViewById(R.id.password);
-        register = getView().findViewById(R.id.register);
+        loginButton = findViewById(R.id.register_account);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        register = findViewById(R.id.register);
 
-        if (firebaseAuth.getCurrentUser() == null)
-            Toast.makeText(this.getContext(), "Please login", Toast.LENGTH_SHORT).show();
+        houseManager = HouseManager.getInstance();
+
+        if (firebaseAuth.getCurrentUser() == null) {
+            houseManager.setLoginMade(FALSE);
+            Toast.makeText(this, "Please login", Toast.LENGTH_SHORT).show();
+        }
         else
         {
-            Toast.makeText(this.getContext(), "You are Logged in", Toast.LENGTH_SHORT).show();
-            ((MainActivity) mAdapter.getContext()).setInitialFragment();
+
+            houseManager.setLoginMade(TRUE);
+            Toast.makeText(this, "You are Logged in", Toast.LENGTH_SHORT).show();
+
+            Intent switchActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(switchActivityIntent);
+            //((MainActivity) mAdapter.getContext()).setInitialFragment();
+            finish();
         }
 
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                  sing_in();  
+                sing_in();
                 //((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             }
         });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RegisterFragment()).commit();
+
+                Intent switchActivityIntent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(switchActivityIntent);
+                //((MainActivity) mAdapter.getContext()).setInitialFragment();
+                finish();
             }
         });
 
@@ -85,7 +98,7 @@ public class LoginFragment extends Fragment {
     private void sing_in() {
         String email = username.getText().toString();
         String pwd = password.getText().toString();
-        Context context = getContext();
+        Context context = this.getBaseContext();
 
 
         if (email.isEmpty()) {
@@ -98,10 +111,10 @@ public class LoginFragment extends Fragment {
             password.setError("The given password is invalid. Password should be at least 6 characters!");
             password.requestFocus();
         } else if (email.isEmpty() && pwd.isEmpty()) {
-            Toast.makeText(this.getContext(), "Fields Are Empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Fields Are Empty!", Toast.LENGTH_SHORT).show();
         } else {
             firebaseAuth.signInWithEmailAndPassword(email,
-                    pwd).addOnCompleteListener(this.getActivity(), new OnCompleteListener<AuthResult>() {
+                    pwd).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
@@ -109,8 +122,12 @@ public class LoginFragment extends Fragment {
                     } else {
                         Toast.makeText(context, "You are Logged in",
                                 Toast.LENGTH_SHORT).show();
+                        houseManager.setUser(new User(email));
+                        Intent switchActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(switchActivityIntent);
+                        //((MainActivity) mAdapter.getContext()).setInitialFragment();
 
-                        ((MainActivity) mAdapter.getContext()).setInitialFragment();
+                        finish();
                     }
                 }
             });
@@ -118,16 +135,18 @@ public class LoginFragment extends Fragment {
     }
 
 
-    @Override
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        super.onCreate(savedInstanceState);
-        return inflater.inflate(R.layout.fragment_login, container, false);
+
+        return inflater.inflate(R.layout.activity_login, container, false);
     }
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         //binding = null;
     }
+
+
 }
