@@ -103,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
                         } else
                             Toast.makeText(context, "SignUp Unsuccessful, Please Try Again", Toast.LENGTH_SHORT).show();
                     } else {
-                        User user = new User(email, email, pwd);
+                        User user = new User(email);
 
 
                         Intent switchActivityIntent = new Intent(RegisterActivity.this, MainActivity.class);

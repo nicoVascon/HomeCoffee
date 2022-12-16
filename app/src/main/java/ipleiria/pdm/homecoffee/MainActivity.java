@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -59,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private HouseManager houseManager;
 
+    private FirebaseAuth mAuth;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HouseManager.lerFicheiro(this);
         houseManager = HouseManager.getInstance();
 
+        mAuth = FirebaseAuth.getInstance();
 
 
         drawer = findViewById(R.id.drawer_layout);
@@ -103,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             else {
                 setInitialFragment();
 
+                setCurrentUser();
+
             }
         } else {
             houseManager = (HouseManager)
@@ -111,9 +120,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //saveLastFragmentOpened = true;
     }
 
+    private void setCurrentUser() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String user_mail = currentUser.getEmail();
+        User user = new User(user_mail);
+        houseManager.setUser(user);
+
+    }
+
     public void setInitialFragment() {
         getSupportActionBar().show();
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+       // drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         drawer.closeDrawer(GravityCompat.START);
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();

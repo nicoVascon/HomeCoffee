@@ -41,6 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
         System.out.println("Criei o login activity");
 
         mAdapter = new RecycleRoomsAdapter(this);
@@ -117,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(context, "You are Logged in",
                                 Toast.LENGTH_SHORT).show();
-
+                        houseManager.setUser(new User(email));
                         Intent switchActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(switchActivityIntent);
                         //((MainActivity) mAdapter.getContext()).setInitialFragment();

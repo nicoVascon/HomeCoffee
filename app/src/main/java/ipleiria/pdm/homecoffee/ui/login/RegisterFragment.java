@@ -115,7 +115,7 @@ public class RegisterFragment extends Fragment {
                         } else
                             Toast.makeText(context, "SignUp Unsuccessful, Please Try Again", Toast.LENGTH_SHORT).show();
                     } else {
-                        User user = new User(email, email, pwd);
+                        User user = new User(email);
 
                         ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
                     }

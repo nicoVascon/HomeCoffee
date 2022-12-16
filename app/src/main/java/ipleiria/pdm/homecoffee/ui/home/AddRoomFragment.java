@@ -1,6 +1,7 @@
 package ipleiria.pdm.homecoffee.ui.home;
 
 import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static java.sql.DriverManager.println;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ACTION;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ID;
@@ -16,6 +17,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -37,6 +40,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,6 +59,8 @@ import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 
 public class AddRoomFragment extends Fragment {
+
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private Spinner roomTypeSpinner;
 
@@ -119,13 +128,18 @@ public class AddRoomFragment extends Fragment {
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, USER_URL, response -> {
             loading.dismiss();
-            Toast.makeText(context, response, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Success", Toast.LENGTH_LONG).show();
 
             HouseManager.getInstance().addRoom(newRoom);
             ((MainActivity) context).setInitialFragment();
 
-        }, error ->
-            Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show())
+        }, error ->{
+            Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+
+        }
+        )
+
+
         {
                 @Override
                 protected Map<String, String> getParams () {
@@ -150,6 +164,34 @@ public class AddRoomFragment extends Fragment {
         RequestQueue requestQueue = Volley.newRequestQueue(this.getActivity());
 
         requestQueue.add(stringRequest);
+
+        //Getting current user's email
+        String userMail=HouseManager.getInstance().getUser().getEmail();
+
+
+
+        //Saving room on Firebase's Firestore
+        // Create a new room
+        Map<String, Object> room = new HashMap<>();
+        room.put("User_Email", userMail);
+        room.put("Room_Name", nome);
+        room.put("Room_Type", type);
+
+        // Add a new document with a generated ID
+        db.collection("rooms")
+                .add(room)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
 
 
         //HouseManager.getInstance().adicionarContacto(newRoom);
