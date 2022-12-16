@@ -1,6 +1,7 @@
 package ipleiria.pdm.homecoffee.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 
@@ -11,6 +12,7 @@ public class Device implements Serializable, Comparable<Device> {
     private boolean connectionStateSaved;
     private DeviceType type;
     private Room room;
+    private ArrayList<Notification> notifications;
     private double value;
 
     public Device(int channel, String name, DeviceType type, Room room) {
@@ -18,6 +20,7 @@ public class Device implements Serializable, Comparable<Device> {
         this.name = name;
         this.type = type;
         this.room = room;
+        this.notifications = new ArrayList<>();
     }
 
     public int getChannel() {
@@ -70,6 +73,22 @@ public class Device implements Serializable, Comparable<Device> {
 
     public Room getRoom() {
         return room;
+    }
+
+    public int getNumNotifications(){
+        return notifications.size();
+    }
+
+    public Notification getNotification(int position){
+        return notifications.get(position);
+    }
+
+    public void addNotification(Notification newNotification){
+        notifications.add(newNotification);
+    }
+
+    public void removeNotification(int position){
+        notifications.remove(position);
     }
 
     public void setRoom(Room room) {

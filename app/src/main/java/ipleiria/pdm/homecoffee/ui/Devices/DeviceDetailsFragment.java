@@ -91,7 +91,8 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         //adapter.addFragment(new Tab1Fragment(), "Tab 1");
         adapter.addFragment(new DeviceControlFragment(), "Tab 1");
 //        adapter.addFragment(new Tab2Fragment(), "Tab 2");
-        adapter.addFragment(new DeviceActivityFragment(), "Tab 2");
+        DeviceActivityFragment myDeviceActivityFragment = new DeviceActivityFragment();
+        adapter.addFragment(myDeviceActivityFragment, "Tab 2");
         adapter.addFragment(new Tab3Fragment(), "Tab 3");
 //        adapter.addFragment(new Tab3Fragment(), "Tab 4");
         adapter.addFragment(new DeviceSettingsFragment(), "Tab 3");
@@ -141,8 +142,21 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         String contentDescriptionTab1 = "Tab 1 Muito Fixe";
         tabLayout.getTabAt(0).setContentDescription(contentDescriptionTab1);
 
-        BadgeDrawable badge = tabLayout.getTabAt(1).getOrCreateBadge();
-        badge.setNumber(25);
+        if (selectedDevice.getNumNotifications() > 0){
+            BadgeDrawable badge = tabLayout.getTabAt(1).getOrCreateBadge();
+            badge.setNumber(selectedDevice.getNumNotifications());
+            myDeviceActivityFragment.setListenner(new DeviceActivityFragment.onRecycleviewItemClickListenner() {
+                @Override
+                public void onDelete() {
+                    int numNotifications = selectedDevice.getNumNotifications();
+                    if (numNotifications > 0){
+                        badge.setNumber(numNotifications);
+                    }else{
+                        tabLayout.getTabAt(1).removeBadge();
+                    }
+                }
+            });
+        }
 
         //Set initial Tab
         tabLayout.getTabAt(initialTab).select();

@@ -12,10 +12,13 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
+import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
@@ -105,6 +108,18 @@ public class HouseManager implements Serializable {
         Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT, initialRoom);
         Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE, initialRoom);
         Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
+
+        dev1.addNotification(new Notification("Choveu!!!"));
+        dev1.addNotification(new Notification(
+                new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
+                "Falta agua!!!"));
+        dev1.addNotification(new Notification(
+                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
+                "Afogo-me!!!"));
+        dev1.addNotification(new Notification(
+                new GregorianCalendar(2022, Calendar.DECEMBER, 25).getTime(),
+                "Tenho sede!!!"));
+
         addDevice(dev1);
         addDevice(dev2);
         addDevice(dev3);

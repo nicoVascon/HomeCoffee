@@ -52,4 +52,6 @@
     <string name="login_failed">"Login falhou"</string>
     <string name="register">Cria uma conta</string>
     <string name="logout">Log out da conta</string>
+    <string name="txt_NotificationsTitle">Notificações</string>
+    <string name="txt_NoNotifications">Não há notificações novas</string>
 </resources>
