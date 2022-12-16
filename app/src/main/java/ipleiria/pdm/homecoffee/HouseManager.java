@@ -1,8 +1,12 @@
 package ipleiria.pdm.homecoffee;
 
+import static java.lang.Boolean.FALSE;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseUser;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,7 +37,9 @@ public class HouseManager implements Serializable {
 
     private User user;
 
-    static final long serialVersionUID = 3L;
+    static final long serialVersionUID = 5L;
+
+    private boolean loginMade=FALSE;
 
     // ------------------------------------- Devices -------------------------------------
     public void addDevice(Device device) {
@@ -187,6 +193,8 @@ public class HouseManager implements Serializable {
         rooms = new ArrayList<>();
         devices = new ArrayList<>();
         bundle = new Bundle();
+
+
     }
 
     public static Bundle getBundle() {
@@ -255,4 +263,17 @@ public class HouseManager implements Serializable {
     public void setUser(User user) {
         this.user = user;
     }
+
+    //---------------------LOGIN-------------------------
+
+    public boolean isLoginMade() {
+        return loginMade;
+    }
+
+    public void setLoginMade(boolean loginMade) {
+        this.loginMade = loginMade;
+    }
+
+
+    //-------------------------------------------------
 }

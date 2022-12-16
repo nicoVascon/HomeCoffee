@@ -1,16 +1,13 @@
-package ipleiria.pdm.homecoffee.ui.login;
+package ipleiria.pdm.homecoffee;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
 import android.util.Patterns;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,14 +19,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
-import ipleiria.pdm.homecoffee.MainActivity;
-import ipleiria.pdm.homecoffee.R;
-import ipleiria.pdm.homecoffee.User;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
-
-public class RegisterFragment extends Fragment {
+public class RegisterActivity extends AppCompatActivity {
 
 
     private RecycleRoomsAdapter mAdapter;
@@ -42,27 +35,23 @@ public class RegisterFragment extends Fragment {
     private TextView register;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
     }
-
-
-
     @Override
     public void onStart() {
         super.onStart();
 
 
-        mAdapter = new RecycleRoomsAdapter(this.getActivity());
+        mAdapter = new RecycleRoomsAdapter(this);
         firebaseAuth = FirebaseAuth.getInstance();
 
-        register = getView().findViewById(R.id.register_account);
-        username = getView().findViewById(R.id.username);
-        password = getView().findViewById(R.id.password);
+        register = findViewById(R.id.register_account);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
 
-        password2 = getView().findViewById(R.id.password2);
+        password2 = findViewById(R.id.password2);
 
 
 
@@ -75,13 +64,12 @@ public class RegisterFragment extends Fragment {
 
     }
 
-
     private void sign_up() {
         String email = username.getText().toString();
         String pwd = password.getText().toString();
         String pwd2 = password2.getText().toString();
 
-        Context context = getContext();
+        Context context = this;
 
         if (email.isEmpty()) {
 
@@ -100,12 +88,12 @@ public class RegisterFragment extends Fragment {
             password2.setError("Please confirm your password");
             password2.requestFocus();
         } else if (email.isEmpty() && pwd.isEmpty() && pwd2.isEmpty()) {
-            Toast.makeText(this.getContext(), "Fields Are Empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Fields Are Empty!", Toast.LENGTH_SHORT).show();
         } else if (!pwd.equals(pwd2)) {
-            Toast.makeText(this.getContext(), "Passwords dont match!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Passwords dont match!", Toast.LENGTH_SHORT).show();
         } else {
             firebaseAuth.createUserWithEmailAndPassword(email,
-                    pwd).addOnCompleteListener(this.getActivity(), new OnCompleteListener<AuthResult>() {
+                    pwd).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (!task.isSuccessful()) {
@@ -117,7 +105,11 @@ public class RegisterFragment extends Fragment {
                     } else {
                         User user = new User(email);
 
-                        ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+
+                        Intent switchActivityIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                        startActivity(switchActivityIntent);
+                        //((MainActivity) mAdapter.getContext()).setInitialFragment();
+                        finish();
                     }
                 }
             });
@@ -127,10 +119,10 @@ public class RegisterFragment extends Fragment {
     }
 
 
+
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    public void onDestroy() {
+        super.onDestroy();
         //binding = null;
     }
-
 }

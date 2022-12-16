@@ -1,5 +1,9 @@
 package ipleiria.pdm.homecoffee;
 
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
+
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +17,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -55,6 +61,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private HouseManager houseManager;
 
+    private FirebaseAuth mAuth;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolBarTitle = toolbar.findViewById(R.id.toolbar_title);
         toolBarTitle.setText(getResources().getString(R.string.app_name));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+
+        HouseManager.lerFicheiro(this);
+        houseManager = HouseManager.getInstance();
+
+        mAuth = FirebaseAuth.getInstance();
+
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -80,13 +97,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         TextView textHeader = header.findViewById(R.id.textViewUser);
 
         if (savedInstanceState == null) {
-            HouseManager.lerFicheiro(this);
-            houseManager = HouseManager.getInstance();
+
+
             //houseManager.setrImage(android.R.drawable.btn_star_big_on);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
                     MODE_NIGHT_NO);
             //setInitialFragment();
-            setLoginFragment();
+            if(houseManager.isLoginMade()!=TRUE){
+
+                setLoginFragment();
+
+            }
+            else {
+                setInitialFragment();
+
+                setCurrentUser();
+
+            }
         } else {
             houseManager = (HouseManager)
                     savedInstanceState.getSerializable("contactos");
@@ -94,9 +121,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //saveLastFragmentOpened = true;
     }
 
+    private void setCurrentUser() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String user_mail = currentUser.getEmail();
+        User user = new User(user_mail);
+        houseManager.setUser(user);
+
+    }
+
     public void setInitialFragment() {
         getSupportActionBar().show();
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+       // drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         drawer.closeDrawer(GravityCompat.START);
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();
@@ -104,10 +139,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void setLoginFragment() {
-        getSupportFragmentManager().beginTransaction().replace(
-                R.id.fragment_container, new LoginFragment()).commit();
-        getSupportActionBar().hide();
-        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+        //getSupportFragmentManager().beginTransaction().replace(
+        //        R.id.fragment_container, new LoginFragment()).commit();
+        System.out.println("Estou a ir para o Login, LoginFragment()");
+        Intent switchActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(switchActivityIntent);
+        finish();
+        //getSupportActionBar().hide();
+        //drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
