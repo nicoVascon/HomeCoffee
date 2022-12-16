@@ -23,10 +23,10 @@
             android:orientation="horizontal">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/cardView_dev"
+                android:id="@+id/cardView_notification"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/devIconBackground"
+                app:cardBackgroundColor="@color/black"
                 app:cardCornerRadius="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -37,12 +37,14 @@
                     android:layout_height="wrap_content">
 
                     <ImageView
-                        android:id="@+id/imageViewDevicePhoto"
+                        android:id="@+id/imageViewNotificationPhoto"
                         android:layout_width="128dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -53,44 +55,55 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ConstraintLayout"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toEndOf="@+id/cardView_dev"
+                app:layout_constraintStart_toEndOf="@+id/cardView_notification"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:id="@+id/textViewConnectionState"
+                    android:id="@+id/textViewNotificationDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txt_connectionStateConnected"
+                    android:text="Date"
                     android:textSize="14sp"
 
-                    app:layout_constraintBottom_toTopOf="@+id/textViewDeviceName"
+                    app:layout_constraintBottom_toTopOf="@+id/textViewNotificationDescription"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
 
                 <TextView
-                    android:id="@+id/textViewDeviceName"
+                    android:id="@+id/textViewNotificationDescription"
                     style="@style/Title"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:autoText="false"
                     android:elegantTextHeight="true"
-                    android:text="DeviceName"
+                    android:text="Description"
                     android:textSize="16sp"
                     app:autoSizeMaxTextSize="16sp"
                     app:autoSizeTextType="uniform"
                     app:guidelineUseRtl="false"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/switch_device"
+                    app:layout_constraintEnd_toStartOf="@+id/btn_deleteNotification"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewConnectionState" />
+                    app:layout_constraintTop_toBottomOf="@+id/textViewNotificationDate" />
+
+                <Button
+                    android:id="@+id/btn_deleteNotification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#00FFFFFF"
+                    app:icon="@drawable/delete_icon"
+                    app:iconTint="#000000"
+                    app:iconTintMode="src_in"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

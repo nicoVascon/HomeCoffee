@@ -63,4 +63,6 @@
     <string name="login_failed">"Login failed"</string>
     <string name="register">Create an account</string>
     <string name="logout">Log out of account</string>
+    <string name="txt_NotificationsTitle">Notifications</string>
+    <string name="txt_NoNotifications">There are not new Notifications</string>
 </resources>

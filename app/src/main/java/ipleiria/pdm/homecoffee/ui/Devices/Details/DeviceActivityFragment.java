@@ -3,10 +3,14 @@ package ipleiria.pdm.homecoffee.ui.Devices.Details;
 import android.graphics.Color;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LabelFormatter;
@@ -22,6 +26,8 @@ import java.util.Date;
 
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
+import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
+import ipleiria.pdm.homecoffee.adapter.RecycleNotificationsAdapter;
 import ipleiria.pdm.homecoffee.adapter.TabAdapter;
 import ipleiria.pdm.homecoffee.components.GraphView_Custom;
 import ipleiria.pdm.homecoffee.model.Device;
@@ -45,6 +51,10 @@ public class DeviceActivityFragment extends Fragment {
     private Button btn_day;
     private Button btn_hour;
 
+    private RecyclerView mRecyclerView;
+    private RecycleNotificationsAdapter dAdapter;
+    private onRecycleviewItemClickListenner listenner;
+
     private LabelFormatter labelFormatter;
 
     @Override
@@ -64,6 +74,29 @@ public class DeviceActivityFragment extends Fragment {
 
         int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
         selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+
+        TextView txtNoNotificationsMessage = getView().findViewById(R.id.textViewNoNotificationsMessage);
+        if(selectedDevice.getNumNotifications() > 0){
+            txtNoNotificationsMessage.setVisibility(View.GONE);
+        }else{
+            txtNoNotificationsMessage.setVisibility(View.VISIBLE);
+        }
+
+        mRecyclerView = getView().findViewById(R.id.recyclerViewNotifications);
+        dAdapter = new RecycleNotificationsAdapter(this.getContext()){
+            @Override
+            public void onDeleteClick(int position) {
+                super.onDeleteClick(position);
+                listenner.onDelete();
+                if(selectedDevice.getNumNotifications() > 0){
+                    txtNoNotificationsMessage.setVisibility(View.GONE);
+                }else{
+                    txtNoNotificationsMessage.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+        mRecyclerView.setAdapter(dAdapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         lineChart = getView().findViewById(R.id.lineChart_DevActivityFragment);
         btn_week = getView().findViewById(R.id.btn_week);
@@ -215,7 +248,7 @@ public class DeviceActivityFragment extends Fragment {
         int maxNumElemets = Math.max(dataPoints1.length, dataPoints2.length);
         int mNumLabels = Math.min(maxNumElemets, MAX_NUM_LABELS);
         graph.getGridLabelRenderer().setNumHorizontalLabels(mNumLabels);
-        graph.getGridLabelRenderer().setTextSize(10f);
+        graph.getGridLabelRenderer().setTextSize(20f);
 
         double minXLabelValue = Double.MAX_VALUE;
         double maxXLabelValue = 0;
@@ -236,5 +269,17 @@ public class DeviceActivityFragment extends Fragment {
         // as we use dates as labels, the human rounding to nice readable numbers
         // is not nessecary
         graph.getGridLabelRenderer().setHumanRounding(false);
+    }
+
+    public onRecycleviewItemClickListenner getListenner() {
+        return listenner;
+    }
+
+    public void setListenner(onRecycleviewItemClickListenner listenner) {
+        this.listenner = listenner;
+    }
+
+    public interface onRecycleviewItemClickListenner {
+        void onDelete();
     }
 }

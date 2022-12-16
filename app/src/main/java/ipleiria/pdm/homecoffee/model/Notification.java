@@ -1,9 +1,10 @@
 package ipleiria.pdm.homecoffee.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Notification {
+public class Notification implements Serializable {
     private Date date;
     private String description;
 
