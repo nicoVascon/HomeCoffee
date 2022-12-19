@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayoutAddSelectRoom"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Devices.AddDeviceSelectRoomFragment" >
+    tools:context=".ui.Devices.Add.AddDeviceSelectRoomFragment" >
 
     <TextView
         android:id="@+id/textViewAddDevSelectRoomTitle"

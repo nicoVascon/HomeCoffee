@@ -1,9 +1,7 @@
-package ipleiria.pdm.homecoffee.ui.Devices;
+package ipleiria.pdm.homecoffee.ui.Devices.Add;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -13,10 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
@@ -26,14 +21,18 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.SpinnerDeviceTypeAdapter;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class AddDeviceFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_NAME = "RESULT_NEW_DEV_NAME";
     public static final String RESULT_NEW_DEV_CHANNEL = "RESULT_NEW_DEV_CHANNEL";
     public static final String RESULT_NEW_DEV_TYPE = "RESULT_NEW_DEV_TYPE";
+    public static final String RESULT_NEW_DEV_MODE = "RESULT_NEW_DEV_MODE";
 
     private Spinner deviceTypeSpinner;
+    private Spinner deviceModeSpinner;
     private Button btn_next;
     private EditText editTextNewDevName;
     private EditText editTextNewDevChannel;
@@ -41,6 +40,7 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     private String newDevName;
     private int newDevChannel;
     private DeviceType newDevType = DeviceType.values()[0];
+    private int newDevMode = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,6 +61,7 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         }
 
         deviceTypeSpinner = getView().findViewById(R.id.deviceType_spinner);
+        deviceModeSpinner = getView().findViewById(R.id.deviceMode_spinner);
         btn_next = getView().findViewById(R.id.button_devNextAdd);
         editTextNewDevName = getView().findViewById(R.id.editTextDevNameAdd);
         editTextNewDevChannel = getView().findViewById(R.id.editTextDevChannelAdd);
@@ -72,12 +73,19 @@ public class AddDeviceFragment extends Fragment implements SaveData {
             }
         });
 
-        ArrayAdapter<DeviceType> adapter = new SpinnerDeviceTypeAdapter(this.getContext(), R.layout.spinneritem_adddevice_devicetype_layout, DeviceType.values());
+        SpinnerDeviceTypeAdapter adapter = new SpinnerDeviceTypeAdapter(this.getContext(),
+                R.layout.item_devicetype_layout, DeviceType.values());
         deviceTypeSpinner.setAdapter(adapter);
+        String[] deviceModeNames = {getContext().getResources().getString(R.string.devModeSpinner_Sensor),
+                                    getContext().getResources().getString(R.string.devModeSpinner_Actuator)};
+        ArrayAdapter<String> devModeArrayAdapter = new ArrayAdapter<>(this.getContext(),
+                android.R.layout.simple_list_item_1, deviceModeNames);
+        deviceModeSpinner.setAdapter(devModeArrayAdapter);
 
         editTextNewDevName.setText(newDevName);
         editTextNewDevChannel.setText(String.valueOf(newDevChannel));
         deviceTypeSpinner.setSelection(newDevType.ordinal());
+        deviceModeSpinner.setSelection(newDevMode);
     }
 
     private void next(){
@@ -94,8 +102,13 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         }
         saveData();
 
-        ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
-                replace(R.id.fragment_container, new AddDeviceSelectRoomFragment()).commit();
+        if(deviceModeSpinner.getSelectedItemPosition() == 0) {
+            ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
+                    replace(R.id.fragment_container, new AddDeviceSelectRoomFragment()).commit();
+        }else{
+            ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
+                    replace(R.id.fragment_container, new AddDeviceSelectSensorFragment()).commit();
+        }
     }
 
     @Override
@@ -111,6 +124,7 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         String newDevChannelAsString = editTextNewDevChannel.getText().toString();
         newDevChannel = newDevChannelAsString.isEmpty() ? 0: Integer.parseInt(newDevChannelAsString);
         newDevType = (DeviceType) deviceTypeSpinner.getSelectedItem();
+        newDevMode = deviceModeSpinner.getSelectedItemPosition();
         Bundle bundle = HouseManager.getBundle();
         if(bundle == null){
             bundle = new Bundle();
@@ -119,6 +133,7 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         bundle.putString(RESULT_NEW_DEV_NAME, newDevName);
         bundle.putInt(RESULT_NEW_DEV_CHANNEL, newDevChannel);
         bundle.putInt(RESULT_NEW_DEV_TYPE, newDevType.ordinal());
+        bundle.putInt(RESULT_NEW_DEV_MODE, newDevMode);
     }
 
     @Override
@@ -130,12 +145,14 @@ public class AddDeviceFragment extends Fragment implements SaveData {
                 newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
                 int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
                 newDevType = DeviceType.values()[devTypePosition];
+                newDevMode = bundle.getInt(RESULT_NEW_DEV_MODE);
             }else if (DeviceSettingsFragment.editingDevice) {
                 int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
                 Device deviceToEdit = HouseManager.getInstance().getDevice(selectedDevPosition);
                 newDevName = deviceToEdit.getName();
                 newDevChannel = deviceToEdit.getChannel();
                 newDevType = deviceToEdit.getType();
+                newDevMode = (deviceToEdit instanceof Sensor) ? 0 : 1;
                 int selectedDevRoomPosition = HouseManager.getInstance().getRoomIndex(deviceToEdit.getRoom());
                 bundle.putInt(AddDeviceSelectRoomFragment.RESULT_NEW_DEV_ROOM, selectedDevRoomPosition);
             }

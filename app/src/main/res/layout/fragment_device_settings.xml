@@ -131,7 +131,7 @@
 
                 <include
                     android:id="@+id/DeviceTypeLayout"
-                    layout="@layout/spinneritem_adddevice_devicetype_layout"
+                    layout="@layout/item_devicetype_layout"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>

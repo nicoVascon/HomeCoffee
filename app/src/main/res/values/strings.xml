@@ -65,4 +65,25 @@
     <string name="logout">Log out of account</string>
     <string name="txt_NotificationsTitle">Notifications</string>
     <string name="txt_NoNotifications">There are not new Notifications</string>
+    <string name="deviceTypeName_Humidity">Humidity</string>
+    <string name="deviceTypeName_Light">Light</string>
+    <string name="deviceTypeName_Temperature">Temperature</string>
+    <string name="deviceTypeName_Acceleration">Acceleration</string>
+    <string name="deviceTypeName_Pressure">Pressure</string>
+    <string name="txt_DeviceMode">Device Mode</string>
+    <string name="devModeSpinner_Sensor">Sensor</string>
+    <string name="devModeSpinner_Actuator">Actuator</string>
+    <string name="txt_SensorValueLabel">Sensor\'s Value</string>
+    <string name="btn_associateSensor">Associate Sensor</string>
+    <string name="txt_NoAssociatedSensor">No Associated Sensor</string>
+    <string name="btn_changeAssociateSensor">Change Associate Sensor</string>
+    <string name="txt_valueControler_DesiredValue">Desired Value</string>
+    <string name="txt_valueControler_MeasuredValue">Measured Value</string>
+    <string name="txt_AlertDialog_AssociateSensorTitle">Associate Sensor</string>
+    <string name="txt_AlertDialog_associateSensor">Are you sure you want to associate this Sensor to the Device?</string>
+    <string name="toastMessage_AddDeviceFail">The Device couldn\'t be added</string>
+    <string name="toastMessage_AddDeviceSuccess">The Device was Added Sucessfully</string>
+    <string name="toastMessage_AssociateSensorSuccess">The Sensor was Associated Successfully</string>
+    <string name="toastMessage_AssociateSensorFail">The Sensor couldn\'t be Associated</string>
+    <string name="toolbar_selectSensorTitle">Select a Sensor</string>
 </resources>

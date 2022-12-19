@@ -1,8 +1,9 @@
 package ipleiria.pdm.homecoffee.Enums;
 
-import androidx.annotation.NonNull;
+import android.content.res.Resources;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+import ipleiria.pdm.homecoffee.R;
 
 public enum DeviceType {
     HUMIDITY,
@@ -10,10 +11,4 @@ public enum DeviceType {
     TEMPERATURE,
     ACCELERATION,
     PRESSURE;
-
-    @NonNull
-    @Override
-    public String toString() {
-        return super.toString() + " SENSOR";
-    }
 }
