@@ -1,4 +1,4 @@
-package ipleiria.pdm.homecoffee.ui.Devices;
+package ipleiria.pdm.homecoffee.ui.Devices.Add;
 
 import android.os.Bundle;
 
@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
+import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
@@ -22,7 +23,11 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
+import ipleiria.pdm.homecoffee.model.Sensor;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_ROOM = "RESULT_NEW_DEV_ROOM";
@@ -35,6 +40,8 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     private int newDevChannel;
     private DeviceType newDevType;
     private Room newDevRoom;
+    private int newDevMode;
+    private Sensor sensorToAssociate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,7 +116,28 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
 
     private void add(){
         if (newDevRoom != null){
-            HouseManager.getInstance().addDevice(new Device(newDevChannel, newDevName, newDevType, newDevRoom));
+            if(newDevMode == 0) {
+                HouseManager.getInstance().addDevice(new Sensor(newDevChannel, newDevName, newDevType, newDevRoom));
+            }else{
+                Actuator newActuator = new Actuator(newDevChannel, newDevName, newDevType, newDevRoom);
+                if(sensorToAssociate != null){
+                    Sensor currentAssociatedSensor = newActuator.setAssociatedSensor(sensorToAssociate);
+                    if(currentAssociatedSensor == sensorToAssociate){
+                        Toast.makeText(getContext(), getResources().getString(R.string.toastMessage_AssociateSensorSuccess),
+                                Toast.LENGTH_LONG).show();
+                    }else {
+                        Toast.makeText(getContext(), getResources().getString(R.string.toastMessage_AssociateSensorFail),
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+                if(HouseManager.getInstance().addDevice(newActuator)){
+                    Toast.makeText(this.getContext(), getResources().getString(R.string.toastMessage_AddDeviceSuccess),
+                            Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(this.getContext(), getResources().getString(R.string.toastMessage_AddDeviceFail),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
             ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new DevicesFragment()).commit();
             HouseManager.setBundle(null);
@@ -117,6 +145,10 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
             return;
         }
         Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevRoom, Toast.LENGTH_LONG).show();
+    }
+
+    public void setSensorToAssociate(Sensor sensorToAssociate) {
+        this.sensorToAssociate = sensorToAssociate;
     }
 
     @Override
@@ -137,6 +169,7 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
             newDevName = bundle.getString(AddDeviceFragment.RESULT_NEW_DEV_NAME);
             newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
             newDevType = DeviceType.values()[bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE)];
+            newDevMode = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_MODE);
         }catch (NullPointerException e){
             System.out.println("Erro ao recuperar os dados do novo dispositivo.");
             System.out.println(e.getMessage());

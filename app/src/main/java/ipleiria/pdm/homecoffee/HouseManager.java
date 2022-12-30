@@ -6,8 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,7 +20,9 @@ import java.util.GregorianCalendar;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
+import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Notification;
+import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
@@ -34,6 +34,7 @@ public class HouseManager implements Serializable {
 
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
+    private ArrayList<Sensor> sensors;
 
     private User user;
 
@@ -41,12 +42,56 @@ public class HouseManager implements Serializable {
 
     private boolean loginMade=FALSE;
 
+    // ------------------------------------- Sensors -------------------------------------
+    public void addSensor(Sensor sensor) {
+        if (sensors.isEmpty() || !sensors.contains(sensor)) {
+            sensors.add(sensor);
+            Collections.sort(sensors);
+        }
+    }
+
+    public void removeSensor(int pos) {
+        sensors.remove(pos);
+    }
+
+    public Sensor getSensor(int pos) {
+        return sensors.get(pos);
+    }
+
+    public ArrayList<Sensor> getSensors() {
+        return sensors;
+    }
+
+    public ArrayList<Sensor> searchSensors(String name) {
+        ArrayList<Sensor> result = new ArrayList<>();
+        for (Sensor sensor : sensors) {
+            if ((sensor.getName().toUpperCase()).contains(name.toUpperCase()))
+                result.add(sensor);
+        }
+        return result;
+    }
+
+    public ArrayList<Sensor> searchSensors(DeviceType deviceType) {
+        ArrayList<Sensor> result = new ArrayList<>();
+        for (Sensor sensor : sensors) {
+            if (sensor.getType() == deviceType)
+                result.add(sensor);
+        }
+        return result;
+    }
+
     // ------------------------------------- Devices -------------------------------------
-    public void addDevice(Device device) {
+    public boolean addDevice(Device device) {
         if (devices.isEmpty() || !devices.contains(device)) {
             devices.add(device);
             Collections.sort(devices);
+            if(device instanceof Sensor){
+                sensors.add((Sensor) device);
+                Collections.sort(sensors);
+            }
+            return true;
         }
+        return false;
     }
 
     public void removeDevice(int pos) {
@@ -109,11 +154,12 @@ public class HouseManager implements Serializable {
             rooms.add(initialRoom);
         }
 
-        Device dev1 = new Device(125, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
-        Device dev2 = new Device(456, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
-        Device dev3 = new Device(789, "Sensor de Luminosidade", DeviceType.LIGHT, initialRoom);
-        Device dev4 = new Device(852, "Sensor de   Pressão", DeviceType.PRESSURE, initialRoom);
-        Device dev5 = new Device(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
+        Device dev1 = new Sensor(125, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
+        Device dev2 = new Sensor(456, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
+        Device dev3 = new Actuator(268, "Aquecedor", DeviceType.TEMPERATURE, initialRoom);
+        Device dev4 = new Sensor(789, "Sensor de Luminosidade", DeviceType.LIGHT, initialRoom);
+        Device dev5 = new Actuator(852, "Válvula de   Pressão", DeviceType.PRESSURE, initialRoom);
+        Device dev6 = new Sensor(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
 
         dev1.addNotification(new Notification("Choveu!!!"));
         dev1.addNotification(new Notification(
@@ -131,6 +177,7 @@ public class HouseManager implements Serializable {
         addDevice(dev3);
         addDevice(dev4);
         addDevice(dev5);
+        addDevice(dev6);
     }
     //-----------------------------------------------------
     public void addRoom(Room room) {
@@ -192,9 +239,8 @@ public class HouseManager implements Serializable {
     private HouseManager() {
         rooms = new ArrayList<>();
         devices = new ArrayList<>();
+        sensors = new ArrayList<>();
         bundle = new Bundle();
-
-
     }
 
     public static Bundle getBundle() {

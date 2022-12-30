@@ -5,15 +5,15 @@ import java.util.ArrayList;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 
-public class Device implements Serializable, Comparable<Device> {
-    private int channel;
-    private String name;
-    private boolean connectionState;
-    private boolean connectionStateSaved;
-    private DeviceType type;
-    private Room room;
-    private ArrayList<Notification> notifications;
-    private double value;
+public abstract class Device implements Serializable, Comparable<Device> {
+    protected int channel;
+    protected String name;
+    protected boolean connectionState;
+    protected boolean connectionStateSaved;
+    protected DeviceType type;
+    protected Room room;
+    protected ArrayList<Notification> notifications;
+    protected double value;
 
     public Device(int channel, String name, DeviceType type, Room room) {
         this.channel = channel;
@@ -63,16 +63,12 @@ public class Device implements Serializable, Comparable<Device> {
         this.type = type;
     }
 
-    public double getValue() {
-        return value;
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
-
     public Room getRoom() {
         return room;
+    }
+
+    public double getValue() {
+        return value;
     }
 
     public int getNumNotifications(){

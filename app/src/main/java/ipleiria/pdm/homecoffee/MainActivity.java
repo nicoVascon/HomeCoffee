@@ -9,11 +9,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,8 +26,10 @@ import java.util.LinkedList;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
-import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceFragment;
-import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceSelectRoomFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectSensorFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.EditDeviceSelectSensorFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
@@ -107,6 +107,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     savedInstanceState.getSerializable("contactos");
         }
         //saveLastFragmentOpened = true;
+
+//        Device dev1 = HouseManager.getInstance().getDevice(0);
+//        dev1.addNotification(new Notification("Choveu!!!"));
+//        dev1.addNotification(new Notification(
+//                new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
+//                "Falta agua!!!"));
+//        dev1.addNotification(new Notification(
+//                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
+//                "Afogo-me!!!"));
+//        dev1.addNotification(new Notification(
+//                new GregorianCalendar(2022, Calendar.DECEMBER, 25).getTime(),
+//                "Tenho sede!!!"));
     }
 
     private void setCurrentUser() {
@@ -203,6 +215,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         break;
                     case DEVICE_DETAILS_FRAGMENT:
                         currentFragment = new DeviceDetailsFragment();
+                        break;
+                    case ADD_DEVICES_SELECT_SENSOR_FRAGMENT:
+                        currentFragment = new AddDeviceSelectSensorFragment();
+                        break;
+                    case EDIT_DEVICES_SELECT_ROOM_FRAGMENT:
+                        currentFragment = new EditDeviceSelectSensorFragment();
                         break;
                     default:
                         currentFragment = new HomeFragment();

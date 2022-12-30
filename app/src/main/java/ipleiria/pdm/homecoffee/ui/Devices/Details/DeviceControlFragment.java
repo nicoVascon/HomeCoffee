@@ -2,28 +2,38 @@ package ipleiria.pdm.homecoffee.ui.Devices.Details;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.HouseManager;
+import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.components.CircleSliderView;
+import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Sensor;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class DeviceControlFragment extends Fragment {
-    Device selectedDevice;
+    //public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
 
-    TextView textView_devName;
+    private Device selectedDevice;
+
+    private TextView textView_devName;
+    private TextView textView_devMode;
+    private TextView textView_actuatorSensorValue;
     private Switch devSwitch;
     private CircleSliderView circleSlider_valueControl;
 
@@ -45,11 +55,46 @@ public class DeviceControlFragment extends Fragment {
         int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
         selectedDevice = HouseManager.getInstance().getDevice(devPosition);
 
+        textView_devName = getView().findViewById(R.id.textView_DeviceName_ControlFragment);
+        textView_devMode = getView().findViewById(R.id.textView_DeviceMode_ControlFragment);
         circleSlider_valueControl = getView().findViewById(R.id.circleSliderView_valueControler);
-        circleSlider_valueControl.setEnabled(selectedDevice.isConnectionState());
+
+        textView_devName.setText(selectedDevice.getName());
+        TextView textView_CSDesiredValueLabel = getView().findViewById(R.id.textView_CSDesiredValueLabel);
+
+        circleSlider_valueControl.setEnabled((selectedDevice instanceof Actuator) && selectedDevice.isConnectionState());
         circleSlider_valueControl.setAlpha(selectedDevice.isConnectionState() ? 1.0f : 0.35f);
         circleSlider_valueControl.setmCurrentTime(selectedDevice.getValue()*3600/100);
         circleSlider_valueControl.setmCurrentRadian((float) ((selectedDevice.getValue()/100)*2*Math.PI));
+
+        CardView cardView = getView().findViewById(R.id.cardView_ActuatorSensor);
+        if(selectedDevice instanceof Sensor){
+            cardView.setVisibility(View.GONE);
+            textView_devMode.setText(getResources().getString(R.string.devModeSpinner_Sensor));
+            textView_CSDesiredValueLabel.setText(getResources().getString(R.string.txt_valueControler_MeasuredValue));
+        }else{
+            textView_devMode.setText(getResources().getString(R.string.devModeSpinner_Actuator));
+            textView_CSDesiredValueLabel.setText(getResources().getString(R.string.txt_valueControler_DesiredValue));
+
+            cardView.setVisibility(View.VISIBLE);
+            textView_actuatorSensorValue = getView().findViewById(R.id.textView_ActuadorSensorValue_ControlFragment);
+            Button btn_associateSensor = getView().findViewById(R.id.btn_associateSensor);
+            if(((Actuator) selectedDevice).getAssociatedSensor() != null){
+                btn_associateSensor.setText(getResources().getString(R.string.btn_changeAssociateSensor));
+                updateSensorValue();
+            }else{
+                btn_associateSensor.setText(getResources().getString(R.string.btn_associateSensor));
+                textView_actuatorSensorValue.setText(getResources().getString(R.string.txt_NoAssociatedSensor));
+            }
+            //btn_associateSensor.setTextColor(getResources().getColor(R.color.app_color));
+            btn_associateSensor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
+                            replace(R.id.fragment_container, new EditDeviceSelectSensorFragment()).commit();
+                }
+            });
+        }
 
         final String unit;
         if (selectedDevice.getType() == DeviceType.TEMPERATURE){
@@ -71,7 +116,16 @@ public class DeviceControlFragment extends Fragment {
             @Override
             public String setText(double value) {
                 double percentValue = value*100 / MAX_VALUE;
-                selectedDevice.setValue(percentValue);
+                if (selectedDevice instanceof Actuator) {
+                    ((Actuator) selectedDevice).setDesiredValue(percentValue);
+
+                    //Temp code!!
+                    if(((Actuator) selectedDevice).getAssociatedSensor() != null) {
+                        ((Actuator) selectedDevice).getAssociatedSensor().setValue(percentValue);
+                        textView_actuatorSensorValue.setText(String.format("%.2f", percentValue) + " " + unit);
+                    }
+                    //
+                }
                 return String.format("%.2f", percentValue) + " " + unit;
             }
         });
@@ -83,15 +137,15 @@ public class DeviceControlFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 selectedDevice.setConnectionState(isChecked);
-                circleSlider_valueControl.setEnabled(isChecked);
+                circleSlider_valueControl.setEnabled((selectedDevice instanceof Actuator) && isChecked);
                 circleSlider_valueControl.setAlpha(isChecked ? 1.0f : 0.35f);
                 buttonView.setText(isChecked ? R.string.btn_OnDevices : R.string.btn_OffDevices);
             }
         });
+    }
 
-        textView_devName = getView().findViewById(R.id.textView_DeviceName_ControlFragment);
-        textView_devName.setText(selectedDevice.getName());
-
-
+    public void updateSensorValue(){
+        double measuredValue = ((Actuator) selectedDevice).getMeasuredValue();
+        textView_actuatorSensorValue.setText(String.valueOf(measuredValue));
     }
 }

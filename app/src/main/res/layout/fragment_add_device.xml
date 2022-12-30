@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Devices.AddDeviceFragment">
+    tools:context=".ui.Devices.Add.AddDeviceFragment">
 
     <TextView
         android:id="@+id/textViewDevNameAdd"
@@ -43,6 +42,36 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDevChannelAdd" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout_ControlVariable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDevChannelAdd"
+        tools:layout_editor_absoluteX="-26dp">
+
+        <TextView
+            android:id="@+id/textViewDevControlVariableAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_DeviceMode"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Spinner
+            android:id="@+id/deviceMode_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/spinner_contDescription"
+            android:drawSelectorOnTop="true"
+            android:minHeight="32dp"
+            android:textAlignment="viewStart"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <Spinner
         android:id="@+id/deviceType_spinner"
         android:layout_width="match_parent"
@@ -52,7 +81,7 @@
         android:minHeight="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDevChannelAdd" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_ControlVariable" />
 
     <Button
         android:id="@+id/button_devNextAdd"

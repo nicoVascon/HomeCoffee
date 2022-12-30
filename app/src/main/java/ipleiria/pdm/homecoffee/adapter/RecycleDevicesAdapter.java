@@ -10,14 +10,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.io.FileInputStream;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
-import ipleiria.pdm.homecoffee.model.Room;
+import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
@@ -45,16 +44,18 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         public final TextView txtNumDev;
         public final Switch switchDev;
         public final ImageView imgPhoto;
-        final RecycleDevicesAdapter dAdapter;
+        public final CardView cardView_dev;
+        public final RecycleDevicesAdapter dAdapter;
 
         public DevicesHolder(@NonNull View itemView,  RecycleDevicesAdapter adapter) {
             super(itemView);
 
             txtConnectionState = itemView.findViewById(R.id.textViewConnectionState);
             txtDevName = itemView.findViewById(R.id.textViewDeviceName);
-            txtNumDev = itemView.findViewById(R.id.textViewNumDev);
+            txtNumDev = itemView.findViewById(R.id.textViewDevValue);
             switchDev = itemView.findViewById(R.id.switch_device);
             imgPhoto= itemView.findViewById(R.id.imageViewDevicePhoto);
+            cardView_dev = itemView.findViewById(R.id.cardView_dev);
             this.dAdapter = adapter;
 
             switchDev.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -93,6 +94,10 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         holder.switchDev.setChecked(devCurrent.isConnectionState());
         holder.switchDev.setText(devCurrent.isConnectionState() ? R.string.btn_OnDevices : R.string.btn_OffDevices);
         holder.txtNumDev.setText(String.format("%.2f", devCurrent.getValue()) + " %");
+        holder.cardView_dev.setCardBackgroundColor(
+                (devCurrent instanceof Sensor) ?
+                        context.getResources().getColor(R.color.devIconBackground) :
+                        context.getResources().getColor(R.color.devTypeSpinnerIconBackground));
         switch (devCurrent.getType()){
             case HUMIDITY:
                 holder.imgPhoto.setImageResource(R.drawable.humiditysensor);

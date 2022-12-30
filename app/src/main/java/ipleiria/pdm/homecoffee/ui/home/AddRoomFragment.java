@@ -1,22 +1,15 @@
 package ipleiria.pdm.homecoffee.ui.home;
 
-import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
-import static java.sql.DriverManager.println;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ACTION;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_ID;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_IMAGE;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.KEY_NAME;
 import static ipleiria.pdm.homecoffee.ui.home.ConfigurationRoomSave.USER_URL;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,10 +20,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -45,7 +34,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;

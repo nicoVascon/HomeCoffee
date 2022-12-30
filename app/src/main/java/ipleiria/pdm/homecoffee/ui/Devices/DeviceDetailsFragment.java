@@ -33,6 +33,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 
 public class DeviceDetailsFragment extends Fragment implements SaveData {
+    public static final int CONTROL_TAB_INDEX = 0;
     public static final int SETTINGS_TAB_INDEX = 3;
     public static boolean addAsVisitedFragment = true;
 

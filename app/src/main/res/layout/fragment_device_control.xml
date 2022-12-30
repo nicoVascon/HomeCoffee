@@ -5,58 +5,132 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Devices.DevicesFragment"
-    android:id="@+id/scrollView">
+    tools:context=".ui.Devices.DevicesFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout_ControlFragment"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/textView_DeviceName_ControlFragment"
+            style="@style/Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:elegantTextHeight="true"
+            android:text="Device Name"
+            app:autoSizeMaxTextSize="35sp"
+            app:autoSizeTextType="uniform"
+            app:guidelineUseRtl="false"
+            app:layout_constraintEnd_toStartOf="@+id/switch_DevState_ControlFragment"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Switch
+            android:id="@+id/switch_DevState_ControlFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:minHeight="48dp"
+            android:scrollbarSize="4sp"
+            android:text="@string/btn_OnDevices"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView_DeviceMode_ControlFragment"
+            style="@style/Sub_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="TextView"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/textView_DeviceName_ControlFragment"
+            app:layout_constraintTop_toBottomOf="@+id/textView_DeviceName_ControlFragment" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_ActuatorSensor"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        app:cardBackgroundColor="#A3B1BA"
+        app:cardCornerRadius="20sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_ControlFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout_ControlFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView_DeviceName_ControlFragment"
+                android:id="@+id/textView_ActuadorSensorLabel_ControlFragment"
                 style="@style/Title"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:elegantTextHeight="true"
-                android:text="Device Name"
-                app:autoSizeMaxTextSize="35sp"
-                app:autoSizeTextType="uniform"
-                app:guidelineUseRtl="false"
-                app:layout_constraintEnd_toStartOf="@+id/switch_DevState_ControlFragment"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/txt_SensorValueLabel"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Switch
-                android:id="@+id/switch_DevState_ControlFragment"
+            <TextView
+                android:id="@+id/textView_ActuadorSensorValue_ControlFragment"
+                style="@style/Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:minHeight="48dp"
-                android:scrollbarSize="4sp"
-                android:text="@string/btn_OnDevices"
-                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-condensed"
+                android:paddingBottom="5dp"
+                android:text="val"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_ActuadorSensorLabel_ControlFragment" />
+
+            <Button
+                android:id="@+id/btn_associateSensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#00FFFFFF"
+                android:text="@string/btn_associateSensor"
+                android:textSize="7sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/textView_ActuadorSensorValue_ControlFragment" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
-        <ipleiria.pdm.homecoffee.components.CircleSliderView
-            android:id="@+id/circleSliderView_valueControler"
-            android:layout_width="255dp"
-            android:layout_height="272dp"
-            android:layout_gravity="center"
-            android:layout_margin="40dp" />
+    <ipleiria.pdm.homecoffee.components.CircleSliderView
+        android:id="@+id/circleSliderView_valueControler"
+        android:layout_width="0dp"
+        android:layout_height="272dp"
+        android:layout_gravity="center"
+        android:layout_margin="40dp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView_ActuatorSensor" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textView_CSDesiredValueLabel"
+        style="@style/Sub_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_valueControler_DesiredValue"
+        android:textColor="#FFFA7777"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/circleSliderView_valueControler"
+        app:layout_constraintStart_toStartOf="@+id/circleSliderView_valueControler"
+        app:layout_constraintTop_toBottomOf="@+id/circleSliderView_valueControler" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

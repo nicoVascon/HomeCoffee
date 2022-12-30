@@ -14,15 +14,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
-import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceFragment;
-import ipleiria.pdm.homecoffee.ui.Devices.AddDeviceSelectRoomFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
@@ -113,22 +110,26 @@ public class DeviceSettingsFragment extends Fragment {
         txt_devName.setText(selectedDevice.getName());
         txt_devChannel.setText(String.valueOf(selectedDevice.getChannel()));
 
-        txt_devTypeName.setText(selectedDevice.getType().toString());
         switch (selectedDevice.getType()){
             case HUMIDITY:
                 imageView_devType.setImageResource(R.drawable.humiditysensor);
+                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Humidity));
                 break;
             case TEMPERATURE:
                 imageView_devType.setImageResource(R.drawable.temperaturesensor);
+                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Temperature));
                 break;
             case LIGHT:
                 imageView_devType.setImageResource(R.drawable.lightsensor);
+                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Light));
                 break;
             case ACCELERATION:
                 imageView_devType.setImageResource(R.drawable.accelerationsensor);
+                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Acceleration));
                 break;
             case PRESSURE:
                 imageView_devType.setImageResource(R.drawable.preassuresensor);
+                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Pressure));
                 break;
         }
     }
