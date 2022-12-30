@@ -7,22 +7,29 @@
     android:background="@drawable/custom_effect"
     android:orientation="vertical">
 
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardViewRoomItem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:animateLayoutChanges="true"
         android:animationCache="true"
-        app:cardBackgroundColor="#FFD08B"
         app:cardCornerRadius="15dp"
-        app:cardElevation="5dp"
-        app:contentPadding="5dp">
+
+        app:contentPadding="5dp"
+        app:cardBackgroundColor="#1600EAFF"
+        app:cardElevation="0dp">
+        <!-- app:cardBackgroundColor="#EDEDED"
+        app:cardElevation="5dp"-->
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#1AFFFFFF"
+            android:backgroundTint="#1AFFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/imageViewItemPhoto"
             app:layout_constraintTop_toBottomOf="@+id/imageViewItemPhoto">
 
@@ -34,31 +41,31 @@
                 android:id="@+id/imageViewItemPhoto"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textViewItemName"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                app:layout_constraintBottom_toTopOf="@+id/textViewItemName"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:srcCompat="@tools:sample/avatars" />
 
-
             <TextView
                 android:id="@+id/textViewItemName"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="5dp"
                 android:autoText="false"
-                android:elegantTextHeight="true"
+                android:elegantTextHeight="false"
                 android:gravity="center"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                app:autoSizeMaxTextSize="25dp"
-                app:autoSizeTextType="uniform"
+                app:autoSizeTextType="none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageViewItemPhoto"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="parent" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

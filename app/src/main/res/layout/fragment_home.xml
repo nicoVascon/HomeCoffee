@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_logn"
     tools:context=".ui.home.HomeFragment">
+
+
+
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout3"
@@ -15,87 +20,89 @@
 
 
         <TextView
-            android:id="@+id/textViewGreeting"
-            style="@style/Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:id="@+id/textViewWelcome"
+            style="@style/Sub_Title"
+            android:layout_width="403dp"
+            android:layout_height="59dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="10dp"
-            android:height="50dp"
+            android:height="30dp"
+            android:autoText="true"
+            android:elegantTextHeight="true"
             android:fontFamily="@font/days_one"
-            android:text="Hi Carlos"
-            android:textColor="#8B000000"
-            android:textStyle="normal"
-            app:layout_constraintBottom_toTopOf="@+id/textViewWelcome"
+            android:text="Welcome to your house"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            app:autoSizeMinTextSize="20dp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewWelcome"
-            style="@style/Sub_Title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:height="30dp"
-            android:autoText="true"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/days_one"
-            android:text="Welcome to your house in Lisbon"
-            android:textColor="#6A000000"
-            app:autoSizeMinTextSize="20dp"
-            app:autoSizeTextType="uniform"
-            app:layout_constraintBottom_toTopOf="@+id/buttonAddRoom"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewGreeting" />
-
-
-        <TextView
             android:id="@+id/textViewYourRooms"
             style="@style/Sub_Title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="6dp"
+            android:layout_width="186dp"
+            android:layout_height="31dp"
+            android:layout_marginStart="40dp"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/days_one"
             android:text="Your Rooms"
-            android:textColor="#56000000"
+            android:textAlignment="center"
+            android:textColor="#EAEAEA"
+            android:textSize="24sp"
             android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/RecyclerViewMain"
             app:layout_constraintEnd_toStartOf="@+id/buttonAddRoom"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buttonAddRoom" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
 
         <Button
             android:id="@+id/buttonAddRoom"
-            style="@style/Button.LightOrange"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-
-
-            android:text="Add"
-            android:theme="@style/Button.LightOrange"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:backgroundTint="#1600EAFF"
+            android:fontFamily="@font/days_one"
+            android:text=" Add"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="#EAEAEA"
+            android:textSize="20sp"
+            android:theme="@style/Button.LightBlue"
             app:cornerRadius="15dp"
             app:layout_constraintBottom_toTopOf="@+id/RecyclerViewMain"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textViewYourRooms"
-            app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
-
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecyclerViewMain"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="70dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAddRoom" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/white_login"
+            app:circularflow_radiusInDP="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
