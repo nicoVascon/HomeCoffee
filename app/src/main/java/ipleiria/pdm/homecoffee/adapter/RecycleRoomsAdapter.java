@@ -88,7 +88,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
     public void onItemClick(View v, int position){
         if (lastSelectedItemView != null){
             CardView lastCardView = lastSelectedItemView.findViewById(R.id.cardViewRoomItem);
-            lastCardView.setCardBackgroundColor(context.getResources().getColor(R.color.roomIconBackground));
+            lastCardView.setCardBackgroundColor(context.getResources().getColor(R.color.iconBackgoundRooms));
         }
         lastSelectedItemView = v;
         CardView cardView = v.findViewById(R.id.cardViewRoomItem);
