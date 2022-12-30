@@ -24,12 +24,11 @@
         <TextView
             android:id="@+id/textViewWelcome"
             style="@style/Sub_Title"
-            android:layout_width="403dp"
-            android:layout_height="59dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="10dp"
-            android:height="30dp"
             android:autoText="true"
             android:elegantTextHeight="true"
             android:fontFamily="@font/days_one"
@@ -45,9 +44,8 @@
         <TextView
             android:id="@+id/textViewYourRooms"
             style="@style/Sub_Title"
-            android:layout_width="186dp"
-            android:layout_height="31dp"
-            android:layout_marginStart="40dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             android:fontFamily="@font/days_one"
             android:text="Your Rooms"
@@ -57,15 +55,14 @@
             android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/RecyclerViewMain"
             app:layout_constraintEnd_toStartOf="@+id/buttonAddRoom"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textViewWelcome"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
 
         <Button
             android:id="@+id/buttonAddRoom"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="40dp"
             android:backgroundTint="#1600EAFF"
             android:fontFamily="@font/days_one"
@@ -78,7 +75,6 @@
             app:cornerRadius="15dp"
             app:layout_constraintBottom_toTopOf="@+id/RecyclerViewMain"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textViewYourRooms"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -96,13 +92,12 @@
             android:id="@+id/imageView2"
             android:layout_width="0dp"
             android:layout_height="5dp"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:src="@drawable/white_login"
             app:circularflow_radiusInDP="100dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textViewWelcome"
+            app:layout_constraintStart_toStartOf="@+id/textViewWelcome"
             app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
