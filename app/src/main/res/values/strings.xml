@@ -86,4 +86,7 @@
     <string name="toastMessage_AssociateSensorSuccess">The Sensor was Associated Successfully</string>
     <string name="toastMessage_AssociateSensorFail">The Sensor couldn\'t be Associated</string>
     <string name="toolbar_selectSensorTitle">Select a Sensor</string>
+    <string name="txt_NoBLEDevName">N/A</string>
+    <string name="txt_loadingDialog_ScanningDevices">Scanning Devices...</string>
+    <string name="txt_loadingDialog_ConnectingToDevice">Connecting...</string>
 </resources>

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +31,8 @@ public class RecycleBLEDevicesAdapter extends RecyclerView.Adapter<RecycleBLEDev
     private Context context;
     private LayoutInflater mInflater;
     private List<BluetoothDevice> devices;
+
+    private View lastSelectedItemView;
 
     public RecycleBLEDevicesAdapter(Context context, List<BluetoothDevice> devices) {
         mInflater = LayoutInflater.from(context);
@@ -65,13 +68,21 @@ public class RecycleBLEDevicesAdapter extends RecyclerView.Adapter<RecycleBLEDev
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        holder.textView_BLEDevName.setText(BLEDevice.getName());
+        holder.textView_BLEDevName.setText(BLEDevice.getName() != null? BLEDevice.getName() :
+                context.getResources().getString(R.string.txt_NoBLEDevName));
         holder.imgPhoto.setImageResource(R.drawable.ble_icon);
         //holder.imgPhoto.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.white)));
         int itemPosition = position;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (lastSelectedItemView != null){
+                    CardView lastCardView = lastSelectedItemView.findViewById(R.id.cardView_BLEDev);
+                    lastCardView.setCardBackgroundColor(context.getResources().getColor(R.color.iconBackgoundRooms));
+                }
+                lastSelectedItemView = v;
+                CardView cardView = v.findViewById(R.id.cardView_BLEDev);
+                cardView.setCardBackgroundColor(context.getResources().getColor(R.color.devIconBackground));
                 onItemClick(v, itemPosition);
             }
         });

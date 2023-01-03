@@ -13,6 +13,7 @@ import android.bluetooth.le.ScanCallback;
 import android.bluetooth.le.ScanResult;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleBLEDevicesAdapter;
+import ipleiria.pdm.homecoffee.components.LoadingDialog;
 
 public class SlideshowFragment extends Fragment {
     public static final String TARGET_SERVICE_UUID = "0000000000000001";
@@ -65,6 +67,7 @@ public class SlideshowFragment extends Fragment {
     TextView textViewServicesBLE;
     TextView textViewReceivedValue;
     EditText editTextNumberDecimal;
+    LoadingDialog loadingDialog;
 
     private RecyclerView mRecyclerView;
     private RecycleBLEDevicesAdapter dAdapter;
@@ -109,96 +112,13 @@ public class SlideshowFragment extends Fragment {
         dAdapter = new RecycleBLEDevicesAdapter(getActivity(), devices){
             @Override
             public void onItemClick(View view, int position) {
-                deviceSelected = devices.get(position);
-                connect(deviceSelected);
-                if (!deviceConnectionState || selectedService == null){
-                    return;
-                }
-                List<BluetoothGattCharacteristic> characteristics = selectedService.getCharacteristics();
-
-                BluetoothGattCharacteristic deviceTypeCharacteristic = null;
-                BluetoothGattCharacteristic advertNameCharacteristic = null;
-                BluetoothGattCharacteristic devEuiCodeCharacteristic = null;
-                BluetoothGattCharacteristic appEuiCodeCharacteristic = null;
-                BluetoothGattCharacteristic appKeyCodeCharacteristic = null;
-                BluetoothGattCharacteristic bleServerNameCharacteristic = null;
-                BluetoothGattCharacteristic ttnAppJoinStateCharacteristic = null;
-                for (BluetoothGattCharacteristic characteristic : characteristics) {
-                    System.out.println("Characteristic: " + getUUID_toString(characteristic.getUuid()));
-                    switch (getUUID_toString(characteristic.getUuid())){
-                        case DEVICE_TYPE_CHARACTERISTIC_UUID:
-                            deviceTypeCharacteristic = characteristic;
-                            break;
-                        case ADVERT_NAME_CHARACTERISTIC_UUID:
-                            advertNameCharacteristic = characteristic;
-                            break;
-                        case DEVICE_EUI_CODE_CHARACTERISTIC_UUID:
-                            devEuiCodeCharacteristic = characteristic;
-                            break;
-                        case APP_EUI_CODE_CHARACTERISTIC_UUID:
-                            appEuiCodeCharacteristic = characteristic;
-                            break;
-                        case APP_KEY_CODE_CHARACTERISTIC_UUID:
-                            appKeyCodeCharacteristic = characteristic;
-                            break;
-                        case BLE_SERVER_NAME_CHARACTERISTIC_UUID:
-                            bleServerNameCharacteristic = characteristic;
-                            break;
-                        case TTN_APP_JOIN_STATE_CHARACTERISTIC_UUID:
-                            ttnAppJoinStateCharacteristic = characteristic;
-                            break;
+                new Thread(new Runnable() {
+                    public void run() {
+                        // a potentially time consuming task
+                        onBLEDevItemClick(position);
                     }
-                }
-                if (deviceTypeCharacteristic == null) {
-                    System.out.println("Target Device Type characteristic not found");
-                }else{
-                    String value = readString(deviceTypeCharacteristic);
-                    textViewReceivedValue.setText("Received Value: " + value);
-                }
+                }).start();
 
-                if (advertNameCharacteristic == null) {
-                    System.out.println("Target Advertising Name characteristic not found");
-                }else{
-                    String stringValue = "Oiii BLE";
-                    writeString(advertNameCharacteristic, stringValue);
-                }
-
-                if (devEuiCodeCharacteristic == null) {
-                    System.out.println("Target Device Eui Code characteristic not found");
-                }else{
-                    String value = readString(devEuiCodeCharacteristic);
-                    String lastValue = textViewReceivedValue.getText().toString();
-                    textViewReceivedValue.setText(lastValue + "\nDevice Eui: " + value);
-                }
-
-                if (appEuiCodeCharacteristic == null) {
-                    System.out.println("Target App Eui Code characteristic not found");
-                }else{
-                    String stringValue = "0000000000000111";
-                    writeString(appEuiCodeCharacteristic, stringValue);
-                }
-
-                if (appKeyCodeCharacteristic == null) {
-                    System.out.println("Target App Key Code characteristic not found");
-                }else{
-                    String stringValue = "abc0000000000111";
-                    writeString(appKeyCodeCharacteristic, stringValue);
-                }
-
-                if (bleServerNameCharacteristic == null) {
-                    System.out.println("Target BLE Server Name characteristic not found");
-                }else{
-                    String stringValue = "BLE Server :)";
-                    writeString(bleServerNameCharacteristic, stringValue);
-                }
-
-                if (ttnAppJoinStateCharacteristic == null) {
-                    System.out.println("Target TTN App Join State characteristic not found");
-                }else{
-                    String value = readString(ttnAppJoinStateCharacteristic);
-                    String lastValue = textViewReceivedValue.getText().toString();
-                    textViewReceivedValue.setText(lastValue + "\nJoin State: " + value);
-                }
             }
         };
         mRecyclerView.setAdapter(dAdapter);
@@ -227,26 +147,143 @@ public class SlideshowFragment extends Fragment {
         btnConnectBLE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                    System.out.println("Oiiiiiiiii Não tem permissão...................");
-                    return;
-                }
-                for (BluetoothDevice device : devices) {
-                    if (device.getName() != null && device.getName().equals("LoPy Nicolas ;)")) {
-                        deviceSelected = device;
-                        connect(deviceSelected);
-                        return;
-                    }
-                }
-                System.out.println("Device \"LoPy Nicolas ;)\" não encontrado!!!!!!!!!!!!");
+                openLoadingDialog();
             }
         });
     }
 
-    private List<BluetoothDevice> scanLeDevice() {
+    public void openLoadingDialog()
+    {
+        loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                loadingDialog.dismisDialog();
+            }
+        },5000); //You can change this time as you wish
+    }
+
+    public void onBLEDevItemClick(int position){
+        loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
+
+        deviceSelected = devices.get(position);
+        connect(deviceSelected);
+        if (!deviceConnectionState || selectedService == null){
+            return;
+        }
+        List<BluetoothGattCharacteristic> characteristics = selectedService.getCharacteristics();
+
+        BluetoothGattCharacteristic deviceTypeCharacteristic = null;
+        BluetoothGattCharacteristic advertNameCharacteristic = null;
+        BluetoothGattCharacteristic devEuiCodeCharacteristic = null;
+        BluetoothGattCharacteristic appEuiCodeCharacteristic = null;
+        BluetoothGattCharacteristic appKeyCodeCharacteristic = null;
+        BluetoothGattCharacteristic bleServerNameCharacteristic = null;
+        BluetoothGattCharacteristic ttnAppJoinStateCharacteristic = null;
+        for (BluetoothGattCharacteristic characteristic : characteristics) {
+            System.out.println("Characteristic: " + getUUID_toString(characteristic.getUuid()));
+            switch (getUUID_toString(characteristic.getUuid())){
+                case DEVICE_TYPE_CHARACTERISTIC_UUID:
+                    deviceTypeCharacteristic = characteristic;
+                    break;
+                case ADVERT_NAME_CHARACTERISTIC_UUID:
+                    advertNameCharacteristic = characteristic;
+                    break;
+                case DEVICE_EUI_CODE_CHARACTERISTIC_UUID:
+                    devEuiCodeCharacteristic = characteristic;
+                    break;
+                case APP_EUI_CODE_CHARACTERISTIC_UUID:
+                    appEuiCodeCharacteristic = characteristic;
+                    break;
+                case APP_KEY_CODE_CHARACTERISTIC_UUID:
+                    appKeyCodeCharacteristic = characteristic;
+                    break;
+                case BLE_SERVER_NAME_CHARACTERISTIC_UUID:
+                    bleServerNameCharacteristic = characteristic;
+                    break;
+                case TTN_APP_JOIN_STATE_CHARACTERISTIC_UUID:
+                    ttnAppJoinStateCharacteristic = characteristic;
+                    break;
+            }
+        }
+        if (deviceTypeCharacteristic == null) {
+            System.out.println("Target Device Type characteristic not found");
+        }else{
+            String value = readString(deviceTypeCharacteristic);
+            textViewReceivedValue.post(new Runnable() {
+                @Override
+                public void run() {
+                    textViewReceivedValue.setText("Received Value: " + value);
+                }
+            });
+        }
+
+        if (advertNameCharacteristic == null) {
+            System.out.println("Target Advertising Name characteristic not found");
+        }else{
+            String stringValue = "Oiii BLE";
+            writeString(advertNameCharacteristic, stringValue);
+        }
+
+        if (devEuiCodeCharacteristic == null) {
+            System.out.println("Target Device Eui Code characteristic not found");
+        }else{
+            String value = readString(devEuiCodeCharacteristic);
+            String lastValue = textViewReceivedValue.getText().toString();
+            textViewReceivedValue.post(new Runnable() {
+                @Override
+                public void run() {
+                    textViewReceivedValue.setText(lastValue + "\nDevice Eui: " + value);
+                }
+            });
+        }
+
+        if (appEuiCodeCharacteristic == null) {
+            System.out.println("Target App Eui Code characteristic not found");
+        }else{
+            String stringValue = "0000000000000111";
+            writeString(appEuiCodeCharacteristic, stringValue);
+        }
+
+        if (appKeyCodeCharacteristic == null) {
+            System.out.println("Target App Key Code characteristic not found");
+        }else{
+            String stringValue = "abc0000000000111";
+            writeString(appKeyCodeCharacteristic, stringValue);
+        }
+
+        if (bleServerNameCharacteristic == null) {
+            System.out.println("Target BLE Server Name characteristic not found");
+        }else{
+            String stringValue = "BLE Server :)";
+            writeString(bleServerNameCharacteristic, stringValue);
+        }
+
+        if (ttnAppJoinStateCharacteristic == null) {
+            System.out.println("Target TTN App Join State characteristic not found");
+        }else{
+            String value = readString(ttnAppJoinStateCharacteristic);
+            String lastValue = textViewReceivedValue.getText().toString();
+            textViewReceivedValue.post(new Runnable() {
+                @Override
+                public void run() {
+                    textViewReceivedValue.setText(lastValue + "\nJoin State: " + value);
+                }
+            });
+        }
+    }
+
+    private void scanLeDevice() {
+        loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
+        loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_ScanningDevices));
         if (ActivityCompat.checkSelfPermission(this.getContext(), Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("Não tem permissão!!");
-            return null;
+            return;
         }
         BluetoothLeScanner bluetoothLeScanner = bluetoothAdapter.getBluetoothLeScanner();
         if (bluetoothLeScanner == null) {
@@ -267,28 +304,20 @@ public class SlideshowFragment extends Fragment {
                 System.out.println("oiiiiiiiiiii Outro: " + devicesDetected);
 
                 // Add the device to the list of found devices
-                if (!devices.contains(result.getDevice())) {
+                if (!devices.contains(result.getDevice()) && devicesDetected < 40) {
                     devices.add(result.getDevice());
                     System.out.println("Oiiiii Deu..........");
                     System.out.println("Device Name: " + result.getDevice().getName());
-
-                    StringBuilder str = new StringBuilder();
-                    for (BluetoothDevice device : devices) {
-                        str.append(device.getName() + "\n");
-                    }
-
-
                     dAdapter.notifyDataSetChanged();
-//                    textViewDispositivosBLE.setText(str.toString());
                 }
                 if (devices.size() > 20 || devicesDetected > 40) {
                     System.out.println("-------------------- Oi Stop bluetoothLeScanner!!!!!");
                     bluetoothLeScanner.stopScan(this);
+                    loadingDialog.dismisDialog();
                 }
             }
         };
         bluetoothLeScanner.startScan(scanCallback);
-        return devices;
     }
 
     public String readString(BluetoothGattCharacteristic targetCharacteristic){
@@ -305,8 +334,6 @@ public class SlideshowFragment extends Fragment {
     }
 
     public void read(BluetoothGattCharacteristic targetCharacteristic) {
-
-
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("Oiiiiiiiii Não tem permissão...................");
             return;
@@ -363,6 +390,8 @@ public class SlideshowFragment extends Fragment {
     }
 
     public void connect(BluetoothDevice device) {
+        loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_ConnectingToDevice));
+
         if (deviceConnectionState){
             return;
         }
@@ -444,14 +473,25 @@ public class SlideshowFragment extends Fragment {
                 i++;
             }
             if (!deviceConnectionState && i == TIMEOUT){
-                Toast.makeText(getContext(), "Timeout: Device Connection failed", Toast.LENGTH_LONG).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Timeout: Device Connection failed", Toast.LENGTH_LONG).show();
+                    }
+                });
                 return;
             }
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
             // Handle the exception
         }
-        Toast.makeText(getContext(), "Connection Succeeded with: " + device.getName(), Toast.LENGTH_LONG).show();
+        String devName = device.getName();
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getContext(), "Connection Succeeded with: " + devName, Toast.LENGTH_LONG).show();
+            }
+        });
 
         try {
             int i = 0;
@@ -461,7 +501,12 @@ public class SlideshowFragment extends Fragment {
                 i++;
             }
             if (i == TIMEOUT){
-                Toast.makeText(getContext(), "Timeout: Discover Services operation failed", Toast.LENGTH_LONG).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(), "Timeout: Discover Services operation failed", Toast.LENGTH_LONG).show();
+                    }
+                });
                 return;
             }
         } catch (InterruptedException e) {
@@ -479,7 +524,12 @@ public class SlideshowFragment extends Fragment {
                 selectedService = service;
             }
         }
-        textViewServicesBLE.setText(str.toString());
+        textViewServicesBLE.post(new Runnable() {
+            @Override
+            public void run() {
+                textViewServicesBLE.setText(str.toString());
+            }
+        });
 
         if (selectedService == null) {
             System.out.println("Target service not found");

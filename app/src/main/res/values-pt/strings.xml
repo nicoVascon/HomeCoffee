@@ -75,4 +75,7 @@
     <string name="toastMessage_AssociateSensorSuccess">O Sensor foi Associado com Sucesso</string>
     <string name="toastMessage_AssociateSensorFail">O Sensor não pudo ser Associado</string>
     <string name="toolbar_selectSensorTitle">Seleciona um Sensor</string>
+    <string name="txt_NoBLEDevName">N/A</string>
+    <string name="txt_loadingDialog_ScanningDevices">A Procurar Dispositivos...</string>
+    <string name="txt_loadingDialog_ConnectingToDevice">A Connectar...</string>
 </resources>
