@@ -68,7 +68,7 @@ public class RecycleBLEDevicesAdapter extends RecyclerView.Adapter<RecycleBLEDev
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        holder.textView_BLEDevName.setText(BLEDevice.getName() != null? BLEDevice.getName() :
+        holder.textView_BLEDevName.setText(BLEDevice.getName() != null && !BLEDevice.getName().trim().isEmpty()? BLEDevice.getName() :
                 context.getResources().getString(R.string.txt_NoBLEDevName));
         holder.imgPhoto.setImageResource(R.drawable.ble_icon);
         //holder.imgPhoto.setImageTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.white)));

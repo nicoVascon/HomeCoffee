@@ -89,4 +89,32 @@
     <string name="txt_NoBLEDevName">N/A</string>
     <string name="txt_loadingDialog_ScanningDevices">Scanning Devices...</string>
     <string name="txt_loadingDialog_ConnectingToDevice">Connecting...</string>
+    <string name="toastMessage_BLEDeviceDisconnected">BLE Device Disconnected</string>
+    <string name="toastMessage_BLEDeviceConnected">BLE Device Connected</string>
+    <string name="txt_loadingDialog_ConnectionWithDeviceSucceed">Connection Succeeded with:</string>
+    <string name="txt_loadingDialog_ServicesDiscovered">Services Discovered</string>
+    <string name="txt_loadingDialog_Characteristic_Part1">\"</string>
+    <string name="txt_loadingDialog_CharacteristicRead_Part2">\" Characteristic Read Successfully</string>
+    <string name="txt_loadingDialog_CharacteristicWroten_Part2">\" Characteristic Wroten Sucessfully</string>
+    <string name="txt_loadingDialog_ConfigurationServiceFound">Configuration Service Found</string>
+    <string name="toastMessage_BLEDeviceConfigurationSucceeded">BLE Device Configuration Succeeded</string>
+    <string name="toastMessage_BLEDeviceConfigurationError">BLE Device Configuration Error</string>
+    <string name="toastMessage_CharacteristicReadOperationFailed">Timeout: Read operation failed</string>
+    <string name="toastMessage_CharacteristicWriteOperationFailed">Timeout: Write Operation Failed</string>
+    <string name="toastMessage_BLEDeviceConnectionFailed">Timeout: Device Connection Failed</string>
+    <string name="toastMessage_BLEDiscoverServicesFailed">Timeout: Discover Services Operation Failed</string>
+    <string name="BLEDevicesFound_title">Devices Found</string>
+    <string name="btn_scanBLEDevices">Scan</string>
+    <string name="txt_AlertDialog_TTNEndDeviceRegistrationTitle">TTN End Device Registration</string>
+    <string name="txt_AlertDialog_TTNEndDeviceRegistration">Regist the End Device on The Things Network Plataform, Fill the Fieds and Click in Continue</string>
+    <string name="btn_Continue">Continue</string>
+    <string name="btn_Cancel">Cancel</string>
+    <string name="txt_DeviceEUICode">Device EUI Code:</string>
+    <string name="btn_setGateaway">Set Gateaway</string>
+    <string name="txt_GatewayNotDefined">Gateway Not Defined</string>
+    <string name="txt_AlertDialog_DisassociateGatewayTitle">Disassociate Gateway</string>
+    <string name="txt_AlertDialog_DisassociateGateway">Are you sure that you want to disassociate Gateway?</string>
+    <string name="txt_AlertDialog_GWConfig_AppEUILabel" translatable="false">App EUI:</string>
+    <string name="txt_AlertDialog_GWConfig_AppKeyLabel" translatable="false">App Key:</string>
+    <string name="toastMessage_RemainingFields">Remaining Fields. Try Again</string>
 </resources>

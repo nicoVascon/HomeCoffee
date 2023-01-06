@@ -31,6 +31,7 @@ public class LoadingDialog {
                 View view = inflater.inflate(R.layout.custom_dialog_loading,null);
                 textViewLoadingDialogMainText = view.findViewById(R.id.textViewLoadingDialogMainText);
                 textViewLoadingDialogSubText = view.findViewById(R.id.textViewLoadingDialogSubText);
+                textViewLoadingDialogSubText.setVisibility(View.GONE);
                 builder.setView(view);
                 builder.setCancelable(false);
 
@@ -41,19 +42,29 @@ public class LoadingDialog {
     }
 
     public void setSubText(String text){
-        textViewLoadingDialogSubText.post(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(text == null || text.trim().isEmpty()){
+                    textViewLoadingDialogSubText.setVisibility(View.GONE);
+                    return;
+                }
                 textViewLoadingDialogSubText.setText(text);
+                textViewLoadingDialogSubText.setVisibility(View.VISIBLE);
             }
         });
     }
 
     public void setMainText(String text){
-        textViewLoadingDialogMainText.post(new Runnable() {
+        activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                if(text == null || text.trim().isEmpty()){
+                    textViewLoadingDialogMainText.setVisibility(View.GONE);
+                    return;
+                }
                 textViewLoadingDialogMainText.setText(text);
+                textViewLoadingDialogMainText.setVisibility(View.VISIBLE);
             }
         });
     }

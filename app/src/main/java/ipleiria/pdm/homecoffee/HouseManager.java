@@ -32,6 +32,9 @@ public class HouseManager implements Serializable {
 
     private static Bundle bundle;
 
+    private String GatewayBLEServerName;
+    private String GatewayBLEServerDevEuiCode;
+
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
     private ArrayList<Sensor> sensors;
@@ -243,11 +246,27 @@ public class HouseManager implements Serializable {
         bundle = new Bundle();
     }
 
-    public static Bundle getBundle() {
+    public String getGatewayBLEServerName() {
+        return GatewayBLEServerName;
+    }
+
+    public void setGatewayBLEServerName(String gatewayBLEServerName) {
+        GatewayBLEServerName = gatewayBLEServerName;
+    }
+
+    public String getGatewayBLEServerDevEuiCode() {
+        return GatewayBLEServerDevEuiCode;
+    }
+
+    public void setGatewayBLEServerDevEuiCode(String gatewayBLEServerDevEuiCode) {
+        GatewayBLEServerDevEuiCode = gatewayBLEServerDevEuiCode;
+    }
+
+    public static synchronized Bundle getBundle() {
         return bundle;
     }
 
-    public static void setBundle(Bundle bundle) {
+    public static synchronized void setBundle(Bundle bundle) {
         HouseManager.bundle = bundle;
     }
 
