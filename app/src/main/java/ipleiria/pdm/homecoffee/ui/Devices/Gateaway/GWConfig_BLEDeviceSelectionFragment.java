@@ -66,6 +66,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
     private static final int TIMEOUT = 10;
     private static final int WRITE_TIME_SLEEP = 1;
     private static final int MAX_RANDOM_INTEGER = 1000;
+    private static final int TTN_JOIN_TIME_SLEEP = 3000;
 
     public boolean discoverServicesSucceed = false;
     public boolean readCharacteristicsSucceed = false;
@@ -88,6 +89,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
 
     private String appEUICode;
     private String appKeyCode;
+    private String devEuiCode;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -183,7 +185,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
             System.out.println("Target Device Eui Code characteristic not found");
             loadingDialog.dismisDialog();
         }else{
-            String value = readString(devEuiCodeCharacteristic, "Device Eui Code");
+            devEuiCode = readString(devEuiCodeCharacteristic, "Device Eui Code");
             if (readCharacteristicsSucceed){
                 loadingDialog.dismisDialog();
 
@@ -198,7 +200,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                         // Set up the input
                         TextView textViewAlertDialogGWConfig = viewInflated.findViewById(R.id.textViewAlertDialogGWConfig);
                         textViewAlertDialogGWConfig.setText(getResources().getString(R.string.txt_AlertDialog_TTNEndDeviceRegistration) +
-                                "\n\n" + getResources().getString(R.string.txt_DeviceEUICode) + value);
+                                "\n\n" + getResources().getString(R.string.txt_DeviceEUICode) + devEuiCode);
                         final EditText EditTextGWConfigAppEUI = (EditText) viewInflated.findViewById(R.id.EditTextGWConfigAppEUI);
                         final EditText EditTextGWConfigAppKey = (EditText) viewInflated.findViewById(R.id.EditTextGWConfigAppKey);
                         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
@@ -263,7 +265,6 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
 
         BluetoothGattCharacteristic deviceTypeCharacteristic = null;
         BluetoothGattCharacteristic advertNameCharacteristic = null;
-        BluetoothGattCharacteristic devEuiCodeCharacteristic = null;
         BluetoothGattCharacteristic appEuiCodeCharacteristic = null;
         BluetoothGattCharacteristic appKeyCodeCharacteristic = null;
         BluetoothGattCharacteristic bleServerNameCharacteristic = null;
@@ -277,9 +278,6 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                     break;
                 case ADVERT_NAME_CHARACTERISTIC_UUID:
                     advertNameCharacteristic = characteristic;
-                    break;
-                case DEVICE_EUI_CODE_CHARACTERISTIC_UUID:
-                    devEuiCodeCharacteristic = characteristic;
                     break;
                 case APP_EUI_CODE_CHARACTERISTIC_UUID:
                     appEuiCodeCharacteristic = characteristic;
@@ -316,16 +314,6 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         }else{
             writeString(advertNameCharacteristic, gatewayName, "Advertising Name");
             if (writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
-        }
-
-        String devEuiCode = null;
-        if (devEuiCodeCharacteristic == null) {
-            System.out.println("Target Device Eui Code characteristic not found");
-        }else{
-            devEuiCode = readString(devEuiCodeCharacteristic, "Device Eui Code");
-            if (readCharacteristicsSucceed){
                 configOperationsCounter++;
             }
         }
@@ -367,7 +355,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 value = readString(ttnAppJoinStateCharacteristic, "TTN App Join State");
                 if(!value.equals(TTN_JOINED_STATE)) {
                     try {
-                        Thread.sleep(3000);
+                        Thread.sleep(TTN_JOIN_TIME_SLEEP);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
