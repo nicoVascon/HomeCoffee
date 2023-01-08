@@ -13,23 +13,37 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
-    private HouseManager gestorContactos;
+    private HouseManager houseManager;
     private Context context;
     private LayoutInflater mInflater;
-    DevicesFragment devicesFragment;
+    private DevicesFragment devicesFragment;
+    private RoomFragment roomFragment;
+    ArrayList<Device> devices;
 
-    public RecycleDevicesAdapter(Context context, DevicesFragment devicesFragment){
+    public RecycleDevicesAdapter(Context context, DevicesFragment devicesFragment, ArrayList<Device> devices){
         mInflater = LayoutInflater.from(context);
-        this.gestorContactos = HouseManager.getInstance();
+        this.houseManager = HouseManager.getInstance();
         this.context=context;
         this.devicesFragment = devicesFragment;
+        this.devices=devices;
+    }
+
+    public RecycleDevicesAdapter(Context context,RoomFragment roomFragment, ArrayList<Device> devices){
+        mInflater = LayoutInflater.from(context);
+        this.houseManager = HouseManager.getInstance();
+        this.context=context;
+        this.devices=devices;
+        this.roomFragment=roomFragment;
     }
 
     public RecycleDevicesAdapter.DevicesHolder onCreateViewHolder(@NonNull ViewGroup parent, int
@@ -66,8 +80,13 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
                     itemDevice.setConnectionState(isChecked);
 
                     if (DevicesFragment.isDevicesEnable()){
-                        devicesFragment.updateDevicesConnectionState();
+                        if(devicesFragment!=null) {
+                            devicesFragment.updateDevicesConnectionState();
+                        }
+                        else {
+                            roomFragment.updateDevicesConnectionState();
 //                        dAdapter.notifyDataSetChanged();
+                        }
                     }
                     txtConnectionState.setText(isChecked ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
                     buttonView.setText(isChecked ? R.string.btn_OnDevices : R.string.btn_OffDevices);
@@ -76,19 +95,27 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
 
         public Device getDevice(){
-            return gestorContactos.getDevice(this.getLayoutPosition());
+            return houseManager.getDevice(this.getLayoutPosition());
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecycleDevicesAdapter.DevicesHolder holder, int position) {
-        Device devCurrent = gestorContactos.getDevices().get(position);
+        //Device devCurrent = houseManager.getDevices().get(position);
+        Device devCurrent = devices.get(position);
+
+
+//        Device dev = houseManager.getDevice(position);
+//        Device devCurrent = houseManager.getRooms().get(houseManager.getRoomIndex(houseManager.));
+
         holder.txtDevName.setText(devCurrent.getName());
         if (!DevicesFragment.isDevicesEnable()){
             devCurrent.setConnectionState(false);
             holder.switchDev.setEnabled(false);
+
         } else{
             holder.switchDev.setEnabled(true);
+
         }
         holder.txtConnectionState.setText(devCurrent.isConnectionState() ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
         holder.switchDev.setChecked(devCurrent.isConnectionState());
@@ -124,14 +151,16 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
                 onItemClick(v, itemPosition);
             }
         });
+
     }
+
 
     public void onItemClick(View view, int position){
     }
 
     @Override
     public int getItemCount() {
-        return gestorContactos.getDevices().size();
+        return devices.size();
     }
 
     public Context getContext() {

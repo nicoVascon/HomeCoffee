@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.HouseManager;
 
 public abstract class Device implements Serializable, Comparable<Device> {
     protected int channel;
@@ -14,6 +15,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected Room room;
     protected ArrayList<Notification> notifications;
     protected double value;
+    protected HouseManager houseManager;
 
     public Device(int channel, String name, DeviceType type, Room room) {
         this.channel = channel;
@@ -21,6 +23,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.type = type;
         this.room = room;
         this.notifications = new ArrayList<>();
+        room.addDevice(this);
     }
 
     public int getChannel() {

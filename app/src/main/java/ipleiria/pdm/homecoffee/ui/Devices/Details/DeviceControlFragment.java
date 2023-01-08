@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -36,6 +37,7 @@ public class DeviceControlFragment extends Fragment {
     private TextView textView_actuatorSensorValue;
     private Switch devSwitch;
     private CircleSliderView circleSlider_valueControl;
+    private HouseManager houseManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -125,7 +127,15 @@ public class DeviceControlFragment extends Fragment {
                         textView_actuatorSensorValue.setText(String.format("%.2f", percentValue) + " " + unit);
                     }
                     //
+
                 }
+
+                Integer dev_channel = selectedDevice.getChannel();
+                String dev_name = selectedDevice.getName();
+                String dev_value = String.format("%.2f",percentValue);
+
+                houseManager.addString_send_ttn(dev_channel,"name:"+dev_name + ",dev_channel:" + dev_channel + ",dev_value:" + dev_value);
+
                 return String.format("%.2f", percentValue) + " " + unit;
             }
         });

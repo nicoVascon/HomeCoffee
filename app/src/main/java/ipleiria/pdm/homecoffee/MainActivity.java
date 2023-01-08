@@ -2,16 +2,21 @@ package ipleiria.pdm.homecoffee;
 
 import static java.lang.Boolean.TRUE;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -38,6 +43,7 @@ import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
     private static TextView toolBarTitle;
     private static LinkedList<FragmentsEnum> lastsFragmentsOpened = new LinkedList<>();;
@@ -50,12 +56,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private HouseManager houseManager;
 
     private FirebaseAuth mAuth;
+    //private Mqtt3AsyncClient client;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context context = this;
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         houseManager = HouseManager.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
+
 
 
         drawer = findViewById(R.id.drawer_layout);
@@ -119,6 +128,105 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        dev1.addNotification(new Notification(
 //                new GregorianCalendar(2022, Calendar.DECEMBER, 25).getTime(),
 //                "Tenho sede!!!"));
+
+        //MQTT
+        /*
+        client = MqttClient.builder()
+                .useMqttVersion3()
+                .identifier("5c9496e0-58ff-11ed-bf0a-bb4ba43bd3f6")
+                .serverHost("mqtt.mydevices.com")
+                .serverPort(1883)
+                .sslWithDefaultConfig()
+                .addConnectedListener(context -> TypeSwitch.when(context)
+                        .is(Mqtt3ClientConnectedContext.class, context3 -> System.out.println(context3.getConnAck())))
+                .addDisconnectedListener(context -> {
+                    final Throwable cause = context.getCause();
+                    if (cause instanceof Mqtt3ConnAckException) {
+                        System.out.println("Eu desconectei\n\n\n");
+                        System.out.printf(cause.getMessage());
+                    } else {
+
+                    }})
+                .buildAsync();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            System.out.println("EU vou TENTAR CONECTAR----------------------------\n\n\n");
+            client.connectWith()
+                    .simpleAuth()
+                        .username("411755b0-58fa-11ed-bf0a-bb4ba43bd3f6")
+                        .password("ea48065ad529cdc42764fc43645e4c10ef899ca4".getBytes())
+                        .applySimpleAuth()
+                    .send()
+                    .whenComplete((connAck, throwable) -> {
+                        if (throwable != null) {
+                            Toast.makeText(this,"Nao conectei\n"+throwable.getMessage(),Toast.LENGTH_LONG);
+                            System.out.println(throwable.getMessage());
+                            // handle failure
+                        } else {
+                            Toast.makeText(this,"Conectei",Toast.LENGTH_LONG);
+                            System.out.println("EU CONECTEI------------------\n\n\n\n");
+                        }
+                    });
+        }
+        */
+
+        /*
+        client = MqttClient.builder()
+                .identifier("5c9496e0-58ff-11ed-bf0a-bb4ba43bd3f6")
+                .serverHost("mqtt.mydevices.com")
+                .serverPort(1883)
+                .sslWithDefaultConfig()
+                .simpleAuth()
+                .username("411755b0-58fa-11ed-bf0a-bb4ba43bd3f6")
+                .password("ea48065ad529cdc42764fc43645e4c10ef899ca4".getBytes())
+                .applySimpleAuth()
+                .build();
+
+
+        Mqtt5ConnAck connAckMessage = client.toBlocking().connect();
+        System.out.println(connAckMessage);
+        */
+
+        houseManager.start_mqtt();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int i=0;
+                while(true) {
+                    i++;
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(i==10) {
+                        ((MainActivity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Toast.makeText(context, "I finished the timer", Toast.LENGTH_SHORT).show();
+                                if(!HouseManager.getString_send_ttn().isEmpty()) {
+                                    Toast.makeText(context, houseManager.getString_send_ttn().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        i=0;
+
+                        //Onde correr metodo a cada 5s
+                        if(!HouseManager.getString_send_ttn().isEmpty())
+                            houseManager.submitMessage();
+
+                    }
+
+                }
+            }
+        }) ;
+        thread.start();
+
+
+
+
     }
 
     private void setCurrentUser() {
@@ -280,5 +388,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setLoginFragment();
         drawer.closeDrawer(GravityCompat.START);
         //finish();
+    }
+
+    public void button_send_loopy(View view) {
+
+    /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            System.out.println("Oi entrei e vou publicar");
+            client.publishWith()
+                    .topic("v1/411755b0-58fa-11ed-bf0a-bb4ba43bd3f6/things/5c9496e0-58ff-11ed-bf0a-bb4ba43bd3f6/data/3")
+                    .payload("digital_sensor,d=1".getBytes())
+                    .send()
+                    .whenComplete((publish, throwable) -> {
+                        if (throwable != null) {
+                            System.out.println("Nao publiquei o mundo");
+                            System.out.println(throwable.getMessage());
+                        } else {
+
+                            System.out.println("Publqiuei o mundo");
+                        }
+                    });
+        }*/
+
     }
 }

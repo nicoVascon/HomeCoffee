@@ -1,5 +1,6 @@
-package ipleiria.pdm.homecoffee.ui.Devices;
+package ipleiria.pdm.homecoffee.ui.rooms;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +16,27 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
+import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
-public class DevicesFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * create an instance of this fragment.
+ */
+public class RoomFragment extends Fragment {
+    public static final String RESULT_ROOM_POSITION = "RESULT_ROOM_POSITION";
     public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
 
     private HouseManager houseManager;
@@ -33,29 +46,41 @@ public class DevicesFragment extends Fragment {
     private Switch allDevSwitch;
     private Button addDeviceButton;
     private static boolean devicesEnable;
+    private int room_position;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
-        System.out.println("oiiiiii");
-        return inflater.inflate(R.layout.fragment_devices, container, false);
+        return inflater.inflate(R.layout.fragment_room, container, false);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        MainActivity.addFragmentViseted(FragmentsEnum.DEVICES_FRAGMENT);
+        MainActivity.addFragmentViseted(FragmentsEnum.ROOM_FRAGMENT);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        room_position = getArguments().getInt(RESULT_ROOM_POSITION);
+        System.out.println(room_position);
     }
 
     @Override
     public void onStart() {
+        Context context = this.getContext();
         super.onStart();
         houseManager = HouseManager.getInstance();
+        ArrayList<Device> devices = houseManager.getRoom(room_position).getDevices();
+
         MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devicesTitle));
 
         mRecyclerView = getView().findViewById(R.id.recyclerViewDevices);
-        dAdapter = new RecycleDevicesAdapter(this.getActivity(), this, HouseManager.getInstance().getDevices()){
+        dAdapter = new RecycleDevicesAdapter(this.getActivity() ,this,devices){
             @Override
             public void onItemClick(View view, int position) {
                 super.onItemClick(view, position);
@@ -64,7 +89,7 @@ public class DevicesFragment extends Fragment {
                     bundle = new Bundle();
                     HouseManager.setBundle(bundle);
                 }
-                bundle.putInt(RESULT_DEV_POSITION, position);
+                bundle.putInt(DevicesFragment.RESULT_DEV_POSITION, position);
                 ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
                         replace(R.id.fragment_container, new DeviceDetailsFragment()).commit();
             }
@@ -80,7 +105,7 @@ public class DevicesFragment extends Fragment {
         allDevSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                devicesEnable = isChecked;
+                DevicesFragment.setDevicesEnable(isChecked);
                 if (isChecked){
                     houseManager.recoverSavedDeviceConnectionState();
                 }else{
@@ -104,6 +129,7 @@ public class DevicesFragment extends Fragment {
         });
 
         updateDevicesConnectionState();
+
     }
 
     public void updateDevicesConnectionState(){
@@ -117,6 +143,7 @@ public class DevicesFragment extends Fragment {
     }
 
     public static void setDevicesEnable(boolean devicesEnable) {
-        DevicesFragment.devicesEnable = devicesEnable;
+        RoomFragment.devicesEnable = devicesEnable;
     }
+
 }

@@ -86,4 +86,7 @@
     <string name="toastMessage_AssociateSensorSuccess">The Sensor was Associated Successfully</string>
     <string name="toastMessage_AssociateSensorFail">The Sensor couldn\'t be Associated</string>
     <string name="toolbar_selectSensorTitle">Select a Sensor</string>
+    <string name="general_messages">message</string>
+    <string name="general_please_write_some_message">please write message</string>
+    <string name="mqtt_share">mqtt_share</string>
 </resources>
