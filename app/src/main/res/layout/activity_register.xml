@@ -31,7 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewLoadingDialogMainText"
         android:layout_width="324dp"
         android:layout_height="135dp"
         android:gravity="center"

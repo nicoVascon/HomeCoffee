@@ -26,6 +26,15 @@ public class SpinnerDeviceTypeAdapter extends ArrayAdapter<DeviceType> {
 
         DeviceType deviceType = DeviceType.values()[position];
         switch (deviceType){
+            case DIGITAL:
+                imgPhoto_devType.setImageResource(R.drawable.digital_icon);
+                break;
+            case ANALOG:
+                imgPhoto_devType.setImageResource(R.drawable.analog_icon);
+                break;
+            case PRESENCE:
+                imgPhoto_devType.setImageResource(R.drawable.presence_icon);
+                break;
             case HUMIDITY:
                 imgPhoto_devType.setImageResource(R.drawable.humiditysensor);
                 txtDevName_devType.setText(getContext().getResources().getString(R.string.deviceTypeName_Humidity));
@@ -34,7 +43,7 @@ public class SpinnerDeviceTypeAdapter extends ArrayAdapter<DeviceType> {
                 imgPhoto_devType.setImageResource(R.drawable.temperaturesensor);
                 txtDevName_devType.setText(getContext().getResources().getString(R.string.deviceTypeName_Temperature));
                 break;
-            case LIGHT:
+            case LUMINOSITY:
                 imgPhoto_devType.setImageResource(R.drawable.lightsensor);
                 txtDevName_devType.setText(getContext().getResources().getString(R.string.deviceTypeName_Light));
                 break;

@@ -55,4 +55,6 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.22'
+
+    implementation 'org.thethingsnetwork:data-mqtt:2.1.0'
 }

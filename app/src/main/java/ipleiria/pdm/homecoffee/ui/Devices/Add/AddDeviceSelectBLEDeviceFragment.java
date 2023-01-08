@@ -1,4 +1,4 @@
-package ipleiria.pdm.homecoffee.ui.slideshow;
+package ipleiria.pdm.homecoffee.ui.Devices.Add;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
@@ -14,14 +14,6 @@ import android.bluetooth.le.ScanResult;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -30,19 +22,30 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
+
 import java.nio.charset.StandardCharsets;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
+import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleBLEDevicesAdapter;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
+import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
-public class SlideshowFragment extends Fragment {
+
+public class AddDeviceSelectBLEDeviceFragment extends Fragment {
     public static final String TARGET_SERVICE_UUID = "0000000000000001";
     public static final String DEVICE_TYPE_CHARACTERISTIC_UUID = "c000000000000001";
     public static final String ADVERT_NAME_CHARACTERISTIC_UUID = "c000000000000002";
@@ -57,14 +60,21 @@ public class SlideshowFragment extends Fragment {
 
     public static final int CONFIG_OPERATIONS_NUMBER = 7;
 
+    public static final String RESULT_DEVICE_TYPE = "RESULT_DEVICE_TYPE";
+    public static final String RESULT_DEVICE_MODE = "RESULT_DEVICE_MODE";
+
 
     private static final int TIMEOUT = 10;
     private static final int WRITE_TIME_SLEEP = 1;
+    private static final int MAX_RANDOM_INTEGER = 1000;
 
     public boolean discoverServicesSucceed = false;
     public boolean readCharacteristicsSucceed = false;
     public boolean writeCharacteristicsSucceed = false;
     public boolean deviceConnectionState = false;
+
+    private boolean buttonPressed = false;
+    private boolean continuePressed = false;
 
     private BluetoothAdapter bluetoothAdapter;
     List<BluetoothDevice> devices;
@@ -81,7 +91,7 @@ public class SlideshowFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_slideshow, container, false);
+        return inflater.inflate(R.layout.fragment_ble_device_selection, container, false);
     }
 
     @Override
@@ -92,7 +102,7 @@ public class SlideshowFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        MainActivity.addFragmentViseted(FragmentsEnum.SLIDES_HOW_FRAGMENT);
+//        MainActivity.addFragmentViseted(FragmentsEnum.SLIDES_HOW_FRAGMENT);
     }
 
     @Override
@@ -107,59 +117,10 @@ public class SlideshowFragment extends Fragment {
         btnScanBLE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                selectedDevice = null;
-//                selectedService = null;
-//                gatt = null;
-//                scanLeDevice();
-
-//                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
-//                LayoutInflater inflater = getActivity().getLayoutInflater();
-//                View view = inflater.inflate(R.layout.alertdialog_gwconfig_layout,null);
-//
-//                builder.setView(view);
-//                builder.setCancelable(false);
-//
-//                AlertDialog alertDialog = builder.create();
-//                alertDialog.show();
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle(getResources().getString(R.string.txt_AlertDialog_TTNEndDeviceRegistrationTitle));
-                // I'm using fragment here so I'm using getView() to provide ViewGroup
-                // but you can provide here any other instance of ViewGroup from your Fragment / Activity
-                View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.alertdialog_gwconfig_layout, (ViewGroup) getView(), false);
-                // Set up the input
-                TextView textViewAlertDialogGWConfig = viewInflated.findViewById(R.id.textViewAlertDialogGWConfig);
-                textViewAlertDialogGWConfig.setText(getResources().getString(R.string.txt_AlertDialog_TTNEndDeviceRegistration) +
-                        "\n\n" + getResources().getString(R.string.txt_DeviceEUICode) + "value");
-                final EditText EditTextGWConfigAppEUI = (EditText) viewInflated.findViewById(R.id.EditTextGWConfigAppEUI);
-                final EditText EditTextGWConfigAppKey = (EditText) viewInflated.findViewById(R.id.EditTextGWConfigAppKey);
-                // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-                builder.setView(viewInflated);
-                builder.setIcon(R.drawable.link_icon);
-
-                // Set up the buttons
-                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-                        String appEui = EditTextGWConfigAppEUI.getText().toString();
-                        String appKey = EditTextGWConfigAppKey.getText().toString();
-                        System.out.println("String!!!!!!!!!!!!!!!!  AppEui: " + appEui + " AppKey: " + appKey);
-                        if (appEui == null || appEui.trim().isEmpty() || appKey == null || appKey.trim().isEmpty()){
-                            Toast.makeText(getContext(), getResources().getString(R.string.toastMessage_RemainingFields),
-                                    Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-                });
-                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
-
-                builder.show();
+                selectedDevice = null;
+                selectedService = null;
+                gatt = null;
+                scanLeDevice();
             }
         });
 
@@ -181,24 +142,56 @@ public class SlideshowFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    public void openLoadingDialog()
-    {
-        loadingDialog = new LoadingDialog(getActivity());
-        loadingDialog.startLoadingDialog();
-
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                loadingDialog.dismisDialog();
-            }
-        },5000); //You can change this time as you wish
-    }
-
     public void onBLEDevItemClick(int position){
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog();
-//        loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_ConnectingToDevice));
+
+        selectedDevice = devices.get(position);
+
+        connect(selectedDevice);
+        if (!deviceConnectionState || selectedService == null){
+            loadingDialog.dismisDialog();
+            return;
+        }
+        List<BluetoothGattCharacteristic> characteristics = selectedService.getCharacteristics();
+
+        BluetoothGattCharacteristic deviceTypeCharacteristic = null;
+        for (BluetoothGattCharacteristic characteristic : characteristics) {
+            System.out.println("Characteristic: " + getUUID_toString(characteristic.getUuid()));
+            switch (getUUID_toString(characteristic.getUuid())){
+                case DEVICE_TYPE_CHARACTERISTIC_UUID:
+                    deviceTypeCharacteristic = characteristic;
+                    break;
+            }
+        }
+        if (deviceTypeCharacteristic == null) {
+            System.out.println("Target Device Type characteristic not found");
+        }else{
+            String value = readString(deviceTypeCharacteristic, "Device Type");
+            if (readCharacteristicsSucceed){
+                Bundle bundle = HouseManager.getBundle();
+                if(bundle == null){
+                    bundle = new Bundle();
+                    HouseManager.setBundle(bundle);
+                }
+                String[] valueSplit = value.split(" ");
+                if(valueSplit.length == 2){
+                    bundle.putInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE, DeviceType.valueOf(valueSplit[0]).ordinal());
+                    bundle.putInt(AddDeviceFragment.RESULT_NEW_DEV_MODE, valueSplit[1] == "SENSOR"? 0:1);
+
+                    ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                            replace(R.id.fragment_container, new AddDeviceFragment()).commit();
+                }
+            }
+        }
+
+        loadingDialog.dismisDialog();
+    }
+
+    public void Continue(int position){
+        loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.startLoadingDialog();
+
         selectedDevice = devices.get(position);
 
         connect(selectedDevice);
@@ -266,10 +259,11 @@ public class SlideshowFragment extends Fragment {
             }
         }
 
+        String devEuiCode = null;
         if (devEuiCodeCharacteristic == null) {
             System.out.println("Target Device Eui Code characteristic not found");
         }else{
-            String value = readString(devEuiCodeCharacteristic, "Device Eui Code");
+            devEuiCode = readString(devEuiCodeCharacteristic, "Device Eui Code");
             if (readCharacteristicsSucceed){
                 configOperationsCounter++;
             }
@@ -295,11 +289,13 @@ public class SlideshowFragment extends Fragment {
             }
         }
 
+        String gatewayName = null;
         if (bleServerNameCharacteristic == null) {
             System.out.println("Target BLE Server Name characteristic not found");
         }else{
-            String stringValue = "BLE Server :)";
-            writeString(bleServerNameCharacteristic, stringValue, "BLE Server Name");
+            Random random = new Random();
+            gatewayName = "GATEWAY#" + random.nextInt(MAX_RANDOM_INTEGER);
+            writeString(bleServerNameCharacteristic, gatewayName, "BLE Server Name");
             if(writeCharacteristicsSucceed){
                 configOperationsCounter++;
             }
@@ -319,6 +315,8 @@ public class SlideshowFragment extends Fragment {
         }else{
             String value = readString(configurationStateCharacteristic, "Configuration State");
             int configOperationsCounter_temp = configOperationsCounter;
+            String GateWayName = gatewayName;
+            String GateWayEuiCode = devEuiCode;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -326,6 +324,10 @@ public class SlideshowFragment extends Fragment {
                         Toast.makeText(getContext(),
                                 getResources().getString(R.string.toastMessage_BLEDeviceConfigurationSucceeded),
                                 Toast.LENGTH_LONG).show();
+                        HouseManager.getInstance().setGatewayBLEServerName(GateWayName);
+                        HouseManager.getInstance().setGatewayBLEServerDevEuiCode(GateWayEuiCode);
+                        ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
+                                replace(R.id.fragment_container, new DevicesFragment()).commit();
                     }else{
                         Toast.makeText(getContext(),
                                 getResources().getString(R.string.toastMessage_BLEDeviceConfigurationError),
@@ -649,5 +651,4 @@ public class SlideshowFragment extends Fragment {
         strUUID.reverse();
         return strUUID.toString();
     }
-
 }

@@ -111,6 +111,15 @@ public class DeviceSettingsFragment extends Fragment {
         txt_devChannel.setText(String.valueOf(selectedDevice.getChannel()));
 
         switch (selectedDevice.getType()){
+            case DIGITAL:
+                imageView_devType.setImageResource(R.drawable.digital_icon);
+                break;
+            case ANALOG:
+                imageView_devType.setImageResource(R.drawable.analog_icon);
+                break;
+            case PRESENCE:
+                imageView_devType.setImageResource(R.drawable.presence_icon);
+                break;
             case HUMIDITY:
                 imageView_devType.setImageResource(R.drawable.humiditysensor);
                 txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Humidity));
@@ -119,7 +128,7 @@ public class DeviceSettingsFragment extends Fragment {
                 imageView_devType.setImageResource(R.drawable.temperaturesensor);
                 txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Temperature));
                 break;
-            case LIGHT:
+            case LUMINOSITY:
                 imageView_devType.setImageResource(R.drawable.lightsensor);
                 txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Light));
                 break;

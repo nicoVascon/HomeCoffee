@@ -32,6 +32,9 @@ public class HouseManager implements Serializable {
 
     private static Bundle bundle;
 
+    private String GatewayBLEServerName;
+    private String GatewayBLEServerDevEuiCode;
+
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
     private ArrayList<Sensor> sensors;
@@ -157,7 +160,7 @@ public class HouseManager implements Serializable {
         Device dev1 = new Sensor(125, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
         Device dev2 = new Sensor(456, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
         Device dev3 = new Actuator(268, "Aquecedor", DeviceType.TEMPERATURE, initialRoom);
-        Device dev4 = new Sensor(789, "Sensor de Luminosidade", DeviceType.LIGHT, initialRoom);
+        Device dev4 = new Sensor(789, "Sensor de Luminosidade", DeviceType.LUMINOSITY, initialRoom);
         Device dev5 = new Actuator(852, "Válvula de   Pressão", DeviceType.PRESSURE, initialRoom);
         Device dev6 = new Sensor(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
 
@@ -243,11 +246,27 @@ public class HouseManager implements Serializable {
         bundle = new Bundle();
     }
 
-    public static Bundle getBundle() {
+    public String getGatewayBLEServerName() {
+        return GatewayBLEServerName;
+    }
+
+    public void setGatewayBLEServerName(String gatewayBLEServerName) {
+        GatewayBLEServerName = gatewayBLEServerName;
+    }
+
+    public String getGatewayBLEServerDevEuiCode() {
+        return GatewayBLEServerDevEuiCode;
+    }
+
+    public void setGatewayBLEServerDevEuiCode(String gatewayBLEServerDevEuiCode) {
+        GatewayBLEServerDevEuiCode = gatewayBLEServerDevEuiCode;
+    }
+
+    public static synchronized Bundle getBundle() {
         return bundle;
     }
 
-    public static void setBundle(Bundle bundle) {
+    public static synchronized void setBundle(Bundle bundle) {
         HouseManager.bundle = bundle;
     }
 

@@ -1,6 +1,7 @@
 package ipleiria.pdm.homecoffee.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -82,7 +84,45 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
 
     @Override
     public void onBindViewHolder(@NonNull RecycleDevicesAdapter.DevicesHolder holder, int position) {
-        Device devCurrent = gestorContactos.getDevices().get(position);
+        if (position == 0){
+            String gatewayName = gestorContactos.getGatewayBLEServerName();
+            holder.txtDevName.setText(gatewayName != null && !gatewayName.trim().isEmpty()? gatewayName :
+                    context.getResources().getString(R.string.txt_GatewayNotDefined));
+            holder.txtConnectionState.setText(getContext().getResources().getString(R.string.txt_DeviceEUICode) +
+                    (gatewayName != null && !gatewayName.trim().isEmpty()?
+                            gestorContactos.getGatewayBLEServerDevEuiCode() : ""));
+            holder.txtNumDev.setText("");
+            holder.switchDev.setVisibility(View.GONE);
+            holder.imgPhoto.setImageResource(R.drawable.gateway_icon);
+            holder.cardView_dev.setCardBackgroundColor(
+                            context.getResources().getColor(android.R.color.holo_red_light));
+            holder.itemView.setLongClickable(true);
+            holder.itemView.setClickable(true);
+
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new AlertDialog.Builder(getContext())
+                            .setTitle(context.getResources().getString(R.string.txt_AlertDialog_DisassociateGatewayTitle))
+                            .setMessage(context.getResources().getString(R.string.txt_AlertDialog_DisassociateGateway) +
+                                    "\n\n\"" + HouseManager.getInstance().getGatewayBLEServerName() + "\"")
+                            .setPositiveButton(context.getResources().getString(R.string.txt_yes), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    HouseManager.getInstance().setGatewayBLEServerName(null);
+                                    HouseManager.getInstance().setGatewayBLEServerDevEuiCode(null);
+                                    notifyDataSetChanged();
+                                }
+                            })
+                            .setNegativeButton(context.getResources().getString(R.string.txt_no), null)
+                            .setIcon(R.drawable.link_icon)
+                            .show();
+                }
+            });
+            return;
+        }
+
+
+        Device devCurrent = gestorContactos.getDevices().get(position - 1);
         holder.txtDevName.setText(devCurrent.getName());
         if (!DevicesFragment.isDevicesEnable()){
             devCurrent.setConnectionState(false);
@@ -99,13 +139,22 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
                         context.getResources().getColor(R.color.devIconBackground) :
                         context.getResources().getColor(R.color.devTypeSpinnerIconBackground));
         switch (devCurrent.getType()){
+            case DIGITAL:
+                holder.imgPhoto.setImageResource(R.drawable.digital_icon);
+                break;
+            case ANALOG:
+                holder.imgPhoto.setImageResource(R.drawable.analog_icon);
+                break;
+            case PRESENCE:
+                holder.imgPhoto.setImageResource(R.drawable.presence_icon);
+                break;
             case HUMIDITY:
                 holder.imgPhoto.setImageResource(R.drawable.humiditysensor);
                 break;
             case TEMPERATURE:
                 holder.imgPhoto.setImageResource(R.drawable.temperaturesensor);
                 break;
-            case LIGHT:
+            case LUMINOSITY:
                 holder.imgPhoto.setImageResource(R.drawable.lightsensor);
                 break;
             case ACCELERATION:
@@ -117,7 +166,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
         holder.itemView.setLongClickable(true);
         holder.itemView.setClickable(true);
-        int itemPosition = position;
+        int itemPosition = position - 1;
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

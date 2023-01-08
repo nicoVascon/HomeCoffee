@@ -21,7 +21,9 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectBLEDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Gateaway.GWConfig_BLEDeviceSelectionFragment;
 
 public class DevicesFragment extends Fragment {
     public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
@@ -98,8 +100,19 @@ public class DevicesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DeviceSettingsFragment.editingDevice = false;
+//                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+//                        replace(R.id.fragment_container, new AddDeviceFragment()).commit();
                 ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new AddDeviceFragment()).commit();
+                        replace(R.id.fragment_container, new AddDeviceSelectBLEDeviceFragment()).commit();
+            }
+        });
+
+        Button btnSetGateaway = getView().findViewById(R.id.btnSetGateaway);
+        btnSetGateaway.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).getSupportFragmentManager().beginTransaction().
+                        replace(R.id.fragment_container, new GWConfig_BLEDeviceSelectionFragment()).commit();
             }
         });
 
