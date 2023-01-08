@@ -20,7 +20,6 @@ import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
-import ipleiria.pdm.homecoffee.adapter.SpinnerDeviceTypeAdapter;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
@@ -135,7 +134,7 @@ public class AddDeviceFragment extends Fragment implements SaveData {
                 imageView_devType.setImageResource(R.drawable.temperaturesensor);
                 txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Temperature));
                 break;
-            case LIGHT:
+            case LUMINOSITY:
                 imageView_devType.setImageResource(R.drawable.lightsensor);
                 txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Light));
                 break;

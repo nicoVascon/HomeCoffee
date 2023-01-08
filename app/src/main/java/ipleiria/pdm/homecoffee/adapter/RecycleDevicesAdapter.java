@@ -139,13 +139,22 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
                         context.getResources().getColor(R.color.devIconBackground) :
                         context.getResources().getColor(R.color.devTypeSpinnerIconBackground));
         switch (devCurrent.getType()){
+            case DIGITAL:
+                holder.imgPhoto.setImageResource(R.drawable.digital_icon);
+                break;
+            case ANALOG:
+                holder.imgPhoto.setImageResource(R.drawable.analog_icon);
+                break;
+            case PRESENCE:
+                holder.imgPhoto.setImageResource(R.drawable.presence_icon);
+                break;
             case HUMIDITY:
                 holder.imgPhoto.setImageResource(R.drawable.humiditysensor);
                 break;
             case TEMPERATURE:
                 holder.imgPhoto.setImageResource(R.drawable.temperaturesensor);
                 break;
-            case LIGHT:
+            case LUMINOSITY:
                 holder.imgPhoto.setImageResource(R.drawable.lightsensor);
                 break;
             case ACCELERATION:

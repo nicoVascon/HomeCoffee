@@ -160,7 +160,7 @@ public class HouseManager implements Serializable {
         Device dev1 = new Sensor(125, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
         Device dev2 = new Sensor(456, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
         Device dev3 = new Actuator(268, "Aquecedor", DeviceType.TEMPERATURE, initialRoom);
-        Device dev4 = new Sensor(789, "Sensor de Luminosidade", DeviceType.LIGHT, initialRoom);
+        Device dev4 = new Sensor(789, "Sensor de Luminosidade", DeviceType.LUMINOSITY, initialRoom);
         Device dev5 = new Actuator(852, "Válvula de   Pressão", DeviceType.PRESSURE, initialRoom);
         Device dev6 = new Sensor(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
 
