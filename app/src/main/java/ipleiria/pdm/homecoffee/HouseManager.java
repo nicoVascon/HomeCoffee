@@ -8,8 +8,6 @@ import android.widget.Toast;
 
 import com.jjoe64.graphview.series.DataPoint;
 
-import org.eclipse.paho.client.mqttv3.MqttException;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,7 +27,6 @@ import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.model.Sensor;
-import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
@@ -48,7 +45,7 @@ public class HouseManager implements Serializable {
 
     private User user;
 
-    static final long serialVersionUID = 15L;
+    static final long serialVersionUID = 14L;
 
     private boolean loginMade=FALSE;
 
@@ -65,46 +62,19 @@ public class HouseManager implements Serializable {
 
 
 
-    public PahoDemo getPaho() {
-        return paho;
-    }
-
-    private PahoDemo paho;
-
-    public synchronized void submitMessage() {
-        if (!string_send_ttn.isEmpty()) {
-
-            paho.doDemo(string_send_ttn);
-            string_send_ttn.clear();
-        }
-
-    }
-
-    public void start_mqtt() {
-        try {
-            paho = new PahoDemo();
-            paho.initDemo("v3/teste-rs2022@ttn/devices/eui-70b3d54990a17f82/up");
-        } catch (MqttException e) {
-            e.printStackTrace();
-            System.out.println("\n\n\n\nException: " + e.getMessage());
-        }
-    }
 
 
 
 
-    public StringBuilder msgs_received = new StringBuilder();
+
+
+
+
+    public static StringBuilder msgs_received = new StringBuilder();
 
     public StringBuilder getMsgs_received() {
         return msgs_received;
     }
-
-    public void setMsgs_received(StringBuilder msgs_received) {
-        this.msgs_received = msgs_received;
-    }
-
-
-
 
 
     // ------------------------------------- Sensors -------------------------------------
@@ -179,10 +149,10 @@ public class HouseManager implements Serializable {
         }
         return result;
     }
-    public Device searchDevicesChannel(int channel) {
-        for (Device device : devices) {
-            if(device.getChannel()==channel){
-                return device;
+    public Sensor searchSensorChannel(int channel) {
+        for (Sensor sensor : sensors) {
+            if(sensor.getChannel()==channel){
+                return sensor;
             }
         }
         return null;
@@ -228,9 +198,11 @@ public class HouseManager implements Serializable {
 
         Device dev1 = new Actuator(4, "Alarme de Temperatura", DeviceType.TEMPERATURE, initialRoom);
         Device dev2 = new Sensor(3, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
+        ((Actuator) dev1).setAssociatedSensor((Sensor) dev2);
         Device dev3 = new Actuator(268, "Aquecedor", DeviceType.TEMPERATURE, initialRoom);
         Device dev4 = new Actuator(5, "Luminaria", DeviceType.LUMINOSITY, initialRoom);
         Device dev4_1 = new Sensor(5, "Sensor de Luminosidade", DeviceType.LUMINOSITY, initialRoom);
+        ((Actuator) dev4).setAssociatedSensor((Sensor) dev4_1);
         Device dev5 = new Sensor(6, "Detetor de Chama", DeviceType.DIGITAL, initialRoom);
         Device dev6 = new Sensor(7, "Detetor de Proximidade", DeviceType.DIGITAL, initialRoom);
         Device dev7 = new Actuator(2, "Motor", DeviceType.DIGITAL, initialRoom);
@@ -262,40 +234,40 @@ public class HouseManager implements Serializable {
         addDevice(dev7_1);
 
         //generate Dates
-        Calendar calendar = Calendar.getInstance();
-        Date d5 = calendar.getTime();
-        calendar.add(Calendar.DATE, -1);
-        Date d4 = calendar.getTime();
-        calendar.add(Calendar.DATE, -1);
-        Date d3 = calendar.getTime();
-        calendar.add(Calendar.DATE, -1);
-        Date d2 = calendar.getTime();
-        calendar.add(Calendar.DATE, -1);
-        Date d1 = calendar.getTime();
-        // Points in different minutes
-        calendar = Calendar.getInstance();
-        calendar.add(Calendar.MINUTE, -15);
-        Date dm3 = calendar.getTime();
-        calendar.add(Calendar.MINUTE, -24);
-        Date dm2 = calendar.getTime();
-        calendar.add(Calendar.MINUTE, -10);
-        Date dm1 = calendar.getTime();
-
-        DataPoint[] dataPoints1 = new DataPoint[] {
-            new DataPoint(d1, 1),
-            new DataPoint(d2, 5),
-            new DataPoint(d3, 3),
-            new DataPoint(d4, 2),
-
-            new DataPoint(dm1, 10),
-            new DataPoint(dm2, 6),
-            new DataPoint(dm3, 1),
-
-            new DataPoint(d5, 6)
-        };
-        for (int i = 0; i < dataPoints1.length; i++){
-            dev2.getDataPoints().add(dataPoints1[i]);
-        }
+//        Calendar calendar = Calendar.getInstance();
+//        Date d5 = calendar.getTime();
+//        calendar.add(Calendar.DATE, -1);
+//        Date d4 = calendar.getTime();
+//        calendar.add(Calendar.DATE, -1);
+//        Date d3 = calendar.getTime();
+//        calendar.add(Calendar.DATE, -1);
+//        Date d2 = calendar.getTime();
+//        calendar.add(Calendar.DATE, -1);
+//        Date d1 = calendar.getTime();
+//        // Points in different minutes
+//        calendar = Calendar.getInstance();
+//        calendar.add(Calendar.MINUTE, -15);
+//        Date dm3 = calendar.getTime();
+//        calendar.add(Calendar.MINUTE, -24);
+//        Date dm2 = calendar.getTime();
+//        calendar.add(Calendar.MINUTE, -10);
+//        Date dm1 = calendar.getTime();
+//
+//        DataPoint[] dataPoints1 = new DataPoint[] {
+//            new DataPoint(d1, 1),
+//            new DataPoint(d2, 5),
+//            new DataPoint(d3, 3),
+//            new DataPoint(d4, 2),
+//
+//            new DataPoint(dm1, 10),
+//            new DataPoint(dm2, 6),
+//            new DataPoint(dm3, 1),
+//
+//            new DataPoint(d5, 6)
+//        };
+//        for (int i = 0; i < dataPoints1.length; i++){
+//            dev2.getDataPoints().add(dataPoints1[i]);
+//        }
     }
     //-----------------------------------------------------
     public void addRoom(Room room) {
@@ -341,7 +313,7 @@ public class HouseManager implements Serializable {
     }
 
     // ------------------------------------- House Manager -------------------------------------
-    //Código adicionado para garantir que há só uma instância da classe GestorContactos
+    //Código adicionado para garantir que há só uma instância da classe HouseManager
     public static synchronized HouseManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new HouseManager();

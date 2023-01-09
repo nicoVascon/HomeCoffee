@@ -175,7 +175,7 @@ public class GalleryFragment extends Fragment {
             //TTN TRY
             String message = editTextMessage.getText().toString();
             HouseManager.addString_send_ttn(1, message);
-            HouseManager.getInstance().submitMessage();
+            PahoDemo.getInstance().submitMessage();
 
             }
             });

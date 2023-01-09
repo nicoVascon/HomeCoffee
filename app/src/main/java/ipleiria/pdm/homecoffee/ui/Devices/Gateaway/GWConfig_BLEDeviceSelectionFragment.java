@@ -195,6 +195,9 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        if(buttonPressed && continuePressed){
+                            return;
+                        }
                         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                         builder.setTitle(getResources().getString(R.string.txt_AlertDialog_TTNEndDeviceRegistrationTitle));
                         // I'm using fragment here so I'm using getView() to provide ViewGroup
@@ -404,7 +407,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 } catch (Exception e) {
                     System.out.println("Exception: " + e.getMessage());
                 }
-            }while (value == null && attemptsNum < attemptsMaxNum);
+            }while ((value == null || !value.equals(CONFIGURATION_READY_STATE)) && attemptsNum < attemptsMaxNum);
 
             int configOperationsCounter_temp = configOperationsCounter;
             String GateWayName = gatewayName;
@@ -413,7 +416,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(value_2.equals(CONFIGURATION_READY_STATE) && configOperationsCounter_temp == CONFIG_OPERATIONS_NUMBER){
+                    if(value_2 == null || value_2.equals(CONFIGURATION_READY_STATE)){
                         Toast.makeText(getContext(),
                                 getResources().getString(R.string.toastMessage_BLEDeviceConfigurationSucceeded),
                                 Toast.LENGTH_LONG).show();

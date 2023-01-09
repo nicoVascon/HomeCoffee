@@ -1,8 +1,5 @@
 package ipleiria.pdm.homecoffee.mqtt;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -13,22 +10,45 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
-import java.util.Set;
 
 import ipleiria.pdm.homecoffee.HouseManager;
-import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
 
 public class PahoDemo implements MqttCallback, Serializable {
+    public static PahoDemo INSTANCE;
 
-    MqttClient client;
+    private MqttClient client;
 
-    public PahoDemo() {
+
+    public PahoDemo() {}
+
+    //Código adicionado para garantir que há só uma instância da classe HouseManager
+    public static synchronized PahoDemo getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PahoDemo();
+        }
+        return INSTANCE;
+    }
+
+    public void start_mqtt() {
+        try {
+            INSTANCE = new PahoDemo();
+            INSTANCE.initDemo("v3/teste-rs2022@ttn/devices/eui-70b3d54990a17f82/up");
+        } catch (MqttException e) {
+            e.printStackTrace();
+            System.out.println("\n\n\n\nException: " + e.getMessage());
+        }
+    }
+
+    public synchronized void submitMessage() {
+        if (!HouseManager.getString_send_ttn().isEmpty()) {
+            INSTANCE.doDemo(HouseManager.getString_send_ttn());
+            HouseManager.getString_send_ttn().clear();
+        }
+
     }
 
 
@@ -155,7 +175,7 @@ public class PahoDemo implements MqttCallback, Serializable {
                 int chan = Integer.parseInt(text_div2[0].substring(last_index+1, text_div2[0].length() - 1));
                 System.out.println(chan);
                 System.out.println(text_div2[1]);
-                Device device = houseManager.searchDevicesChannel(chan);
+                Device device = houseManager.searchSensorChannel(chan);
                 if(device instanceof Sensor){
                     ((Sensor)device).setValue(Double.parseDouble(text_div2[1]));
                 }

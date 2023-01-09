@@ -28,6 +28,7 @@ import java.util.LinkedList;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
+import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectSensorFragment;
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                new GregorianCalendar(2022, Calendar.DECEMBER, 25).getTime(),
 //                "Tenho sede!!!"));
 
-        houseManager.start_mqtt();
+        PahoDemo.getInstance().start_mqtt();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         //Onde correr metodo a cada 5s
                         if(HouseManager.getString_send_ttn() != null &&!HouseManager.getString_send_ttn().isEmpty()){
-                            HouseManager.getInstance().submitMessage();
+                            PahoDemo.getInstance().submitMessage();
                         }
 
                         ((MainActivity) context).runOnUiThread(new Runnable() {
