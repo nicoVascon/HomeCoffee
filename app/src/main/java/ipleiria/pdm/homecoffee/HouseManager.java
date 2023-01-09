@@ -45,7 +45,7 @@ public class HouseManager implements Serializable {
 
     private User user;
 
-    static final long serialVersionUID = 5L;
+    static final long serialVersionUID = 11L;
 
     private boolean loginMade=FALSE;
 
@@ -222,6 +222,7 @@ public class HouseManager implements Serializable {
         Device dev4 = new Sensor(789, "Sensor de Luminosidade", DeviceType.LUMINOSITY, initialRoom);
         Device dev5 = new Actuator(852, "Válvula de   Pressão", DeviceType.PRESSURE, initialRoom);
         Device dev6 = new Sensor(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
+        Device dev7 = new Actuator(25, "Motor", DeviceType.DIGITAL, initialRoom);
 
         dev1.addNotification(new Notification("Choveu!!!"));
         dev1.addNotification(new Notification(
@@ -240,6 +241,7 @@ public class HouseManager implements Serializable {
         addDevice(dev4);
         addDevice(dev5);
         addDevice(dev6);
+        addDevice(dev7);
     }
     //-----------------------------------------------------
     public void addRoom(Room room) {

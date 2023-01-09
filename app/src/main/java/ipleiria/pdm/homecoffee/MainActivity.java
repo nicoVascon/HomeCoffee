@@ -138,15 +138,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     }
 
                     if(i==10) {
-                        ((MainActivity) context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Toast.makeText(context, "I finished the timer", Toast.LENGTH_SHORT).show();
-                                if(!HouseManager.getString_send_ttn().isEmpty()) {
-                                    Toast.makeText(context, houseManager.getString_send_ttn().toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+//                        ((MainActivity) context).runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                //Toast.makeText(context, "I finished the timer", Toast.LENGTH_SHORT).show();
+//                                if(!HouseManager.getString_send_ttn().isEmpty()) {
+//                                    Toast.makeText(context, houseManager.getString_send_ttn().toString(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
                         i=0;
 
                         //Onde correr metodo a cada 5s

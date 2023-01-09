@@ -133,4 +133,33 @@
         app:layout_constraintStart_toStartOf="@+id/circleSliderView_valueControler"
         app:layout_constraintTop_toBottomOf="@+id/circleSliderView_valueControler" />
 
+    <TextView
+        android:id="@+id/textView_CSDesiredValueLabel_btnOnOff"
+        style="@style/Sub_Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/txt_valueControler_DesiredValue"
+        android:textColor="#FFFA7777"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="@+id/btn_OnOff"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="@+id/btn_OnOff"
+        app:layout_constraintTop_toBottomOf="@+id/btn_OnOff" />
+
+    <Button
+        android:id="@+id/btn_OnOff"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+
+        android:layout_marginTop="40dp"
+        android:backgroundTint="#B61010"
+        android:text="@string/txt_On"
+        android:textSize="68sp"
+        app:cornerRadius="100000sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView_ActuatorSensor" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

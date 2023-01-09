@@ -12,8 +12,9 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.Calendar;
+import org.checkerframework.checker.units.qual.A;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -23,7 +24,6 @@ import ipleiria.pdm.homecoffee.components.CircleSliderView;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
-import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class DeviceControlFragment extends Fragment {
@@ -55,14 +55,56 @@ public class DeviceControlFragment extends Fragment {
         int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
         selectedDevice = HouseManager.getInstance().getDevice(devPosition);
 
+        TextView textView_CSDesiredValueLabel = getView().findViewById(R.id.textView_CSDesiredValueLabel);
+        circleSlider_valueControl = getView().findViewById(R.id.circleSliderView_valueControler);
+        TextView textView_CSDesiredValueLabel_btnOnOff = getView().findViewById(R.id.textView_CSDesiredValueLabel_btnOnOff);
+        final Button customButton = getView().findViewById(R.id.btn_OnOff);
+
+        if(selectedDevice.getType() == DeviceType.DIGITAL){
+            textView_CSDesiredValueLabel.setVisibility(View.GONE);
+            circleSlider_valueControl.setVisibility(View.GONE);
+
+            textView_CSDesiredValueLabel_btnOnOff.setVisibility(View.VISIBLE);
+            customButton.setVisibility(View.VISIBLE);
+        }else{
+            textView_CSDesiredValueLabel.setVisibility(View.VISIBLE);
+            circleSlider_valueControl.setVisibility(View.VISIBLE);
+
+            textView_CSDesiredValueLabel_btnOnOff.setVisibility(View.GONE);
+            customButton.setVisibility(View.GONE);
+        }
+
+        customButton.setText(selectedDevice.getValue() == 1.0?
+                getResources().getString(R.string.txt_On) :
+                getResources().getString(R.string.txt_Off));
+        customButton.setBackgroundTintList(selectedDevice.getValue() == 1.0?
+                getResources().getColorStateList(R.color.ButtonOn) :
+                getResources().getColorStateList(R.color.ButtonOff));
+        customButton.setAlpha(selectedDevice.isConnectionState() ? 1.0f : 0.35f);
+        customButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show();
+                ((Actuator) selectedDevice).setDesiredValue(selectedDevice.getValue()*-1 + 1);
+                customButton.setText(selectedDevice.getValue() == 1.0?
+                        getResources().getString(R.string.txt_On) :
+                        getResources().getString(R.string.txt_Off));
+                customButton.setBackgroundTintList(selectedDevice.getValue() == 1.0?
+                        getResources().getColorStateList(R.color.ButtonOn) :
+                        getResources().getColorStateList(R.color.ButtonOff));
+            }
+        });
+
+
+
         textView_devName = getView().findViewById(R.id.textView_DeviceName_ControlFragment);
         textView_devMode = getView().findViewById(R.id.textView_DeviceMode_ControlFragment);
-        circleSlider_valueControl = getView().findViewById(R.id.circleSliderView_valueControler);
+
 
         textView_devName.setText(selectedDevice.getName());
-        TextView textView_CSDesiredValueLabel = getView().findViewById(R.id.textView_CSDesiredValueLabel);
 
         circleSlider_valueControl.setEnabled((selectedDevice instanceof Actuator) && selectedDevice.isConnectionState());
+        customButton.setEnabled((selectedDevice instanceof Actuator) && selectedDevice.isConnectionState());
         circleSlider_valueControl.setAlpha(selectedDevice.isConnectionState() ? 1.0f : 0.35f);
         circleSlider_valueControl.setmCurrentTime(selectedDevice.getValue()*3600/100);
         circleSlider_valueControl.setmCurrentRadian((float) ((selectedDevice.getValue()/100)*2*Math.PI));
@@ -127,11 +169,11 @@ public class DeviceControlFragment extends Fragment {
                     //
                 }
 
-                Integer dev_channel = selectedDevice.getChannel();
-                String dev_name = selectedDevice.getName();
-                String dev_value = String.format("%.2f",percentValue);
-
-                HouseManager.addString_send_ttn(dev_channel,"name:"+dev_name + ",dev_channel:" + dev_channel + ",dev_value:" + dev_value);
+//                Integer dev_channel = selectedDevice.getChannel();
+//                String dev_name = selectedDevice.getName();
+//                String dev_value = String.format("%.2f",percentValue);
+//
+//                HouseManager.addString_send_ttn(dev_channel,"name:"+dev_name + ",dev_channel:" + dev_channel + ",dev_value:" + dev_value);
 
                 return String.format("%.2f", percentValue) + " " + unit;
             }
@@ -146,7 +188,24 @@ public class DeviceControlFragment extends Fragment {
                 selectedDevice.setConnectionState(isChecked);
                 circleSlider_valueControl.setEnabled((selectedDevice instanceof Actuator) && isChecked);
                 circleSlider_valueControl.setAlpha(isChecked ? 1.0f : 0.35f);
+                customButton.setEnabled((selectedDevice instanceof Actuator) && isChecked);
+                customButton.setAlpha(isChecked ? 1.0f : 0.35f);
                 buttonView.setText(isChecked ? R.string.btn_OnDevices : R.string.btn_OffDevices);
+
+                if (!isChecked){
+                    selectedDevice.setValueSaved(((Actuator) selectedDevice).getValue());
+                    ((Actuator) selectedDevice).setDesiredValue(0.0);
+                }else{
+                    ((Actuator) selectedDevice).setDesiredValue(selectedDevice.getValueSaved());
+                }
+
+                customButton.setText(selectedDevice.isConnectionState()?
+                        getResources().getString(R.string.txt_On) :
+                        getResources().getString(R.string.txt_Off));
+                customButton.setBackgroundTintList(selectedDevice.isConnectionState()?
+                        getResources().getColorStateList(R.color.ButtonOn) :
+                        getResources().getColorStateList(R.color.ButtonOff));
+
             }
         });
     }

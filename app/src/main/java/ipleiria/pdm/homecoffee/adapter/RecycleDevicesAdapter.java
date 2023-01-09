@@ -199,7 +199,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
 
     @Override
     public int getItemCount() {
-        return devices.size();
+        return devices.size() +1;
     }
 
     public Context getContext() {

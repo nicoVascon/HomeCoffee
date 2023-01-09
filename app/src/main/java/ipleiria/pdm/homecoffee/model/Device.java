@@ -14,6 +14,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected Room room;
     protected ArrayList<Notification> notifications;
     protected double value;
+    protected double valueSaved;
 
     public Device(int channel, String name, DeviceType type, Room room) {
         this.channel = channel;
@@ -54,6 +55,14 @@ public abstract class Device implements Serializable, Comparable<Device> {
 
     public void setConnectionStateSaved(boolean connectionStateSaved) {
         this.connectionStateSaved = connectionStateSaved;
+    }
+
+    public double getValueSaved() {
+        return valueSaved;
+    }
+
+    public void setValueSaved(double valueSaved) {
+        this.valueSaved = valueSaved;
     }
 
     public DeviceType getType() {

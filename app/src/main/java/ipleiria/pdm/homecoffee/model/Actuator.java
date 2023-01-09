@@ -3,6 +3,7 @@ package ipleiria.pdm.homecoffee.model;
 import javax.annotation.Nullable;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.HouseManager;
 
 public class Actuator extends Device{
 
@@ -38,6 +39,7 @@ public class Actuator extends Device{
 
     private boolean sendValueChangeCommand(double newValue){
         // Code for App-ESP32 communication
+        HouseManager.addString_send_ttn(this.channel, this.channel + "," + this.value );
         return true;
     }
 }

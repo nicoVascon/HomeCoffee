@@ -117,7 +117,9 @@
     <string name="txt_AlertDialog_GWConfig_AppEUILabel" translatable="false">App EUI:</string>
     <string name="txt_AlertDialog_GWConfig_AppKeyLabel" translatable="false">App Key:</string>
     <string name="toastMessage_RemainingFields">Remaining Fields. Try Again</string>
-    <string name="general_messages">message</string>
-    <string name="general_please_write_some_message">please write message</string>
+    <string name="general_messages" translatable="false">message</string>
+    <string name="general_please_write_some_message" translatable="false">please write message</string>
     <string name="mqtt_share">mqtt_share</string>
+    <string name="txt_On" translatable="false">On</string>
+    <string name="txt_Off" translatable="false">Off</string>
 </resources>
