@@ -53,7 +53,50 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseAuth mAuth;
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Context context = this;
 
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                houseManager.start_mqtt();
+                int i=0;
+                while(true) {
+                    i++;
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(i==10) {
+//                        ((MainActivity) context).runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                //Toast.makeText(context, "I finished the timer", Toast.LENGTH_SHORT).show();
+//                                if(!HouseManager.getString_send_ttn().isEmpty()) {
+//                                    Toast.makeText(context, houseManager.getString_send_ttn().toString(), Toast.LENGTH_SHORT).show();
+//                                }
+//                            }
+//                        });
+                        i=0;
+
+                        //Onde correr metodo a cada 5s
+                        if(!HouseManager.getString_send_ttn().isEmpty())
+                            HouseManager.getInstance().submitMessage();
+
+                    }
+
+                }
+            }
+        }) ;
+        thread.start();
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,42 +166,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                new GregorianCalendar(2022, Calendar.DECEMBER, 25).getTime(),
 //                "Tenho sede!!!"));
 
-        houseManager.start_mqtt();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int i=0;
-                while(true) {
-                    i++;
-
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    if(i==10) {
-                        ((MainActivity) context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //Toast.makeText(context, "I finished the timer", Toast.LENGTH_SHORT).show();
-                                if(!HouseManager.getString_send_ttn().isEmpty()) {
-                                    Toast.makeText(context, houseManager.getString_send_ttn().toString(), Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-                        i=0;
-
-                        //Onde correr metodo a cada 5s
-                        if(!HouseManager.getString_send_ttn().isEmpty())
-                            HouseManager.getInstance().submitMessage();
-
-                    }
-
-                }
-            }
-        }) ;
-        thread.start();
 
 
 
