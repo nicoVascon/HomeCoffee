@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
 public abstract class Device implements Serializable, Comparable<Device> {
     protected int channel;
@@ -18,7 +19,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected boolean connectionStateSaved;
     protected DeviceType type;
     protected Room room;
-    protected ArrayList<DataPoint> dataPoints;
+    protected ArrayList<DataPointImpl> dataPoints;
     protected ArrayList<Notification> notifications;
     protected double value;
     protected double valueSaved;
@@ -109,7 +110,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.room = room;
     }
 
-    public ArrayList<DataPoint> getDataPoints() {
+    public ArrayList<DataPointImpl> getDataPoints() {
         return dataPoints;
     }
 

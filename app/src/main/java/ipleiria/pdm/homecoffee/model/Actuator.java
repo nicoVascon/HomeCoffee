@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.HouseManager;
+import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
 public class Actuator extends Device{
 
@@ -43,7 +44,7 @@ public class Actuator extends Device{
             if(associatedSensor == null){
                 Calendar calendar = Calendar.getInstance();
                 Date currentDate = calendar.getTime();
-                this.dataPoints.add(new DataPoint(currentDate, value));
+                this.dataPoints.add(new DataPointImpl(currentDate, value));
             }
         }
     }

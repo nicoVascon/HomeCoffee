@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
 public class Sensor extends Device{
     public Sensor(int channel, String name, DeviceType type, Room room) {
@@ -25,6 +26,6 @@ public class Sensor extends Device{
         this.value = value;
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
-        this.dataPoints.add(new DataPoint(currentDate, value));
+        this.dataPoints.add(new DataPointImpl(currentDate, value));
     }
 }

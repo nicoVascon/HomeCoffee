@@ -22,6 +22,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -30,6 +31,7 @@ import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
 import ipleiria.pdm.homecoffee.adapter.RecycleNotificationsAdapter;
 import ipleiria.pdm.homecoffee.adapter.TabAdapter;
 import ipleiria.pdm.homecoffee.components.GraphView_Custom;
+import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
@@ -150,6 +152,7 @@ public class DeviceActivityFragment extends Fragment {
         }
 
         if(selectedDevice.getDataPoints().size() > 0){
+            Collections.sort(selectedDevice.getDataPoints());
             dataPoints1 = new DataPoint[selectedDevice.getDataPoints().size()];
             //dataPoints2 = new DataPoint[arrayList_dataPoints2.size()];
             for(int i = 0; i < dataPoints1.length; i++){
@@ -195,7 +198,7 @@ public class DeviceActivityFragment extends Fragment {
         }
 
         minDate = currentTime.getTime();
-        ArrayList<DataPoint> deviceDataPoints = selectedDevice.getDataPoints();
+        ArrayList<DataPointImpl> deviceDataPoints = selectedDevice.getDataPoints();
         for(int i = 0; i < deviceDataPoints.size(); i++){
             if (deviceDataPoints.get(i).getX() >= minDate.getTime()){
                 arrayList_dataPoints1.add(deviceDataPoints.get(i));

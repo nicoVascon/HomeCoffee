@@ -31,7 +31,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
 
-public class HouseManager implements Serializable {
+public class HouseManager implements Serializable , Cloneable{
     private static HouseManager INSTANCE = null;
 
     private static Bundle bundle;
@@ -45,7 +45,7 @@ public class HouseManager implements Serializable {
 
     private User user;
 
-    static final long serialVersionUID = 14L;
+    static final long serialVersionUID = 17L;
 
     private boolean loginMade=FALSE;
 
@@ -365,11 +365,11 @@ public class HouseManager implements Serializable {
                     context.openFileOutput("houseManager.bin", Context.MODE_PRIVATE);
             ObjectOutputStream objectOutputStream = new
                     ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(INSTANCE);
+            objectOutputStream.writeObject(HouseManager.getInstance().clone());
             objectOutputStream.writeObject(new Boolean(DevicesFragment.isDevicesEnable()));
             objectOutputStream.close();
             fileOutputStream.close();
-        } catch (IOException e) {
+        } catch (IOException | CloneNotSupportedException e) {
             Toast.makeText(context, "Could not write HouseManager to internal storage.", Toast.LENGTH_LONG).show();
         }
     }
