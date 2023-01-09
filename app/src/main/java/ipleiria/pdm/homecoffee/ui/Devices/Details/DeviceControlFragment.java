@@ -105,7 +105,8 @@ public class DeviceControlFragment extends Fragment {
 
         circleSlider_valueControl.setEnabled((selectedDevice instanceof Actuator) && selectedDevice.isConnectionState());
         customButton.setEnabled((selectedDevice instanceof Actuator) && selectedDevice.isConnectionState());
-        circleSlider_valueControl.setAlpha(selectedDevice.isConnectionState() ? 1.0f : 0.35f);
+        circleSlider_valueControl.setAlpha(selectedDevice.isConnectionState() ||
+                selectedDevice instanceof Sensor? 1.0f : 0.35f);
         circleSlider_valueControl.setmCurrentTime(selectedDevice.getValue()*3600/100);
         circleSlider_valueControl.setmCurrentRadian((float) ((selectedDevice.getValue()/100)*2*Math.PI));
 
@@ -182,6 +183,7 @@ public class DeviceControlFragment extends Fragment {
         devSwitch = getView().findViewById(R.id.switch_DevState_ControlFragment);
         devSwitch.setChecked(selectedDevice.isConnectionState());
         devSwitch.setText(selectedDevice.isConnectionState() ? R.string.btn_OnDevices : R.string.btn_OffDevices);
+        devSwitch.setVisibility((selectedDevice instanceof Actuator)? View.VISIBLE : View.GONE);
         devSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

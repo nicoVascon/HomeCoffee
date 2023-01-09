@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
@@ -151,6 +152,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
         holder.txtConnectionState.setText(devCurrent.isConnectionState() ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
         holder.switchDev.setChecked(devCurrent.isConnectionState());
+        holder.switchDev.setVisibility((devCurrent instanceof Actuator)? View.VISIBLE : View.GONE);
         holder.switchDev.setText(devCurrent.isConnectionState() ? R.string.btn_OnDevices : R.string.btn_OffDevices);
         holder.txtNumDev.setText(String.format("%.2f", devCurrent.getValue()) + " %");
         holder.cardView_dev.setCardBackgroundColor(

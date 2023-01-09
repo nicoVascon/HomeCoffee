@@ -43,9 +43,6 @@ public class DeviceActivityFragment extends Fragment {
     private DataPoint[] dataPoints1;
     private String legend;
     //private DataPoint[] dataPoints2;
-    // Temporal Attributes
-    //private DataPoint[] original_dataPoints1;
-    //private DataPoint[] original_dataPoints2;
 
     private GraphView_Custom lineChart;
     private Button btn_week;
@@ -123,54 +120,6 @@ public class DeviceActivityFragment extends Fragment {
             }
         });
 
-        // generate Dates
-//        Calendar calendar = Calendar.getInstance();
-//        Date d5 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d4 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d3 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d2 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d1 = calendar.getTime();
-//        // Points in different minutes
-//        calendar = Calendar.getInstance();
-//        calendar.add(Calendar.MINUTE, -15);
-//        Date dm3 = calendar.getTime();
-//        calendar.add(Calendar.MINUTE, -24);
-//        Date dm2 = calendar.getTime();
-//        calendar.add(Calendar.MINUTE, -10);
-//        Date dm1 = calendar.getTime();
-//
-//        dataPoints1 = new DataPoint[] {
-//                new DataPoint(d1, 1),
-//                new DataPoint(d2, 5),
-//                new DataPoint(d3, 3),
-//                new DataPoint(d4, 2),
-//
-//                new DataPoint(dm1, 10),
-//                new DataPoint(dm2, 6),
-//                new DataPoint(dm3, 1),
-//
-//                new DataPoint(d5, 6)
-//        };
-//
-//        dataPoints2 = new DataPoint[] {
-//                new DataPoint(d1, 3),
-//                new DataPoint(d2, 3),
-//                new DataPoint(d3, 6),
-//                new DataPoint(d4, 2),
-//
-//                new DataPoint(dm1, 8),
-//                new DataPoint(dm2, 4),
-//                new DataPoint(dm3, -1),
-//
-//                new DataPoint(d5, 5)
-//        };
-//
-//        original_dataPoints1 = dataPoints1;
-//        original_dataPoints2 = dataPoints2;
         legend = getContext().getResources().getString(R.string.txt_MesuredValue);
 
         switch (selectedDevice.getType()){
@@ -200,10 +149,17 @@ public class DeviceActivityFragment extends Fragment {
                 break;
         }
 
-        dataPoints1 = new DataPoint[selectedDevice.getDataPoints().size()];
-        //dataPoints2 = new DataPoint[arrayList_dataPoints2.size()];
-        for(int i = 0; i < dataPoints1.length; i++){
-            dataPoints1[i] = selectedDevice.getDataPoints().get(i);
+        if(selectedDevice.getDataPoints().size() > 0){
+            dataPoints1 = new DataPoint[selectedDevice.getDataPoints().size()];
+            //dataPoints2 = new DataPoint[arrayList_dataPoints2.size()];
+            for(int i = 0; i < dataPoints1.length; i++){
+                dataPoints1[i] = selectedDevice.getDataPoints().get(i);
+            }
+        }else{
+            dataPoints1 = new DataPoint[1];
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
+            dataPoints1[0] = new DataPoint(currentDate, 0);
         }
 
         labelFormatter = new DateAsXAxisLabelFormatter(lineChart.getContext());
@@ -211,6 +167,10 @@ public class DeviceActivityFragment extends Fragment {
     }
 
     public void setAxisXInterval(int interval){
+        if(selectedDevice.getDataPoints().size() == 0){
+            return;
+        }
+
         ArrayList<DataPoint> arrayList_dataPoints1 = new ArrayList<>();
         ArrayList<DataPoint> arrayList_dataPoints2 = new ArrayList<>();
         Date minDate;
@@ -235,17 +195,6 @@ public class DeviceActivityFragment extends Fragment {
         }
 
         minDate = currentTime.getTime();
-//        for(int i = 0; i < original_dataPoints1.length; i++){
-//            if (original_dataPoints1[i].getX() >= minDate.getTime()){
-//                arrayList_dataPoints1.add(original_dataPoints1[i]);
-//            }
-//        }
-//        for(int i = 0; i < original_dataPoints2.length; i++){
-//            if (original_dataPoints2[i].getX() >= minDate.getTime()){
-//                arrayList_dataPoints2.add(original_dataPoints2[i]);
-//            }
-//        }
-
         ArrayList<DataPoint> deviceDataPoints = selectedDevice.getDataPoints();
         for(int i = 0; i < deviceDataPoints.size(); i++){
             if (deviceDataPoints.get(i).getX() >= minDate.getTime()){
@@ -258,10 +207,6 @@ public class DeviceActivityFragment extends Fragment {
         for(int i = 0; i < dataPoints1.length; i++){
             dataPoints1[i] = arrayList_dataPoints1.get(i);
         }
-//        for(int i = 0; i < dataPoints2.length; i++){
-//            dataPoints2[i] = arrayList_dataPoints2.get(i);
-//        }
-        //lineChart.removeAllSeries();
         lineChart.init();
         initGraph(lineChart);
     }
@@ -274,7 +219,7 @@ public class DeviceActivityFragment extends Fragment {
 
         // second series
         LineGraphSeries<DataPoint> series2 = new LineGraphSeries<>(dataPoints1);
-        series2.setTitle("Temperature");
+        series2.setTitle(legend);
         series2.setDrawBackground(true);
         series2.setColor(Color.argb(255, 255, 60, 60));
         series2.setBackgroundColor(Color.argb(100, 204, 119, 119));
