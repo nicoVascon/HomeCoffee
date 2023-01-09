@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import org.eclipse.paho.client.mqttv3.MqttException;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,12 +19,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.model.Sensor;
+import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
@@ -44,6 +48,61 @@ public class HouseManager implements Serializable {
     static final long serialVersionUID = 5L;
 
     private boolean loginMade=FALSE;
+
+    //-------------------------------------- TTN ---------------------------------------------
+    public static synchronized HashMap<Integer, String> getString_send_ttn() {
+        return HouseManager.string_send_ttn;
+    }
+
+    public static void addString_send_ttn(int channel, String string_to_add){
+        HouseManager.getString_send_ttn().put(channel,string_to_add);
+    }
+
+    private static HashMap<Integer, String> string_send_ttn=new HashMap<Integer, String>();
+
+
+
+    public PahoDemo getPaho() {
+        return paho;
+    }
+
+    private PahoDemo paho;
+
+    public synchronized void submitMessage() {
+        if (!string_send_ttn.isEmpty()) {
+
+            paho.doDemo(string_send_ttn);
+            string_send_ttn.clear();
+        }
+
+    }
+
+    public void start_mqtt() {
+        try {
+            paho = new PahoDemo();
+            paho.initDemo("v3/teste-rs2022@ttn/devices/eui-70b3d54990a17f82/up");
+        } catch (MqttException e) {
+            e.printStackTrace();
+            System.out.println("\n\n\n\nException: " + e.getMessage());
+        }
+    }
+
+
+
+
+    public ArrayList<String> msgs_received = new ArrayList<>();
+
+    public ArrayList<String> getMsgs_received() {
+        return msgs_received;
+    }
+
+    public void setMsgs_received(ArrayList<String> msgs_received) {
+        this.msgs_received = msgs_received;
+    }
+
+
+
+
 
     // ------------------------------------- Sensors -------------------------------------
     public void addSensor(Sensor sensor) {
@@ -201,13 +260,7 @@ public class HouseManager implements Serializable {
         addRoom(c4);
         addRoom(c5);
     }
-    /*public void atualizarContacto(int pos, Room contacto) {
-        if (!contactos.contains(contacto) || contacto.getNumero() ==
-                contactos.get(pos).getNumero()) {
-            contactos.set(pos, contacto);
-            Collections.sort(contactos);
-        }
-    }*/
+
     public Room getRoom(int pos) {
         return rooms.get(pos);
     }

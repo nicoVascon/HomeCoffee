@@ -21,7 +21,7 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Room;
 
 public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapter.RoomsHolder>{
-    private HouseManager gestorContactos;
+    private HouseManager houseManager;
     private Context context;
     private LayoutInflater mInflater;
 
@@ -29,7 +29,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
 
     public RecycleRoomsAdapter(Context context){
         mInflater = LayoutInflater.from(context);
-        this.gestorContactos = HouseManager.getInstance();
+        this.houseManager = HouseManager.getInstance();
         this.context=context;
     }
 
@@ -55,7 +55,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull RoomsHolder holder, int position) {
-        Room mCurrent = gestorContactos.getRooms().get(position);
+        Room mCurrent = houseManager.getRooms().get(position);
         holder.txtName.setText(mCurrent.getNome());
         switch (mCurrent.getType()) {
             case BEDROOM:
@@ -97,7 +97,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
 
     @Override
     public int getItemCount() {
-        return gestorContactos.getRooms().size();
+        return houseManager.getRooms().size();
     }
 
     public Context getContext() {

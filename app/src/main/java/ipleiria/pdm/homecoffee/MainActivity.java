@@ -2,12 +2,14 @@ package ipleiria.pdm.homecoffee;
 
 import static java.lang.Boolean.TRUE;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Context context = this;
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,6 +122,47 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        dev1.addNotification(new Notification(
 //                new GregorianCalendar(2022, Calendar.DECEMBER, 25).getTime(),
 //                "Tenho sede!!!"));
+
+        houseManager.start_mqtt();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                int i=0;
+                while(true) {
+                    i++;
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(i==10) {
+                        ((MainActivity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                //Toast.makeText(context, "I finished the timer", Toast.LENGTH_SHORT).show();
+                                if(!HouseManager.getString_send_ttn().isEmpty()) {
+                                    Toast.makeText(context, houseManager.getString_send_ttn().toString(), Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        i=0;
+
+                        //Onde correr metodo a cada 5s
+                        if(!HouseManager.getString_send_ttn().isEmpty())
+                            HouseManager.getInstance().submitMessage();
+
+                    }
+
+                }
+            }
+        }) ;
+        thread.start();
+
+
+
+
     }
 
     private void setCurrentUser() {
@@ -280,5 +324,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setLoginFragment();
         drawer.closeDrawer(GravityCompat.START);
         //finish();
+    }
+
+    public void button_send_loopy(View view) {
+
+    /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            System.out.println("Oi entrei e vou publicar");
+            client.publishWith()
+                    .topic("v1/411755b0-58fa-11ed-bf0a-bb4ba43bd3f6/things/5c9496e0-58ff-11ed-bf0a-bb4ba43bd3f6/data/3")
+                    .payload("digital_sensor,d=1".getBytes())
+                    .send()
+                    .whenComplete((publish, throwable) -> {
+                        if (throwable != null) {
+                            System.out.println("Nao publiquei o mundo");
+                            System.out.println(throwable.getMessage());
+                        } else {
+
+                            System.out.println("Publqiuei o mundo");
+                        }
+                    });
+        }*/
+
     }
 }

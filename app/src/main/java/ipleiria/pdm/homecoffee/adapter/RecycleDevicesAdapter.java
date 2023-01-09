@@ -15,23 +15,37 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
-    private HouseManager gestorContactos;
+    private HouseManager houseManager;
     private Context context;
     private LayoutInflater mInflater;
-    DevicesFragment devicesFragment;
+    private DevicesFragment devicesFragment;
+    private RoomFragment roomFragment;
+    private ArrayList<Device> devices;
 
-    public RecycleDevicesAdapter(Context context, DevicesFragment devicesFragment){
+    public RecycleDevicesAdapter(Context context, DevicesFragment devicesFragment, ArrayList<Device> devices){
         mInflater = LayoutInflater.from(context);
-        this.gestorContactos = HouseManager.getInstance();
+        this.houseManager = HouseManager.getInstance();
         this.context=context;
         this.devicesFragment = devicesFragment;
+        this.devices=devices;
+    }
+
+    public RecycleDevicesAdapter(Context context,RoomFragment roomFragment, ArrayList<Device> devices){
+        mInflater = LayoutInflater.from(context);
+        this.houseManager = HouseManager.getInstance();
+        this.context=context;
+        this.devices=devices;
+        this.roomFragment=roomFragment;
     }
 
     public RecycleDevicesAdapter.DevicesHolder onCreateViewHolder(@NonNull ViewGroup parent, int
@@ -68,8 +82,13 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
                     itemDevice.setConnectionState(isChecked);
 
                     if (DevicesFragment.isDevicesEnable()){
-                        devicesFragment.updateDevicesConnectionState();
+                        if(devicesFragment!=null) {
+                            devicesFragment.updateDevicesConnectionState();
+                        }
+                        else {
+                            roomFragment.updateDevicesConnectionState();
 //                        dAdapter.notifyDataSetChanged();
+                        }
                     }
                     txtConnectionState.setText(isChecked ? R.string.txt_connectionStateConnected : R.string.txt_connectionStateDisconected);
                     buttonView.setText(isChecked ? R.string.btn_OnDevices : R.string.btn_OffDevices);
@@ -78,19 +97,19 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
 
         public Device getDevice(){
-            return gestorContactos.getDevice(this.getLayoutPosition());
+            return houseManager.getDevice(this.getLayoutPosition());
         }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecycleDevicesAdapter.DevicesHolder holder, int position) {
         if (position == 0){
-            String gatewayName = gestorContactos.getGatewayBLEServerName();
+            String gatewayName = houseManager.getGatewayBLEServerName();
             holder.txtDevName.setText(gatewayName != null && !gatewayName.trim().isEmpty()? gatewayName :
                     context.getResources().getString(R.string.txt_GatewayNotDefined));
             holder.txtConnectionState.setText(getContext().getResources().getString(R.string.txt_DeviceEUICode) +
                     (gatewayName != null && !gatewayName.trim().isEmpty()?
-                            gestorContactos.getGatewayBLEServerDevEuiCode() : ""));
+                            houseManager.getGatewayBLEServerDevEuiCode() : ""));
             holder.txtNumDev.setText("");
             holder.switchDev.setVisibility(View.GONE);
             holder.imgPhoto.setImageResource(R.drawable.gateway_icon);
@@ -122,7 +141,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
 
 
-        Device devCurrent = gestorContactos.getDevices().get(position - 1);
+        Device devCurrent = devices.get(position - 1);
         holder.txtDevName.setText(devCurrent.getName());
         if (!DevicesFragment.isDevicesEnable()){
             devCurrent.setConnectionState(false);
@@ -180,7 +199,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
 
     @Override
     public int getItemCount() {
-        return gestorContactos.getDevices().size();
+        return devices.size();
     }
 
     public Context getContext() {

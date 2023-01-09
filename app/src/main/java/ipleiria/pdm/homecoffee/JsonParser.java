@@ -8,10 +8,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.model.Room;
 
-public class JsonParser {
+public class JsonParser implements Serializable {
 
     private JSONArray rooms = null;
 

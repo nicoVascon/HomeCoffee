@@ -126,6 +126,13 @@ public class DeviceControlFragment extends Fragment {
                     }
                     //
                 }
+
+                Integer dev_channel = selectedDevice.getChannel();
+                String dev_name = selectedDevice.getName();
+                String dev_value = String.format("%.2f",percentValue);
+
+                HouseManager.addString_send_ttn(dev_channel,"name:"+dev_name + ",dev_channel:" + dev_channel + ",dev_value:" + dev_value);
+
                 return String.format("%.2f", percentValue) + " " + unit;
             }
         });

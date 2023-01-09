@@ -300,6 +300,8 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
             }
         }
 
+        int attemptsMaxNum = 10;
+        int attemptsNum = 0;
         if (deviceTypeCharacteristic == null) {
             System.out.println("Target Device Type characteristic not found");
         }else{
@@ -308,36 +310,59 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 configOperationsCounter++;
             }
         }
-
+        attemptsNum = 0;
         Random random = new Random();
         String gatewayName = "GATEWAY#" + random.nextInt(MAX_RANDOM_INTEGER);
         if (advertNameCharacteristic == null) {
             System.out.println("Target Advertising Name characteristic not found");
         }else{
-            writeString(advertNameCharacteristic, gatewayName, "Advertising Name");
-            if (writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
+            do{
+                attemptsNum++;
+                try {
+                    writeString(advertNameCharacteristic, gatewayName, "Advertising Name");
+                    if (writeCharacteristicsSucceed){
+                        configOperationsCounter++;
+                    }
+                }catch (Exception e){
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (!writeCharacteristicsSucceed && attemptsNum < attemptsMaxNum);
         }
 
         if (appEuiCodeCharacteristic == null) {
             System.out.println("Target App Eui Code characteristic not found");
         }else{
-            String stringValue = appEUICode;
-            writeString(appEuiCodeCharacteristic, stringValue, "App Eui Code");
-            if (writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
+            attemptsNum = 0;
+            do{
+                attemptsNum++;
+                try {
+                    String stringValue = appEUICode;
+                    writeString(appEuiCodeCharacteristic, stringValue, "App Eui Code");
+                    if (writeCharacteristicsSucceed){
+                        configOperationsCounter++;
+                    }
+                }catch (Exception e){
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (!writeCharacteristicsSucceed && attemptsNum < attemptsMaxNum);
         }
 
         if (appKeyCodeCharacteristic == null) {
             System.out.println("Target App Key Code characteristic not found");
         }else{
-            String stringValue = appKeyCode;
-            writeString(appKeyCodeCharacteristic, stringValue, "App Key Code");
-            if(writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
+            attemptsNum = 0;
+            do{
+                attemptsNum++;
+                try {
+                    String stringValue = appKeyCode.length() <= 16? appKeyCode: appKeyCode.substring(0, 16);
+                    writeString(appKeyCodeCharacteristic, stringValue, "App Key Code");
+                    if(writeCharacteristicsSucceed){
+                        configOperationsCounter++;
+                    }
+                }catch (Exception e){
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (!writeCharacteristicsSucceed && attemptsNum < attemptsMaxNum);
         }
 
         if (bleServerNameCharacteristic == null) {
@@ -352,17 +377,16 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         if (ttnAppJoinStateCharacteristic == null) {
             System.out.println("Target TTN App Join State characteristic not found");
         }else{
+            attemptsNum = 0;
             String value = TTN_NOT_JOINED_STATE;
             do{
-                value = readString(ttnAppJoinStateCharacteristic, "TTN App Join State");
-                if(!value.equals(TTN_JOINED_STATE)) {
-                    try {
-                        Thread.sleep(TTN_JOIN_TIME_SLEEP);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                attemptsNum++;
+                try{
+                    value = readString(ttnAppJoinStateCharacteristic, "TTN App Join State");
+                } catch (Exception e) {
+                    System.out.println("Exception: " + e.getMessage());
                 }
-            }while (!value.equals(TTN_JOINED_STATE));
+            }while ((value == null || !value.equals(TTN_JOINED_STATE)) && attemptsNum < attemptsMaxNum);
             if(readCharacteristicsSucceed){
                 configOperationsCounter++;
             }
@@ -371,14 +395,25 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         if (configurationStateCharacteristic == null) {
             System.out.println("Target Configuration State State characteristic not found");
         }else{
-            String value = readString(configurationStateCharacteristic, "Configuration State");
+            attemptsNum = 0;
+            String value = null;
+            do{
+                attemptsNum++;
+                try{
+                    value = readString(configurationStateCharacteristic, "Configuration State");
+                } catch (Exception e) {
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (value == null && attemptsNum < attemptsMaxNum);
+
             int configOperationsCounter_temp = configOperationsCounter;
             String GateWayName = gatewayName;
             String GateWayEuiCode = devEuiCode;
+            String value_2 = value;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(value.equals(CONFIGURATION_READY_STATE) && configOperationsCounter_temp == CONFIG_OPERATIONS_NUMBER){
+                    if(value_2.equals(CONFIGURATION_READY_STATE) && configOperationsCounter_temp == CONFIG_OPERATIONS_NUMBER){
                         Toast.makeText(getContext(),
                                 getResources().getString(R.string.toastMessage_BLEDeviceConfigurationSucceeded),
                                 Toast.LENGTH_LONG).show();
