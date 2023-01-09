@@ -1,5 +1,10 @@
 package ipleiria.pdm.homecoffee.model;
 
+import com.jjoe64.graphview.series.DataPoint;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 
 public class Sensor extends Device{
@@ -18,5 +23,8 @@ public class Sensor extends Device{
     // Temporal method
     public void setValue(double value){
         this.value = value;
+        Calendar calendar = Calendar.getInstance();
+        Date currentDate = calendar.getTime();
+        this.dataPoints.add(new DataPoint(currentDate, value));
     }
 }

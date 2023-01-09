@@ -1,5 +1,9 @@
 package ipleiria.pdm.homecoffee.model;
 
+import com.jjoe64.graphview.series.DataPoint;
+
+import org.checkerframework.checker.units.qual.A;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -12,6 +16,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected boolean connectionStateSaved;
     protected DeviceType type;
     protected Room room;
+    protected ArrayList<DataPoint> dataPoints;
     protected ArrayList<Notification> notifications;
     protected double value;
     protected double valueSaved;
@@ -23,6 +28,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.room = room;
         this.notifications = new ArrayList<>();
         room.addDevice(this);
+        this.dataPoints = new ArrayList<>();
     }
 
     public int getChannel() {
@@ -101,9 +107,13 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.room = room;
     }
 
+    public ArrayList<DataPoint> getDataPoints() {
+        return dataPoints;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        return this.channel == ((Device) obj).channel;
+        return (obj.getClass() == this.getClass()) && this.channel == ((Device) obj).channel;
     }
 
     @Override

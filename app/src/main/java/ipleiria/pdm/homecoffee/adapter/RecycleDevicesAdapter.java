@@ -97,7 +97,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         }
 
         public Device getDevice(){
-            return houseManager.getDevice(this.getLayoutPosition());
+            return houseManager.getDevice(this.getLayoutPosition() - 1);
         }
     }
 

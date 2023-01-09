@@ -60,7 +60,7 @@ public class DeviceControlFragment extends Fragment {
         TextView textView_CSDesiredValueLabel_btnOnOff = getView().findViewById(R.id.textView_CSDesiredValueLabel_btnOnOff);
         final Button customButton = getView().findViewById(R.id.btn_OnOff);
 
-        if(selectedDevice.getType() == DeviceType.DIGITAL){
+        if(selectedDevice.getType() == DeviceType.DIGITAL || selectedDevice.getType() == DeviceType.LUMINOSITY){
             textView_CSDesiredValueLabel.setVisibility(View.GONE);
             circleSlider_valueControl.setVisibility(View.GONE);
 
@@ -85,7 +85,7 @@ public class DeviceControlFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show();
-                ((Actuator) selectedDevice).setDesiredValue(selectedDevice.getValue()*-1 + 1);
+                ((Actuator) selectedDevice).setDesiredValue(selectedDevice.getValue() == 1.0? 0.0 : 1.0);
                 customButton.setText(selectedDevice.getValue() == 1.0?
                         getResources().getString(R.string.txt_On) :
                         getResources().getString(R.string.txt_Off));
@@ -199,10 +199,10 @@ public class DeviceControlFragment extends Fragment {
                     ((Actuator) selectedDevice).setDesiredValue(selectedDevice.getValueSaved());
                 }
 
-                customButton.setText(selectedDevice.isConnectionState()?
+                customButton.setText(selectedDevice.getValue() == 1.0?
                         getResources().getString(R.string.txt_On) :
                         getResources().getString(R.string.txt_Off));
-                customButton.setBackgroundTintList(selectedDevice.isConnectionState()?
+                customButton.setBackgroundTintList(selectedDevice.getValue() == 1.0?
                         getResources().getColorStateList(R.color.ButtonOn) :
                         getResources().getColorStateList(R.color.ButtonOff));
 

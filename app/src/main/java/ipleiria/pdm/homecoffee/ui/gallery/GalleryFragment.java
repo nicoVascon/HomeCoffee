@@ -54,7 +54,7 @@ public class GalleryFragment extends Fragment {
         this.textLogs = textLogs;
     }
 
-    public TextView textLogs;
+    public static TextView textLogs;
     public EditText editTextMessage;
     private static final int PERMISSION_REQUEST_CODE = 100;
 
@@ -180,14 +180,6 @@ public class GalleryFragment extends Fragment {
             }
             });
 
-        ArrayList <String> msgs_received = houseManager.getMsgs_received();
-        String previous_text = textLogs.getText().toString();
-        StringBuilder str_received= new StringBuilder();
-
-        for (int i = 0; i < msgs_received.size(); i++) {
-            str_received.append((msgs_received.get(i)));
-        }
-        textLogs.setText(previous_text+str_received+"\n");
 
     }
 

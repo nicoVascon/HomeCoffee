@@ -21,6 +21,8 @@ import java.util.Set;
 
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
+import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Sensor;
 
 public class PahoDemo implements MqttCallback, Serializable {
 
@@ -116,6 +118,7 @@ public class PahoDemo implements MqttCallback, Serializable {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
+        HouseManager houseManager = HouseManager.getInstance();
         String text = message.toString();
         System.out.println(text);
         // Extract the string after "Published to:" and before ":{"
@@ -131,10 +134,48 @@ public class PahoDemo implements MqttCallback, Serializable {
         text = "Data: "+extractedString1+"\n   Dados: "+extractedString2+"\n\n";
         System.out.println(text);
         try {
-            HouseManager.getInstance().getMsgs_received().add(text);
+            HouseManager.getInstance().getMsgs_received().append(text+"\n");
         } catch (Exception e) {
             System.out.println("Crashou: " + e.getMessage());
         }
+
+        try {
+            String text_div = extractedString2.substring(3, extractedString2.length() - 3);
+            System.out.println(text_div);
+            String[] text_split = text_div.split(",");
+            //System.out.println(text_split);
+            String[] text_div2;
+            String[] text_chan;
+            String[] text_val;
+            for (int i = 0; i < text_split.length; i++) {
+                System.out.println(text_split[i]);
+                text_div2=text_split[i].split(":");
+
+                int last_index=text_div2[0].lastIndexOf("_");
+                int chan = Integer.parseInt(text_div2[0].substring(last_index+1, text_div2[0].length() - 1));
+                System.out.println(chan);
+                System.out.println(text_div2[1]);
+                Device device = houseManager.searchDevicesChannel(chan);
+                if(device instanceof Sensor){
+                    ((Sensor)device).setValue(Double.parseDouble(text_div2[1]));
+                }
+            }
+
+        }catch (Exception e){
+            System.out.println("Morri muito: "+e.getMessage());
+        }
+        //{"analog_in_1":13,"...
+//        startIndex = text.indexOf("decoded_payload") + "decoded_payload".length();
+//        endIndex = text.indexOf("rx_metadata", startIndex);
+//        String extractedString2 = text.substring(startIndex, endIndex);
+//
+//        startIndex = text.indexOf("decoded_payload") + "decoded_payload".length();
+//        endIndex = text.indexOf("rx_metadata", startIndex);
+//        String extractedString2 = text.substring(startIndex, endIndex);
+
+
+
+
 //        Toast.makeText(MainActivity.getCurrentFragment().getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 

@@ -105,4 +105,7 @@
     <string name="txt_AlertDialog_DisassociateGateway">Tem certeza de que deseja desassociar o Gateway?</string>
     <string name="toastMessage_RemainingFields">Campos em Falta. Tente Novamente</string>
     <string name="mqtt_share">mqtt_share</string>
+    <string name="deviceTypeName_Presence">Presença</string>
+    <string name="deviceTypeName_Analog">Analógico</string>
+    <string name="txt_MesuredValue">Valor Medido</string>
 </resources>

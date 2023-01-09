@@ -1,5 +1,10 @@
 package ipleiria.pdm.homecoffee.model;
 
+import com.jjoe64.graphview.series.DataPoint;
+
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.annotation.Nullable;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
@@ -19,6 +24,7 @@ public class Actuator extends Device{
         }
         if(sensor.getType() == this.type){
             associatedSensor = sensor;
+            this.dataPoints = sensor.dataPoints;
         }
         return associatedSensor;
     }
@@ -34,12 +40,22 @@ public class Actuator extends Device{
     public void setDesiredValue(double value){
         if(sendValueChangeCommand(value)){
             this.value = value;
+            if(associatedSensor == null){
+                Calendar calendar = Calendar.getInstance();
+                Date currentDate = calendar.getTime();
+                this.dataPoints.add(new DataPoint(currentDate, value));
+            }
         }
     }
 
     private boolean sendValueChangeCommand(double newValue){
         // Code for App-ESP32 communication
-        HouseManager.addString_send_ttn(this.channel, this.channel + "," + this.value );
+        if(this.type == DeviceType.DIGITAL || this.type == DeviceType.LUMINOSITY){
+            HouseManager.addString_send_ttn(this.channel, this.channel + "," + ((int) newValue) );
+        }else{
+            HouseManager.addString_send_ttn(this.channel, this.channel + "," + newValue );
+        }
+
         return true;
     }
 }

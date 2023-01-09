@@ -21,7 +21,11 @@ public class LoadingDialog {
         activity= myactivity;
     }
 
-    public void startLoadingDialog()
+    public void startLoadingDialog(){
+        startLoadingDialog(false);
+    }
+
+    public void startLoadingDialog(boolean cancelable)
     {
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -33,7 +37,7 @@ public class LoadingDialog {
                 textViewLoadingDialogSubText = view.findViewById(R.id.textViewLoadingDialogSubText);
                 textViewLoadingDialogSubText.setVisibility(View.GONE);
                 builder.setView(view);
-                builder.setCancelable(false);
+                builder.setCancelable(cancelable);
 
                 alertDialog = builder.create();
                 alertDialog.show();

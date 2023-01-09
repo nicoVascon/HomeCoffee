@@ -255,7 +255,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
 
     public void Continue(int position){
         loadingDialog = new LoadingDialog(getActivity());
-        loadingDialog.startLoadingDialog();
+        loadingDialog.startLoadingDialog(true);
 
         selectedDevice = devices.get(position);
 
@@ -300,7 +300,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
             }
         }
 
-        int attemptsMaxNum = 10;
+        int attemptsMaxNum = 5;
         int attemptsNum = 0;
         if (deviceTypeCharacteristic == null) {
             System.out.println("Target Device Type characteristic not found");

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.jjoe64.graphview.series.DataPoint;
+
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.io.FileInputStream;
@@ -18,6 +20,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
@@ -45,7 +48,7 @@ public class HouseManager implements Serializable {
 
     private User user;
 
-    static final long serialVersionUID = 11L;
+    static final long serialVersionUID = 15L;
 
     private boolean loginMade=FALSE;
 
@@ -90,13 +93,13 @@ public class HouseManager implements Serializable {
 
 
 
-    public ArrayList<String> msgs_received = new ArrayList<>();
+    public StringBuilder msgs_received = new StringBuilder();
 
-    public ArrayList<String> getMsgs_received() {
+    public StringBuilder getMsgs_received() {
         return msgs_received;
     }
 
-    public void setMsgs_received(ArrayList<String> msgs_received) {
+    public void setMsgs_received(StringBuilder msgs_received) {
         this.msgs_received = msgs_received;
     }
 
@@ -176,7 +179,14 @@ public class HouseManager implements Serializable {
         }
         return result;
     }
-
+    public Device searchDevicesChannel(int channel) {
+        for (Device device : devices) {
+            if(device.getChannel()==channel){
+                return device;
+            }
+        }
+        return null;
+    }
     public void saveDeviceConnectionState(){
         for (Device device : devices){
             device.setConnectionStateSaved(device.isConnectionState());
@@ -216,13 +226,17 @@ public class HouseManager implements Serializable {
             rooms.add(initialRoom);
         }
 
-        Device dev1 = new Sensor(125, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
-        Device dev2 = new Sensor(456, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
+        Device dev1 = new Actuator(4, "Alarme de Temperatura", DeviceType.TEMPERATURE, initialRoom);
+        Device dev2 = new Sensor(3, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
         Device dev3 = new Actuator(268, "Aquecedor", DeviceType.TEMPERATURE, initialRoom);
-        Device dev4 = new Sensor(789, "Sensor de Luminosidade", DeviceType.LUMINOSITY, initialRoom);
-        Device dev5 = new Actuator(852, "Válvula de   Pressão", DeviceType.PRESSURE, initialRoom);
-        Device dev6 = new Sensor(159, "Sensor de Aceleração", DeviceType.ACCELERATION, initialRoom);
-        Device dev7 = new Actuator(25, "Motor", DeviceType.DIGITAL, initialRoom);
+        Device dev4 = new Actuator(5, "Luminaria", DeviceType.LUMINOSITY, initialRoom);
+        Device dev4_1 = new Sensor(5, "Sensor de Luminosidade", DeviceType.LUMINOSITY, initialRoom);
+        Device dev5 = new Sensor(6, "Detetor de Chama", DeviceType.DIGITAL, initialRoom);
+        Device dev6 = new Sensor(7, "Detetor de Proximidade", DeviceType.DIGITAL, initialRoom);
+        Device dev7 = new Actuator(2, "Motor", DeviceType.DIGITAL, initialRoom);
+        Device dev7_1 = new Sensor(2, "Sensor de Posição Motor", DeviceType.DIGITAL, initialRoom);
+        Device dev8 = new Sensor(56, "Sensor de Humidade", DeviceType.HUMIDITY, initialRoom);
+        Device dev9 = new Sensor(1, "Sensor de Gas", DeviceType.ANALOG, initialRoom);
 
         dev1.addNotification(new Notification("Choveu!!!"));
         dev1.addNotification(new Notification(
@@ -242,6 +256,46 @@ public class HouseManager implements Serializable {
         addDevice(dev5);
         addDevice(dev6);
         addDevice(dev7);
+        addDevice(dev8);
+        addDevice(dev9);
+        addDevice(dev4_1);
+        addDevice(dev7_1);
+
+        //generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d5 = calendar.getTime();
+        calendar.add(Calendar.DATE, -1);
+        Date d4 = calendar.getTime();
+        calendar.add(Calendar.DATE, -1);
+        Date d3 = calendar.getTime();
+        calendar.add(Calendar.DATE, -1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, -1);
+        Date d1 = calendar.getTime();
+        // Points in different minutes
+        calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, -15);
+        Date dm3 = calendar.getTime();
+        calendar.add(Calendar.MINUTE, -24);
+        Date dm2 = calendar.getTime();
+        calendar.add(Calendar.MINUTE, -10);
+        Date dm1 = calendar.getTime();
+
+        DataPoint[] dataPoints1 = new DataPoint[] {
+            new DataPoint(d1, 1),
+            new DataPoint(d2, 5),
+            new DataPoint(d3, 3),
+            new DataPoint(d4, 2),
+
+            new DataPoint(dm1, 10),
+            new DataPoint(dm2, 6),
+            new DataPoint(dm3, 1),
+
+            new DataPoint(d5, 6)
+        };
+        for (int i = 0; i < dataPoints1.length; i++){
+            dev2.getDataPoints().add(dataPoints1[i]);
+        }
     }
     //-----------------------------------------------------
     public void addRoom(Room room) {
@@ -359,13 +413,13 @@ public class HouseManager implements Serializable {
             objectInputStream.close();
             fileInputStream.close();
         } catch (FileNotFoundException e) {
-            Toast.makeText(context, "Could not read HouseManager from internal storage.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
             error = true;
         } catch (IOException e) {
-            Toast.makeText(context, "Error reading HouseManager from internal storage.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
             error = true;
         } catch (ClassNotFoundException e) {
-            Toast.makeText(context, "Error reading HouseManager from internal storage.", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
             error = true;
         }
 
