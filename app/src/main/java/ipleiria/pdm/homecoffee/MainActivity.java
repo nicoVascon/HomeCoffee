@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         if(HouseManager.getString_send_ttn() != null &&!HouseManager.getString_send_ttn().isEmpty()){
                             PahoDemo.getInstance().submitMessage();
                         }
-
                         ((MainActivity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
