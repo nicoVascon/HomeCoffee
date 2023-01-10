@@ -126,4 +126,5 @@
     <string name="deviceTypeName_Presence">Presence</string>
     <string name="deviceTypeName_Analog">Analog</string>
     <string name="txt_MesuredValue">Measured Vale</string>
+    <string name="NotificationDescription_NewValue">New value received:</string>
 </resources>

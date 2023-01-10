@@ -205,10 +205,17 @@ public class DeviceActivityFragment extends Fragment {
             }
         }
 
-        dataPoints1 = new DataPoint[arrayList_dataPoints1.size()];
-        //dataPoints2 = new DataPoint[arrayList_dataPoints2.size()];
-        for(int i = 0; i < dataPoints1.length; i++){
-            dataPoints1[i] = arrayList_dataPoints1.get(i);
+        if(!arrayList_dataPoints1.isEmpty()){
+            dataPoints1 = new DataPoint[arrayList_dataPoints1.size()];
+            //dataPoints2 = new DataPoint[arrayList_dataPoints2.size()];
+            for(int i = 0; i < dataPoints1.length; i++){
+                dataPoints1[i] = arrayList_dataPoints1.get(i);
+            }
+        }else{
+            dataPoints1 = new DataPoint[1];
+            Calendar calendar = Calendar.getInstance();
+            Date currentDate = calendar.getTime();
+            dataPoints1[0] = new DataPoint(currentDate, 0);
         }
         lineChart.init();
         initGraph(lineChart);

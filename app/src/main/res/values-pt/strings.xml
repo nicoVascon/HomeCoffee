@@ -108,4 +108,5 @@
     <string name="deviceTypeName_Presence">Presença</string>
     <string name="deviceTypeName_Analog">Analógico</string>
     <string name="txt_MesuredValue">Valor Medido</string>
+    <string name="NotificationDescription_NewValue">"Novo Valor Recebido: "</string>
 </resources>

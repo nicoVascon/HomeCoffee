@@ -27,5 +27,6 @@ public class Sensor extends Device{
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
         this.dataPoints.add(new DataPointImpl(currentDate, value));
+        this.addNotification(new Notification(currentDate, "Novo Valor Recebido: " + value));
     }
 }

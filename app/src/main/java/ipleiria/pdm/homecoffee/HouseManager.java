@@ -60,16 +60,6 @@ public class HouseManager implements Serializable , Cloneable{
 
     private static HashMap<Integer, String> string_send_ttn=new HashMap<Integer, String>();
 
-
-
-
-
-
-
-
-
-
-
     public static StringBuilder msgs_received = new StringBuilder();
 
     public StringBuilder getMsgs_received() {

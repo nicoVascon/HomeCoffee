@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseAuth mAuth;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +65,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolBarTitle.setText(getResources().getString(R.string.app_name));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-
         HouseManager.lerFicheiro(this);
         houseManager = HouseManager.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
-
 
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -84,62 +80,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-
         View header = navigationView.getHeaderView(0);
         TextView textHeader = header.findViewById(R.id.textViewUser);
 
         if (savedInstanceState == null) {
-
-
             //houseManager.setrImage(android.R.drawable.btn_star_big_on);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
                     MODE_NIGHT_NO);
             //setInitialFragment();
             if(houseManager.isLoginMade()!=TRUE){
-
                 setLoginFragment();
-
             }
             else {
                 setInitialFragment();
-
                 setCurrentUser();
-
             }
         } else {
-            houseManager = (HouseManager)
-                    savedInstanceState.getSerializable("contactos");
+            houseManager = (HouseManager) savedInstanceState.getSerializable("contactos");
         }
-        //saveLastFragmentOpened = true;
-
-//        Device dev1 = HouseManager.getInstance().getDevice(0);
-//        dev1.addNotification(new Notification("Choveu!!!"));
-//        dev1.addNotification(new Notification(
-//                new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime(),
-//                "Falta agua!!!"));
-//        dev1.addNotification(new Notification(
-//                new GregorianCalendar(2020, Calendar.JANUARY, 1).getTime(),
-//                "Afogo-me!!!"));
-//        dev1.addNotification(new Notification(
-//                new GregorianCalendar(2022, Calendar.DECEMBER, 25).getTime(),
-//                "Tenho sede!!!"));
 
         PahoDemo.getInstance().start_mqtt();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                int i=0;
+//                int i=0;
                 while(true) {
-                    i++;
+//                    i++;
 
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-                    if(i==10) {
-                        i=0;
+//                    if(i==10) {
+//                        i=0;
 
                         //Onde correr metodo a cada 5s
                         if(HouseManager.getString_send_ttn() != null &&!HouseManager.getString_send_ttn().isEmpty()){
@@ -155,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 }
                             }
                         });
-                    }
+//                    }
                 }
             }
         }) ;

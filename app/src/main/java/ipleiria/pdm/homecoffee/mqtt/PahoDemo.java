@@ -48,18 +48,15 @@ public class PahoDemo implements MqttCallback, Serializable {
             INSTANCE.doDemo(HouseManager.getString_send_ttn());
             HouseManager.getString_send_ttn().clear();
         }
-
     }
 
 
     public void doDemo(HashMap<Integer, String> payload_to_send) {
-
-        if (payload_to_send.isEmpty())
+        if (payload_to_send.isEmpty()){
             return;
-
+        }
         MqttMessage message = new MqttMessage();
         StringBuilder to_send = new StringBuilder("");
-
 
         // for each loop
         for (Integer channel : payload_to_send.keySet()) {
