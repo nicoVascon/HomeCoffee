@@ -118,7 +118,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        i=0;
 
                         //Onde correr metodo a cada 5s
-                        PahoDemo.getInstance().submitMessage();
+                        if (HouseManager.isModificable()){
+                            PahoDemo.getInstance().submitMessage();
+                        }
+
                         ((MainActivity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

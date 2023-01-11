@@ -30,6 +30,7 @@ import ipleiria.pdm.homecoffee.model.Room;
 
 public class HouseManager implements Serializable , Cloneable{
     private static HouseManager INSTANCE = null;
+    private static boolean modificable;
 
     private static Bundle bundle;
 
@@ -338,6 +339,10 @@ public class HouseManager implements Serializable , Cloneable{
         HouseManager.bundle = bundle;
     }
 
+    public static boolean isModificable() {
+        return modificable;
+    }
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
@@ -347,6 +352,7 @@ public class HouseManager implements Serializable , Cloneable{
         return str.toString();
     }
     public static void gravarFicheiro(Context context) {
+        HouseManager.modificable = false;
         try {
             FileOutputStream fileOutputStream =
                     context.openFileOutput("houseManager.bin", Context.MODE_PRIVATE);
@@ -359,8 +365,10 @@ public class HouseManager implements Serializable , Cloneable{
         } catch (IOException | CloneNotSupportedException e) {
             Toast.makeText(context, "Could not write HouseManager to internal storage.", Toast.LENGTH_LONG).show();
         }
+        HouseManager.modificable = true;
     }
     public static void lerFicheiro(Context context) {
+        HouseManager.modificable = false;
         boolean error = false;
         try {
             FileInputStream fileInputStream =
@@ -387,6 +395,7 @@ public class HouseManager implements Serializable , Cloneable{
             INSTANCE.adicionarDadosIniciais();
             INSTANCE.addInitialDevices();
         }
+        HouseManager.modificable = true;
     }
 
     public User getUser() {

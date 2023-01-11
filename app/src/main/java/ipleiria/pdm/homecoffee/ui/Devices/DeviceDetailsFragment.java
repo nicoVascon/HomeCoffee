@@ -81,10 +81,7 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devDetails));
 
-        System.out.println("\n\n-------------- Data Points --------------------\n\n");
-        for (DataPointImpl dataPoint : selectedDevice.getDataPoints()){
-            System.out.println(dataPoint);
-        }
+
 
 //        Bundle bundle = HouseManager.getBundle();
 //        if (bundle == null){
