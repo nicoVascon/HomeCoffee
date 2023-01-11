@@ -18,19 +18,33 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
 
+/**
+ * Adaptador que representa os itens de dispositivos
+ * @param <D> extensão para os Devices
+ */
 public class RecycleDevicesMiniAdapter<D extends Device> extends RecyclerView.Adapter<RecycleDevicesMiniAdapter.DevicesHolder> {
     private HouseManager gestorContactos;
     private Context context;
     private LayoutInflater mInflater;
     private ArrayList<D> itemsList;
 
+    /**
+     * Construtor da classe
+     * @param context contexto da aplicação
+     * @param itemsList lista de items a serem mostrados
+     */
     public RecycleDevicesMiniAdapter(Context context, ArrayList<D> itemsList){
         mInflater = LayoutInflater.from(context);
         this.gestorContactos = HouseManager.getInstance();
         this.context=context;
         this.itemsList = itemsList;
     }
-
+    /**
+     * Metodo que cria o holder do item
+     * @param parent ViewGroup parent
+     * @param viewType int
+     * @return DevicesHolder
+     */
     public RecycleDevicesMiniAdapter.DevicesHolder onCreateViewHolder(@NonNull ViewGroup parent, int
             viewType) {
         View mItemView = mInflater.inflate(R.layout.item_device_mini_layout,parent, false);
