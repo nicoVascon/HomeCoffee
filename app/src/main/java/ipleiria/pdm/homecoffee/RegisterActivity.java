@@ -1,11 +1,14 @@
 package ipleiria.pdm.homecoffee;
 
+import static android.content.ContentValues.TAG;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +17,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
@@ -33,6 +43,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText password2;
     FirebaseAuth firebaseAuth;
     private TextView register;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         password2 = findViewById(R.id.password2);
 
-
+        db = FirebaseFirestore.getInstance();
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,7 +114,31 @@ public class RegisterActivity extends AppCompatActivity {
                         } else
                             Toast.makeText(context, "SignUp Unsuccessful, Please Try Again", Toast.LENGTH_SHORT).show();
                     } else {
-                        User user = new User(email);
+
+
+                        //Saving room on Firebase's Firestore
+                        // Create a new room
+                        Map<String, Object> user = new HashMap<>();
+                        user.put("User_Email", email);
+
+
+                        // Add a new document with a generated ID
+                        db.collection("users")
+                                .add(user)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });
+
+
 
 
                         Intent switchActivityIntent = new Intent(RegisterActivity.this, MainActivity.class);

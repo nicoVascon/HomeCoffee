@@ -1,36 +1,35 @@
 package ipleiria.pdm.homecoffee.model;
 
-import com.jjoe64.graphview.series.DataPoint;
-
-import org.checkerframework.checker.units.qual.A;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
-public abstract class Device implements Serializable, Comparable<Device> {
+public class Device implements Serializable, Comparable<Device> {
     protected int channel;
     protected String name;
     protected boolean connectionState;
     protected boolean connectionStateSaved;
     protected DeviceType type;
-    protected Room room;
+
     protected ArrayList<DataPointImpl> dataPoints;
     protected ArrayList<Notification> notifications;
     protected double value;
     protected double valueSaved;
 
+    public Device(){
+    }
+
+
     public Device(int channel, String name, DeviceType type, Room room) {
         this.channel = channel;
         this.name = name;
         this.type = type;
-        this.room = room;
+
         this.notifications = new ArrayList<>();
-        room.addDevice(this);
+//        room.addDevice(this);
         this.dataPoints = new ArrayList<>();
     }
 
@@ -82,9 +81,6 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.type = type;
     }
 
-    public Room getRoom() {
-        return room;
-    }
 
     public double getValue() {
         return value;
@@ -106,8 +102,9 @@ public abstract class Device implements Serializable, Comparable<Device> {
         notifications.remove(position);
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void set_Room(Room room) {
+        room.addDevice(this);
+        room.updateRoomDev();
     }
 
     public ArrayList<DataPointImpl> getDataPoints() {

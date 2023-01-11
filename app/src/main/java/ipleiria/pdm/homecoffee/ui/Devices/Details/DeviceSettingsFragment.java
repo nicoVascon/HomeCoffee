@@ -144,9 +144,9 @@ public class DeviceSettingsFragment extends Fragment {
     }
 
     public void initRoomLayout(){
-        Room devRoom = selectedDevice.getRoom();
-        txt_devRoomName.setText(devRoom.getNome());
-        switch (devRoom.getType()) {
+        Room devRoom = HouseManager.getInstance().searchRoomDevice(selectedDevice);
+        txt_devRoomName.setText(devRoom.getRoom_Name());
+        switch (devRoom.getRoom_Type()) {
             case BEDROOM:
                 imageView_devRoom.setImageResource(R.drawable.bedroom_alternative);
                 break;

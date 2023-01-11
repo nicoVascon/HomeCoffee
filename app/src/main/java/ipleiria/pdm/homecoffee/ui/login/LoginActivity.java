@@ -67,9 +67,14 @@ public class LoginActivity extends AppCompatActivity {
 
             houseManager.setLoginMade(TRUE);
             Toast.makeText(this, "You are Logged in", Toast.LENGTH_SHORT).show();
-
+            houseManager.setCurrentUser();
+//            houseManager.getUserRooms();
+//            while(houseManager.getUserRooms()){
+//            System.out.println("Getting rooms form firebase....");
+//       }
             Intent switchActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(switchActivityIntent);
+            System.out.println("Vou entrar no main activity a partir do login activity");
             //((MainActivity) mAdapter.getContext()).setInitialFragment();
             finish();
         }
@@ -123,6 +128,8 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(context, "You are Logged in",
                                 Toast.LENGTH_SHORT).show();
                         houseManager.setUser(new User(email));
+
+
                         Intent switchActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(switchActivityIntent);
                         //((MainActivity) mAdapter.getContext()).setInitialFragment();

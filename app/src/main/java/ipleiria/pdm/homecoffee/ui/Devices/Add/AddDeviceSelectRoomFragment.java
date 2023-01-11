@@ -24,7 +24,6 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.model.Sensor;
-import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
@@ -106,7 +105,7 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
             selectedDevice.setName(newDevName);
             selectedDevice.setChannel(newDevChannel);
             selectedDevice.setType(newDevType);
-            selectedDevice.setRoom(newDevRoom);
+            selectedDevice.set_Room(newDevRoom);
             ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new DeviceDetailsFragment(DeviceDetailsFragment.SETTINGS_TAB_INDEX)).commit();
             return;
@@ -117,9 +116,15 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     private void add(){
         if (newDevRoom != null){
             if(newDevMode == 0) {
-                HouseManager.getInstance().addDevice(new Sensor(newDevChannel, newDevName, newDevType, newDevRoom));
+                Sensor newSensor = new Sensor(newDevChannel, newDevName, newDevType, newDevRoom);
+                HouseManager.getInstance().addDevice(newSensor);
+                newDevRoom.addDevice(newSensor);
+                newDevRoom.updateRoomDev();
             }else{
                 Actuator newActuator = new Actuator(newDevChannel, newDevName, newDevType, newDevRoom);
+                HouseManager.getInstance().addDevice(newActuator);
+                newDevRoom.addDevice(newActuator);
+                newDevRoom.updateRoomDev();
                 if(sensorToAssociate != null){
                     Sensor currentAssociatedSensor = newActuator.setAssociatedSensor(sensorToAssociate);
                     if(currentAssociatedSensor == sensorToAssociate){

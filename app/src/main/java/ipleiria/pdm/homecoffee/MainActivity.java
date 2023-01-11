@@ -5,18 +5,24 @@ import static java.lang.Boolean.TRUE;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -36,7 +42,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.EditDeviceSelectSensorFragment
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
-import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
@@ -54,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private FirebaseAuth mAuth;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mAuth = FirebaseAuth.getInstance();
 
+
+
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -83,6 +92,62 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View header = navigationView.getHeaderView(0);
         TextView textHeader = header.findViewById(R.id.textViewUser);
 
+        //Users and their rooms on firebase's realtime database
+        setCurrentUser();
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//
+//        LayoutInflater inflater = this.getLayoutInflater();
+//        View dialogView = inflater.inflate(R.layout.uploading_dialog, null);
+//
+//        builder.setView(dialogView);
+//        final AlertDialog dialog = builder.create();
+//        ImageView uploadAnimation = dialogView.findViewById(R.id.uploading_animation);
+//        Picasso.get().load(R.drawable.uploading_animation).into(uploadAnimation);
+//
+//        dialog.show();
+//        //Getting the user's rooms
+//        houseManager.getUserRooms();
+//        //Waiting for the rooms
+//        new Handler().postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                dialog.dismiss();
+//            }
+//        }, 2000);
+//        dialog.dismiss();
+
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        LayoutInflater inflater = this.getLayoutInflater();
+//        View dialogView = inflater.inflate(R.layout.uploading_dialog, null);
+//        builder.setView(dialogView);
+//        final AlertDialog dialog = builder.create();
+//
+//// Find the ProgressBar in the layout
+//        ProgressBar progressBar = dialogView.findViewById(R.id.progressBar);
+//
+//// Show the dialog
+//        dialog.show();
+//
+//// Simulate some background task that takes a while
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                // Do some task here
+//                int progress = 0;
+//                while (progress <= 100) {
+//                    progressBar.setProgress(progress);
+//                    progress += 10;
+//                    try {
+//                        Thread.sleep(150);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                // When the task is done, dismiss the dialog
+//                dialog.dismiss();
+//            }
+//        }).start();
+
         if (savedInstanceState == null) {
             //houseManager.setrImage(android.R.drawable.btn_star_big_on);
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
@@ -94,9 +159,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             else {
                 setInitialFragment();
                 setCurrentUser();
+
             }
         } else {
-            houseManager = (HouseManager) savedInstanceState.getSerializable("contactos");
+
         }
 
         PahoDemo.getInstance().start_mqtt();
@@ -136,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         thread.start();
 
 
-
+        //houseManager.getUserRooms();
 
     }
 
@@ -147,6 +213,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         houseManager.setUser(user);
 
     }
+
 
     public void setInitialFragment() {
         getSupportFragmentManager().beginTransaction().replace(

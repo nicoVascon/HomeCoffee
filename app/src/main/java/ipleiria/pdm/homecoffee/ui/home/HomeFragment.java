@@ -10,9 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,16 +18,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
@@ -37,7 +33,9 @@ import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
-import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
+import ipleiria.pdm.homecoffee.components.LoadingDialog;
+import ipleiria.pdm.homecoffee.model.Room;
+import ipleiria.pdm.homecoffee.ui.rooms.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class HomeFragment extends Fragment  {
@@ -64,6 +62,8 @@ public class HomeFragment extends Fragment  {
         houseManager = HouseManager.getInstance();
         MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.app_name));
+
+//        houseManager.getUserRooms();
 
         mRecyclerView = getView().findViewById(R.id.RecyclerViewMain);
         mAdapter = new RecycleRoomsAdapter(this.getActivity()){
@@ -93,6 +93,11 @@ public class HomeFragment extends Fragment  {
 
         getSensorData();
 
+
+        LoadingDialog loadingDialog = new LoadingDialog(this.getActivity());
+        loadingDialog.startLoadingDialog();
+        loadingDialog.setMainText("Getting rooms...");
+        houseManager.getUserRooms(mAdapter,loadingDialog);
 
     }
 
