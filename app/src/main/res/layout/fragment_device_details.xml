@@ -13,7 +13,7 @@
         android:minHeight="?actionBarSize"
         app:tabGravity="fill"
         app:tabIndicatorHeight="4dp"
-        app:tabMode="scrollable">
+        app:tabMode="fixed">
 
     </com.google.android.material.tabs.TabLayout>
 

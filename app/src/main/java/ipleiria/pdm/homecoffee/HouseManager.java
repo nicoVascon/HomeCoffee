@@ -6,8 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.jjoe64.graphview.series.DataPoint;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -18,7 +16,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 
@@ -45,7 +42,7 @@ public class HouseManager implements Serializable , Cloneable{
 
     private User user;
 
-    static final long serialVersionUID = 17L;
+    static final long serialVersionUID = 19L;
 
     private boolean loginMade=FALSE;
 
@@ -139,7 +136,7 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return result;
     }
-    public Sensor searchSensorChannel(int channel) {
+    public Sensor searchSensorByChannel(int channel) {
         for (Sensor sensor : sensors) {
             if(sensor.getChannel()==channel){
                 return sensor;

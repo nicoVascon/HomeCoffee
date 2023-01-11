@@ -32,6 +32,7 @@ import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectSensorFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.EditDeviceSelectSensorFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
@@ -117,9 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        i=0;
 
                         //Onde correr metodo a cada 5s
-                        if(HouseManager.getString_send_ttn() != null &&!HouseManager.getString_send_ttn().isEmpty()){
-                            PahoDemo.getInstance().submitMessage();
-                        }
+                        PahoDemo.getInstance().submitMessage();
                         ((MainActivity) context).runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -127,6 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     StringBuilder msgs_received = houseManager.getMsgs_received();
                                     GalleryFragment.textLogs.setText(msgs_received.toString());
                                 }
+                                DeviceActivityFragment.updateValues();
                             }
                         });
 //                    }

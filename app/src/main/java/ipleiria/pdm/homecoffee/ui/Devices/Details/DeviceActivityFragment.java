@@ -42,11 +42,11 @@ public class DeviceActivityFragment extends Fragment {
     public static final int X_AXIS_INTERVAL_HOUR = 2;
 
     private Device selectedDevice;
-    private DataPoint[] dataPoints1;
-    private String legend;
+    private static DataPoint[] dataPoints1;
+    private static String legend;
     //private DataPoint[] dataPoints2;
 
-    private GraphView_Custom lineChart;
+    private static GraphView_Custom lineChart;
     private Button btn_week;
     private Button btn_day;
     private Button btn_hour;
@@ -55,7 +55,7 @@ public class DeviceActivityFragment extends Fragment {
     private RecycleNotificationsAdapter dAdapter;
     private onRecycleviewItemClickListenner listenner;
 
-    private LabelFormatter labelFormatter;
+    private static LabelFormatter labelFormatter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -151,10 +151,8 @@ public class DeviceActivityFragment extends Fragment {
                 break;
         }
 
-        if(selectedDevice.getDataPoints().size() > 0){
-            Collections.sort(selectedDevice.getDataPoints());
+        if(selectedDevice.getDataPoints().size() > 1){
             dataPoints1 = new DataPoint[selectedDevice.getDataPoints().size()];
-            //dataPoints2 = new DataPoint[arrayList_dataPoints2.size()];
             for(int i = 0; i < dataPoints1.length; i++){
                 dataPoints1[i] = selectedDevice.getDataPoints().get(i);
             }
@@ -221,7 +219,15 @@ public class DeviceActivityFragment extends Fragment {
         initGraph(lineChart);
     }
 
-    public void initGraph(GraphView graph) {
+    public static void updateValues(){
+        if(lineChart == null){
+            return;
+        }
+        lineChart.init();
+        initGraph(lineChart);
+    }
+
+    public static void initGraph(GraphView graph) {
 //        // first series
 //        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints2);
 //        series.setTitle("Electric Consume");
@@ -275,6 +281,15 @@ public class DeviceActivityFragment extends Fragment {
 
     public void setListenner(onRecycleviewItemClickListenner listenner) {
         this.listenner = listenner;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        DeviceActivityFragment.lineChart = null;
+        DeviceActivityFragment.legend = null;
+        DeviceActivityFragment.dataPoints1 = null;
+        DeviceActivityFragment.labelFormatter = null;
     }
 
     public interface onRecycleviewItemClickListenner {

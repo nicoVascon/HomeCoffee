@@ -26,6 +26,7 @@ import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
+import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
@@ -44,7 +45,8 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
     private ViewPager2 viewPager;
     private int initialTab;
 
-    private String[] tabsTitles = {"Control", "Activity", "Schedule", "Settings"};
+//    private String[] tabsTitles = {"Control", "Activity", "Schedule", "Settings"};
+    private String[] tabsTitles = {"Control", "Activity", "Settings"};
     private int[] tabsSelectedIcon = {
             R.drawable.camera_tab_icon2,
             R.drawable.statistics_tab_icon,
@@ -79,6 +81,11 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devDetails));
 
+        System.out.println("\n\n-------------- Data Points --------------------\n\n");
+        for (DataPointImpl dataPoint : selectedDevice.getDataPoints()){
+            System.out.println(dataPoint);
+        }
+
 //        Bundle bundle = HouseManager.getBundle();
 //        if (bundle == null){
 //            bundle = new Bundle();
@@ -94,7 +101,7 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
 //        adapter.addFragment(new Tab2Fragment(), "Tab 2");
         DeviceActivityFragment myDeviceActivityFragment = new DeviceActivityFragment();
         adapter.addFragment(myDeviceActivityFragment, "Tab 2");
-        adapter.addFragment(new Tab3Fragment(), "Tab 3");
+        //adapter.addFragment(new Tab3Fragment(), "Tab 3");
 //        adapter.addFragment(new Tab3Fragment(), "Tab 4");
         adapter.addFragment(new DeviceSettingsFragment(), "Tab 3");
         viewPager.setAdapter(adapter);

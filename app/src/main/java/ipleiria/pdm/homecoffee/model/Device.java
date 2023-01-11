@@ -7,6 +7,7 @@ import org.checkerframework.checker.units.qual.A;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
@@ -30,8 +31,9 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.type = type;
         this.room = room;
         this.notifications = new ArrayList<>();
-        room.addDevice(this);
         this.dataPoints = new ArrayList<>();
+
+        room.addDevice(this);
     }
 
     public int getChannel() {
@@ -99,7 +101,9 @@ public abstract class Device implements Serializable, Comparable<Device> {
     }
 
     public void addNotification(Notification newNotification){
-        notifications.add(newNotification);
+        if (newNotification != null){
+            notifications.add(newNotification);
+        }
     }
 
     public void removeNotification(int position){
@@ -112,6 +116,13 @@ public abstract class Device implements Serializable, Comparable<Device> {
 
     public ArrayList<DataPointImpl> getDataPoints() {
         return dataPoints;
+    }
+
+    public void addDataPoint(DataPointImpl dataPoint){
+        if(dataPoint != null){
+            this.dataPoints.add(dataPoint);
+            Collections.sort(dataPoints);
+        }
     }
 
     @Override

@@ -63,25 +63,24 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
     public static final String RESULT_DEVICE_TYPE = "RESULT_DEVICE_TYPE";
     public static final String RESULT_DEVICE_MODE = "RESULT_DEVICE_MODE";
 
-
     private static final int TIMEOUT = 10;
     private static final int WRITE_TIME_SLEEP = 1;
     private static final int MAX_RANDOM_INTEGER = 1000;
 
-    public boolean discoverServicesSucceed = false;
-    public boolean readCharacteristicsSucceed = false;
-    public boolean writeCharacteristicsSucceed = false;
-    public boolean deviceConnectionState = false;
+    private boolean discoverServicesSucceed = false;
+    private boolean readCharacteristicsSucceed = false;
+    private boolean writeCharacteristicsSucceed = false;
+    private boolean deviceConnectionState = false;
 
     private boolean buttonPressed = false;
     private boolean continuePressed = false;
 
     private BluetoothAdapter bluetoothAdapter;
-    List<BluetoothDevice> devices;
-    List<BluetoothGattService> services;
-    BluetoothDevice selectedDevice;
-    BluetoothGattService selectedService;
-    BluetoothGatt gatt;
+    private List<BluetoothDevice> devices;
+    private List<BluetoothGattService> services;
+    private BluetoothDevice selectedDevice;
+    private BluetoothGattService selectedService;
+    private BluetoothGatt gatt;
 
     LoadingDialog loadingDialog;
 

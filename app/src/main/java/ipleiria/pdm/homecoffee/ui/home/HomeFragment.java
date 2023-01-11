@@ -164,7 +164,7 @@ public class HomeFragment extends Fragment  {
                             JSONObject values = dec_payl.getJSONObject("decoded_payload");
                             System.out.println(values);
 
-                            Toast.makeText(context, values.toString(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(context, values.toString(), Toast.LENGTH_LONG).show();
                             //Toast.makeText(context, "Ola eu recebi uma resposta", Toast.LENGTH_SHORT).show();
                             //System.out.println("XXXXXXXXXXXXXXXXX\n\n\n\n\n\n\n\n\n\n\nXXXXXXXXXXXXXX");
                             //System.out.println(value);
