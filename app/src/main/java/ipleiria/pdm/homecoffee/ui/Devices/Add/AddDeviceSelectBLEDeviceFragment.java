@@ -63,6 +63,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
     public static final String RESULT_DEVICE_TYPE = "RESULT_DEVICE_TYPE";
     public static final String RESULT_DEVICE_MODE = "RESULT_DEVICE_MODE";
 
+
     private static final int TIMEOUT = 10;
     private static final int WRITE_TIME_SLEEP = 1;
     private static final int MAX_RANDOM_INTEGER = 1000;

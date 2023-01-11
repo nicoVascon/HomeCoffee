@@ -1,8 +1,6 @@
 package ipleiria.pdm.homecoffee.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +10,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import java.io.File;
-import java.io.FileInputStream;
 
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.R;
@@ -56,8 +51,8 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
     @Override
     public void onBindViewHolder(@NonNull RoomsHolder holder, int position) {
         Room mCurrent = houseManager.getRooms().get(position);
-        holder.txtName.setText(mCurrent.getNome());
-        switch (mCurrent.getType()) {
+        holder.txtName.setText(mCurrent.getRoom_Name());
+        switch (mCurrent.getRoom_Type()) {
             case BEDROOM:
                 holder.imgPhoto.setImageResource(R.drawable.bedroom_alternative);
                 break;

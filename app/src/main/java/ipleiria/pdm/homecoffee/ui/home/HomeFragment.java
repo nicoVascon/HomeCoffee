@@ -37,7 +37,9 @@ import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
-import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
+import ipleiria.pdm.homecoffee.components.LoadingDialog;
+import ipleiria.pdm.homecoffee.model.Room;
+import ipleiria.pdm.homecoffee.ui.rooms.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class HomeFragment extends Fragment  {
@@ -93,6 +95,11 @@ public class HomeFragment extends Fragment  {
 
         getSensorData();
 
+
+        LoadingDialog loadingDialog = new LoadingDialog(this.getActivity());
+        loadingDialog.startLoadingDialog();
+        loadingDialog.setMainText("Getting rooms...");
+        houseManager.getUserRooms(mAdapter,loadingDialog);
 
     }
 

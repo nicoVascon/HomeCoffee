@@ -6,6 +6,18 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,6 +33,8 @@ import java.util.HashMap;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
+import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
+import ipleiria.pdm.homecoffee.components.LoadingDialog;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.model.Sensor;
@@ -46,6 +60,10 @@ public class HouseManager implements Serializable , Cloneable{
     static final long serialVersionUID = 19L;
 
     private boolean loginMade=FALSE;
+
+
+
+    private boolean usersRoomDone=FALSE;
 
     //-------------------------------------- TTN ---------------------------------------------
     public static synchronized HashMap<Integer, String> getString_send_ttn() {
@@ -288,16 +306,77 @@ public class HouseManager implements Serializable , Cloneable{
         return rooms.indexOf(room);
     }
 
-    public void removerContacto(int pos) {
-        rooms.remove(pos);
+    public void setRooms(ArrayList<Room> rooms) {
+        this.rooms = rooms;
     }
-    public ArrayList<Room> procurarContacto(String nome) {
-        ArrayList<Room> res = new ArrayList<>();
-        for (Room c : rooms) {
-            if ((c.getNome().toUpperCase()).contains(nome.toUpperCase()))
-                res.add(c);
+
+    public void getUserRooms(RecycleRoomsAdapter adapter, LoadingDialog loadingDialog) {
+        //If this function is done getting users's rooms or not
+        ArrayList<Room> rooms_user = new ArrayList<>();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userMail = user.getEmail();
+        CollectionReference usersRef = db.collection("users");
+        Query query = usersRef.whereEqualTo("User_Email", userMail);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot result = task.getResult();
+                    if (!result.isEmpty()) {
+                        DocumentSnapshot userDoc = result.getDocuments().get(0);
+                        CollectionReference roomsRef = userDoc.getReference().collection("rooms");
+                        roomsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot roomsSnapshot = task.getResult();
+                                    for (DocumentSnapshot roomSnapshot : roomsSnapshot) {
+                                        Room room = roomSnapshot.toObject(Room.class);
+                                        System.out.println(room.toString());
+                                        //addRoom(room);
+                                        rooms_user.add(room);
+
+                                    }
+
+                                    HouseManager.getInstance().setRooms(rooms_user);
+                                    HouseManager.getInstance().addInitialDevices();
+                                    adapter.notifyDataSetChanged();
+                                    try {
+                                        loadingDialog.dismisDialog();
+                                    }catch (Exception e){
+                                        // Exception Raised when the data downloading finish so fast. Can be ignored.
+                                    }
+//                                    loadingDialog.dismisDialog();
+                                }
+                            }
+                        });
+                    }
+                }
+
+
+            }
+
+        });
+
+    }
+    public Room searchRoomDevice(Device device){
+
+        for(Room room : rooms){
+            ArrayList<Device> devices= room.getDevices();
+            for(Device dev : devices){
+                if(dev.equals(device)){
+                    return room;
+                }
+            }
         }
-        return res;
+        return null;
+    }
+    public boolean isUsersRoomDone() {
+        return usersRoomDone;
+    }
+
+    public void setUsersRoomDone(boolean usersRoomDone) {
+        this.usersRoomDone = usersRoomDone;
     }
 
     // ------------------------------------- House Manager -------------------------------------
@@ -404,6 +483,15 @@ public class HouseManager implements Serializable , Cloneable{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void setCurrentUser() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String user_mail = currentUser.getEmail();
+        User user = new User(user_mail);
+        setUser(user);
+
     }
 
     //---------------------LOGIN-------------------------

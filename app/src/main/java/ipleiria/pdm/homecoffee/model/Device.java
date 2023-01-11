@@ -19,21 +19,23 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected boolean connectionState;
     protected boolean connectionStateSaved;
     protected DeviceType type;
-    protected Room room;
+
     protected ArrayList<DataPointImpl> dataPoints;
     protected ArrayList<Notification> notifications;
     protected double value;
     protected double valueSaved;
 
+    public Device(){
+    }
+
+
     public Device(int channel, String name, DeviceType type, Room room) {
         this.channel = channel;
         this.name = name;
         this.type = type;
-        this.room = room;
+
         this.notifications = new ArrayList<>();
         this.dataPoints = new ArrayList<>();
-
-        room.addDevice(this);
     }
 
     public int getChannel() {
@@ -84,9 +86,6 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.type = type;
     }
 
-    public Room getRoom() {
-        return room;
-    }
 
     public double getValue() {
         return value;
@@ -110,8 +109,9 @@ public abstract class Device implements Serializable, Comparable<Device> {
         notifications.remove(position);
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void set_Room(Room room) {
+        room.addDevice(this);
+        room.updateRoomDev();
     }
 
     public ArrayList<DataPointImpl> getDataPoints() {
@@ -121,7 +121,18 @@ public abstract class Device implements Serializable, Comparable<Device> {
     public void addDataPoint(DataPointImpl dataPoint){
         if(dataPoint != null){
             this.dataPoints.add(dataPoint);
-            Collections.sort(dataPoints);
+            try {
+                Collections.sort(dataPoints);
+            }catch (NullPointerException e){
+                System.out.println("Exception addDataPoint: " + e.getMessage());
+                for(int i = 0; i < this.dataPoints.size(); i++){
+                    if(this.dataPoints.get(i) == null){
+                        this.dataPoints.remove(i);
+                    }
+                }
+                Collections.sort(dataPoints);
+            }
+
         }
     }
 

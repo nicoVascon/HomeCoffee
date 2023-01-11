@@ -37,7 +37,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.EditDeviceSelectSensorFragment
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
-import ipleiria.pdm.homecoffee.ui.home.AddRoomFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
@@ -83,6 +83,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View header = navigationView.getHeaderView(0);
         TextView textHeader = header.findViewById(R.id.textViewUser);
+
+        //Users and their rooms on firebase's realtime database
+        setCurrentUser();
 
         if (savedInstanceState == null) {
             //houseManager.setrImage(android.R.drawable.btn_star_big_on);
