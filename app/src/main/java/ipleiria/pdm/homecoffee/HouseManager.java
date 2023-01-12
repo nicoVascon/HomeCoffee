@@ -468,7 +468,6 @@ public class HouseManager implements Serializable , Cloneable{
                                 }catch (Exception e){
                                     System.out.println("Exception: getUserRooms: " + e.getMessage());
                                 }
-
 //                                HouseManager.getInstance().setRooms(rooms_user);
 //                                HouseManager.getInstance().addInitialDevices();
 //                                adapter.notifyDataSetChanged();
