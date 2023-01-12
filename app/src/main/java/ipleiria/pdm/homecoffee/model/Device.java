@@ -181,36 +181,69 @@ public abstract class Device implements Serializable, Comparable<Device> {
         return room;
     }
 
+    /**
+     * Método que retorna o valor do atributo "value"
+     * @return double, representando o valor atual do dispositivo
+     */
     public double getValue() {
         return value;
     }
 
+    /**
+     * Método que retorna o tamanho da lista de notificações
+     * @return int, representando o número de notificações armazenadas
+     */
     public int getNumNotifications(){
         return notifications.size();
     }
 
+    /**
+     * Método que retorna a notificação de uma determinada posição
+     * @param position, int representando a posição desejada
+     * @return Notification, representando a notificação na posição especificada
+     */
     public Notification getNotification(int position){
         return notifications.get(position);
     }
 
+    /**
+     * Método que adiciona uma notificação a lista
+     * @param newNotification, objeto da classe Notification a ser adicionado
+     */
     public void addNotification(Notification newNotification){
         if (newNotification != null){
             notifications.add(newNotification);
         }
     }
 
+    /**
+     * Método que remove uma notificação de uma determinada posição
+     * @param position, int representando a posição da notificação a ser removida
+     */
     public void removeNotification(int position){
         notifications.remove(position);
     }
 
+    /**
+     * Método para setar a sala onde o dispositivo está contido.
+     * @param room sala onde o dispositivo está contido.
+     */
     public void setRoom(Room room) {
         this.room = room;
     }
 
+    /**
+     * Método para obter a lista de pontos de dados do dispositivo.
+     * @return lista de pontos de dados.
+     */
     public ArrayList<DataPointImpl> getDataPoints() {
         return dataPoints;
     }
 
+    /**
+     * Método para adicionar um novo ponto de dado a lista de dados do dispositivo.
+     * @param dataPoint novo ponto de dado a ser adicionado.
+     */
     public void addDataPoint(DataPointImpl dataPoint){
         if(dataPoint != null){
             this.dataPoints.add(dataPoint);
@@ -218,16 +251,30 @@ public abstract class Device implements Serializable, Comparable<Device> {
         }
     }
 
+    /**
+     * Método para verificar se um objeto é igual a este objeto.
+     * @param obj objeto a ser comparado.
+     * @return true se os objetos são iguais, false caso contrário.
+     */
     @Override
     public boolean equals(Object obj) {
         return (obj.getClass() == this.getClass()) && this.channel == ((Device) obj).channel;
     }
 
+    /**
+     * Método para obter a representação em string do objeto.
+     * @return string com o nome e o canal do dispositivo.
+     */
     @Override
     public String toString() {
         return name + " - " + channel;
     }
 
+    /**
+     * Método para comparar este objeto com outro objeto do mesmo tipo.
+     * @param device dispositivo a ser comparado.
+     * @return 0 sempre que chamado.
+     */
     @Override
     public int compareTo(Device device) {
         return 0;

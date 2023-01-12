@@ -29,20 +29,59 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
+/**
+ * Classe responsável pelo fragmento de seleção de quarto para adição de novo dispositivo.
+ * Extende a classe Fragment e implementa a interface SaveData.
+ * Utiliza um RecyclerView para exibir os quartos cadastrados e possibilita a escolha de um para associar ao novo dispositivo.
+ * Tem a possibilidade de adicionar ou editar um dispositivo.
+ */
 public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_ROOM = "RESULT_NEW_DEV_ROOM";
-
+    /**
+     * RecyclerView utilizado para exibir a lista de quartos cadastrados
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Adapter do RecyclerView
+     */
     private RecycleRoomsAdapter mAdapter;
+    /**
+     * Botão utilizado para adicionar ou editar um dispositivo
+     */
     private Button addButton;
-
+    /**
+     * Armazena o nome do novo dispositivo
+     */
     private String newDevName;
+    /**
+     * Armazena o canal do novo dispositivo
+     */
     private int newDevChannel;
+    /**
+     * Armazena o tipo do novo dispositivo
+     */
     private DeviceType newDevType;
+    /**
+     * Armazena o quarto do novo dispositivo
+     */
     private Room newDevRoom;
+    /**
+     * Armazena o modo do novo dispositivo
+     */
     private int newDevMode;
+    /**
+     * Armazena o sensor a ser associado ao dispositivo
+     */
     private Sensor sensorToAssociate;
 
+    /**
+     * Cria e retorna a view do fragmento.
+     * Recupera os dados armazenados anteriormente.
+     * @param inflater LayoutInflater utilizado para inflar a view
+     * @param container ViewGroup container
+     * @param savedInstanceState Bundle com dados salvo anteriormente
+     * @return view criada
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,6 +89,11 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
         return inflater.inflate(R.layout.fragment_add_device_select_room, container, false);
     }
 
+    /**
+     * Configura o fragmento quando ele é iniciado.
+     * Define o fragmento atual na MainActivity e define o título da toolbar.
+     * Configura o botão de adição/edição de dispositivo para chamar o método correspondente.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -99,6 +143,12 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
         mRecyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(),2));
     }
 
+    /**
+     * Método responsável por editar o dispositivo selecionado.
+     * Ele verifica se a nova sala do dispositivo foi definida e, se sim,
+     * atualiza as informações do dispositivo selecionado e redireciona para o fragmento de detalhes do dispositivo.
+     * Caso contrário, exibe uma mensagem de erro informando que a sala do dispositivo não foi selecionada.
+     */
     private void edit(){
         if (newDevRoom != null){
             int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
@@ -114,6 +164,15 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
         Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevRoom, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Método responsável por adicionar um dispositivo. Ele verifica se a nova sala foi selecionada e então adiciona um dispositivo
+     * de acordo com o modo escolhido. Caso o modo seja 0, é adicionado um sensor, caso contrário é adicionado um atuador.
+     * Caso haja um sensor associado, ele é associado ao atuador recém criado.
+     * Em caso de sucesso na adição do dispositivo, é exibida uma mensagem de sucesso.
+     * Em caso de falha, é exibida uma mensagem de falha.
+     * Se a sala não foi selecionada, é exibida uma mensagem informando a falta da seleção.
+     * @param sensorToAssociate Sensor para associar com o dispositivo.
+     */
     private void add(){
         if (newDevRoom != null){
             if(newDevMode == 0) {
@@ -147,21 +206,35 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
         Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevRoom, Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Método que recebe o sensor a ser associado ao dispositivo.
+     * @param sensorToAssociate Sensor a ser associado.
+     */
     public void setSensorToAssociate(Sensor sensorToAssociate) {
         this.sensorToAssociate = sensorToAssociate;
     }
 
+    /**
+     * Método da interface onDestroy, que é chamado quando a classe é destruída.
+     * Ele adiciona a classe ao histórico de fragmentos visitados.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
         MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_SELECT_ROOM_FRAGMENT);
     }
 
+    /**
+     * Método da interface SaveData, que não tem implementação nesta classe.
+     */
     @Override
     public void saveData() {
 
     }
 
+    /**
+     * Método da interface SaveData, que não tem implementação nesta classe.
+     */
     @Override
     public void recoverData() {
         try {

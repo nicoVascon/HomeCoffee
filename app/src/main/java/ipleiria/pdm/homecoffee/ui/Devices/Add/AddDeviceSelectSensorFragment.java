@@ -24,15 +24,37 @@ import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 
+/**
+ * Classe AddDeviceSelectSensorFragment é responsável por exibir uma lista de sensores cadastrados na casa e permitir a seleção de um para associar ao atuador.
+ *
+ * Ela estende a classe Fragment do android
+ */
 public class AddDeviceSelectSensorFragment extends Fragment {
+    /**
+     * Atributo mRecyclerView é responsável por exibir a lista de sensores
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Atributo dAdapter é responsável por gerenciar a exibição dos sensores na lista
+     */
     private RecycleDevicesMiniAdapter<Sensor> dAdapter;
 
+    /**
+     * Método onCreate é chamado quando a classe é criada. Ele é utilizado para inicializar atributos.
+     * @param savedInstanceState salva o estado anterior do Fragment, caso ele precise ser restaurado
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Método onCreateView é chamado quando a View do fragmento é criada. Ele é utilizado para configurar a interface de usuário.
+     * @param inflater cria a View a partir do layout definido no xml
+     * @param container o pai da View
+     * @param savedInstanceState salva o estado anterior do Fragment, caso ele precise ser restaurado
+     * @return a View criada
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -40,6 +62,13 @@ public class AddDeviceSelectSensorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_select_sensor, container, false);
     }
 
+    /**
+     * Método chamado quando o fragmento é iniciado.
+     *
+     * É responsável por configurar a RecyclerView, adicionar um adapter com os sensores
+     * compatíveis com o tipo de dispositivo selecionado e definir um LayoutManager.
+     * Também adiciona uma ação ao clique em cada item da lista de sensores.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -83,6 +112,11 @@ public class AddDeviceSelectSensorFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
     }
 
+    /**
+     * Método chamado quando a view do fragmento é destruída.
+     *
+     * Adiciona o fragmento atual à lista de fragmentos visitados.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

@@ -26,12 +26,18 @@ import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
+/**
+ * Classe do fragmento responsável por adicionar um novo dispositivo
+ * Estende a classe Fragment e implementa a interface SaveData
+ */
 public class AddDeviceFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_NAME = "RESULT_NEW_DEV_NAME";
     public static final String RESULT_NEW_DEV_CHANNEL = "RESULT_NEW_DEV_CHANNEL";
     public static final String RESULT_NEW_DEV_TYPE = "RESULT_NEW_DEV_TYPE";
     public static final String RESULT_NEW_DEV_MODE = "RESULT_NEW_DEV_MODE";
-
+    /**
+     * Referência do Spinner usado para escolher o modo do dispositivo
+     */
     private Spinner deviceModeSpinner;
     private Button btn_next;
     private EditText editTextNewDevName;
@@ -43,6 +49,14 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     private DeviceType newDevType = DeviceType.values()[0];
     private int newDevMode = 0;
 
+    /**
+     * Este método é chamado quando a view do fragmento é criada.
+     * Ele usa um LayoutInflater para transformar o layout XML em uma view
+     * @param inflater LayoutInflater usado para inflar o layout
+     * @param container o container onde a view será inserida
+     * @param savedInstanceState estado salvo anteriormente do fragmento
+     * @return a view criada do fragmento
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,6 +65,11 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         return inflater.inflate(R.layout.fragment_add_device, container, false);
     }
 
+    /**
+     * Este método é chamado quando o fragmento é iniciado.
+     * Ele configura o título da toolbar de acordo se está editando ou adicionando
+     * um novo dispositivo e define o listener do botão de próximo.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -93,6 +112,10 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         initDevTypeLayout();
     }
 
+    /**
+     * Método chamado ao clicar no botão 'next'
+     * Valida o nome do dispositivo e navega para a próxima tela de acordo com o modo de dispositivo selecionado
+     */
     private void next(){
         newDevName = editTextNewDevName.getText().toString().trim();
 //        String newDevChannelAsString = editTextNewDevChannel.getText().toString();
@@ -116,6 +139,10 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         }
     }
 
+    /**
+     * Método chamado ao destruir o fragmento
+     * Adiciona o fragmento visitado na lista de fragmentos visitados na MainActivity
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -123,6 +150,10 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
     }
 
+    /**
+     * Inicializa a view do tipo do dispositivo.
+     * Ele é usado para definir a imagem e o nome do dispositivo de acordo com o seu tipo.
+     */
     public void initDevTypeLayout(){
 
         switch (newDevType){
@@ -149,6 +180,10 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         }
     }
 
+    /**
+     * Salva os dados dos dispositivos
+     * Ele salva o nome, o canal, o tipo e o modo do dispositivo
+     */
     @Override
     public void saveData() {
         newDevName = editTextNewDevName.getText().toString().trim();
@@ -168,6 +203,10 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         bundle.putInt(RESULT_NEW_DEV_MODE, newDevMode);
     }
 
+    /**
+     * Método para recuperar os dados salvos anteriormente.
+     * É usado para preencher os campos de edição com os dados do dispositivo a ser editado.
+     */
     @Override
     public void recoverData() {
         Bundle bundle = HouseManager.getBundle();
