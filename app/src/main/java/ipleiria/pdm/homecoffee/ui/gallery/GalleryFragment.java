@@ -32,39 +32,98 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
 
+/**
+ * Classe GalleryFragment é responsável por criar e gerenciar a interface de usuário para o fragmento de galeria.
+ *
+ * Ela também é responsável por gerenciar a comunicação entre o dispositivo Android e o gateway da casa (lopy).
+ */
 public class GalleryFragment extends Fragment {
 
+    /**
+     * Instância do gerenciador da casa.
+     */
     private HouseManager houseManager;
+    /**
+     * Campo de texto para inserir o nome do dispositivo lopy.
+     */
     private EditText editTextLopy;
+    /**
+     * Botão para se conectar ao dispositivo lopy.
+     */
     private Button button_lopy;
 
-
+    /**
+     * Tag usada para identificar mensagens enviadas e recebidas pelo aplicativo.
+     */
     //COmmunication between android and the house gateway(lopy)
     public static final String TAG = "msg";
+    /**
+     * URI do servidor MQTT.
+     */
     public static final String serverUri = "tcp://broker.hivemq.com:1883";
+    /**
+     * Tópico de assinatura para receber mensagens do gateway da casa.
+     */
     public static final String subscriptionTopic = "messagesFromCroatia/#";
+    /**
+     * Tópico de publicação para enviar mensagens para o gatewat da casa
+     */
     public static final String publishTopic = "messagesFromCroatia";
+    /**
+     * Atributo que representa o identificador do cliente MQTT.
+     * É composto por "MyAndroidClientId" concatenado com o timestamp atual.
+     */
     private String clientId = "MyAndroidClientId" + System.currentTimeMillis();
 
+    /**
+     * Getter para o atributo textLogs
+     * @return o valor do atributo textLogs
+     */
     public TextView getTextLogs() {
         return textLogs;
     }
 
+    /**
+     * Setter para o atributo textLogs
+     * @param textLogs o novo valor para o atributo textLogs
+     */
     public void setTextLogs(TextView textLogs) {
         this.textLogs = textLogs;
     }
 
+    /**
+     * Atributo que representa a view de logs.
+     */
     public static TextView textLogs;
+    /**
+     * Atributo que representa a view para edição de mensagem.
+     */
     public EditText editTextMessage;
+    /**
+     * Atributo que representa o código de permissão utilizado.
+     */
     private static final int PERMISSION_REQUEST_CODE = 100;
 
 //    MqttManagerImpl mqttManager;
 
     //TTN CONNECT MQTT
+    /**
+     * Atributo que representa o cliente MQTT para conexão com o TTN.
+     */
     MqttClient client_ttn;
+    /**
+     * Atributo para a classe de exemplo do Paho.
+     */
     PahoDemo paho;
 
 
+    /**
+     * Método chamado quando o fragmento é iniciado
+     * Ele sobrescreve o método onStart da classe pai.
+     * Ele inicializa o gerenciador de casa, define o fragmento atual e o título da barra de ferramentas.
+     * Ele também inicializa os campos de texto e o botão de submit.
+     * Este método contém código comentado para conexão e publicação com o protocolo MQTT.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -183,12 +242,27 @@ public class GalleryFragment extends Fragment {
 
     }
 
+    /**
+     * Método onCreateView é chamado quando é necessário criar a exibição do fragmento.
+     * Ele infla o layout do fragmento e o retorna.
+     * @param inflater objeto LayoutInflater que pode ser usado para inflar o layout do fragmento
+     * @param container objeto ViewGroup que contém o fragmento.
+     * @param savedInstanceState objeto Bundle que contém o estado salvo do fragmento.
+     * @return objeto View que contém o layout do fragmento.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_gallery, container, false);
     }
+
+    /**
+     * Método writeToFile é usado para escrever uma String de dados em um arquivo no armazenamento externo.
+     * Este método tenta escrever os dados no arquivo "mqtt_sharing.txt" dentro do diretório de documentos.
+     * Ele exibe uma notificação Toast e imprime uma mensagem de log de sucesso ou falha.
+     * @param data String de dados a ser escrita no arquivo.
+     */
     private void writeToFile(String data) {
         /*try {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("mqtt_SHARE.txt", Context.MODE_PRIVATE));
@@ -248,7 +322,11 @@ public class GalleryFragment extends Fragment {
 //        }
     }
 
-private boolean checkPermission() {
+    /**
+     * Método checkPermission() verifica se a permissão de escrita em armazenamento externo foi concedida.
+     * @return true se a permissão foi concedida e false caso contrário.
+     */
+    private boolean checkPermission() {
         int result = ContextCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (result == PackageManager.PERMISSION_GRANTED) {
         return true;
@@ -257,7 +335,11 @@ private boolean checkPermission() {
         }
         }
 
-private void requestPermission() {
+    /**
+     * Método requestPermission() solicita a permissão de escrita em armazenamento externo ao usuário. Exibe uma mensagem Toast
+     * explicando a necessidade da permissão, caso o usuário ainda não tenha sido solicitado anteriormente.
+     */
+    private void requestPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
         Toast.makeText(this.getActivity(), "Write External Storage permission allows us to create files. Please allow this permission in App Settings.", Toast.LENGTH_LONG).show();
         } else {
@@ -265,7 +347,14 @@ private void requestPermission() {
         }
         }
 
-@Override
+    /**
+     * Este método é chamado quando o resultado de uma solicitação de permissão é recebido.
+     * Ele verifica se a permissão de escrita em armazenamento externo foi concedida ou negada pelo usuário.
+     * @param requestCode O código da solicitação enviado anteriormente.
+     * @param permissions O conjunto de permissões solicitadas.
+     * @param grantResults O resultado da solicitação de permissão para cada permissão no conjunto de permissões.
+     */
+    @Override
 public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
         case PERMISSION_REQUEST_CODE:

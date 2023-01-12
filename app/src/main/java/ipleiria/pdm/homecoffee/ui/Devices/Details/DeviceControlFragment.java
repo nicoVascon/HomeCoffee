@@ -26,28 +26,57 @@ import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
+/**
+ * Classe que representa o fragmento de controle de dispositivos.
+ *
+ * Nessa classe é possível visualizar e controlar o dispositivo selecionado.
+ */
 public class DeviceControlFragment extends Fragment {
     //public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
 
+    /**
+     * Variável que representa o dispositivo selecionado.
+     */
     private Device selectedDevice;
 
+    /**
+     * Variáveis que representam os elementos de visualização do dispositivo.
+     */
     private TextView textView_devName;
     private TextView textView_devMode;
     private TextView textView_actuatorSensorValue;
     private Switch devSwitch;
     private CircleSliderView circleSlider_valueControl;
 
+    /**
+     *
+     * Método é chamado quando o fragment é criado. Ele pode ser usado para inicializar qualquer estado necessário.
+     * @param savedInstanceState Bundle - O estado salvo anteriormente do fragmento, pode ser nulo.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Método chamado quando a view é criada.
+     * Nesse método são inicializados os elementos de visualização do dispositivo.
+     * @param inflater objeto utilizado para inflar a view.
+     * @param container container que a view será adicionada.
+     * @param savedInstanceState estado salvo anteriormente da instância.
+     * @return a view criada.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_device_control, container, false);
     }
 
+    /**
+     * Este método é chamado quando o fragmento é iniciado. Ele configura a exibição dos elementos da tela de acordo com o tipo de dispositivo selecionado.
+     *
+     * Ele também configura o comportamento do botão de liga/desliga e o comportamento do CircleSlider de acordo com o dispositivo selecionado
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -212,6 +241,9 @@ public class DeviceControlFragment extends Fragment {
         });
     }
 
+    /**
+     *Este método atualiza o valor medido do dispositivo sensor no TextView correspondente.
+     */
     public void updateSensorValue(){
         double measuredValue = ((Actuator) selectedDevice).getMeasuredValue();
         textView_actuatorSensorValue.setText(String.valueOf(measuredValue));

@@ -46,17 +46,39 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 
+/**
+ * Classe AddRoomFragment é uma extensão da classe Fragment, responsável por adicionar um novo quarto à base de dados do Firebase.
+ * Ela contém uma instância do FirebaseFirestore, responsável por se comunicar com a base de dados do Firebase.
+ * Também contém um Spinner, responsável por exibir as opções de tipo de quarto disponíveis.
+ */
 public class AddRoomFragment extends Fragment {
 
+    /**
+     * Instância do FirebaseFirestore para acesso ao banco de dados.
+     */
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    /**
+     * Spinner para seleção do tipo do quarto.
+     */
     private Spinner roomTypeSpinner;
 
+    /**
+     * Método que infla o layout do fragmento e retorna a view criada.
+     * @param inflater é o objeto que irá carregar o layout.
+     * @param container é o container onde o fragmento será adicionado.
+     * @param savedInstanceState é o estado anterior do fragmento, caso exista.
+     * @return view criada a partir do layout inflado.
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_room, container, false);
     }
 
+    /**
+     * Método chamado quando o fragmento é iniciado.
+     * Inicializa as configurações da tela, como o título da toolbar e o adapter do Spinner.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -88,6 +110,10 @@ public class AddRoomFragment extends Fragment {
 
     }
 
+    /**
+     * O método addRoom() cria um novo objeto do tipo Room, com o nome e tipo fornecido pelo usuário
+     * e adiciona-o ao HouseManager e à base de dados Firebase Firestore.
+     */
     private void addRoom() {
         EditText et_name = getView().findViewById(R.id.editTextRoomName);
         String nome = et_name.getText().toString();
@@ -186,6 +212,9 @@ public class AddRoomFragment extends Fragment {
         ((MainActivity) getActivity()).setInitialFragment();
     }
 
+    /**
+     * Este método é chamado quando o fragmento é destruido e diz á main activity que este fragmento foi visitado
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();

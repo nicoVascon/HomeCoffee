@@ -293,6 +293,11 @@ public class DeviceActivityFragment extends Fragment {
         initGraph(lineChart);
     }
 
+    /**
+     * Método estático que atualiza os valores do gráfico.
+     * Verifica se o lineChart é nulo, se for, o método retorna sem fazer nada.
+     * Caso contrário, o método chama o método init do lineChart e o método initGraph.
+     */
     public static void updateValues(){
         if(lineChart == null){
             return;
@@ -301,6 +306,10 @@ public class DeviceActivityFragment extends Fragment {
         initGraph(lineChart);
     }
 
+    /**
+     * Método estático que inicializa o gráfico.
+     * @param graph A view do gráfico.
+     */
     public static void initGraph(GraphView graph) {
 //        // first series
 //        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPoints2);
@@ -349,14 +358,26 @@ public class DeviceActivityFragment extends Fragment {
         graph.getGridLabelRenderer().setHumanRounding(false);
     }
 
+    /**
+     *Método que retorna o listenner de clique para o recycleview.
+     * @return O listenner de clique para o recycleview.
+     */
     public onRecycleviewItemClickListenner getListenner() {
         return listenner;
     }
 
+    /**
+     *  Método que define o listener de clique para o recycleview
+     * @param listenner que ficará vinculado ao click da recycle view
+     */
     public void setListenner(onRecycleviewItemClickListenner listenner) {
         this.listenner = listenner;
     }
 
+    /**
+     * Método chamado quando a view é destruída.
+     * Ele remove a referência ao gráfico, legenda, dados e formato de rótulo.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -366,6 +387,10 @@ public class DeviceActivityFragment extends Fragment {
         DeviceActivityFragment.labelFormatter = null;
     }
 
+    /**
+     * Interface para escutar os eventos de clique no recyclerview.
+     *
+     */
     public interface onRecycleviewItemClickListenner {
         void onDelete();
     }

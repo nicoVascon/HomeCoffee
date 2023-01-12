@@ -32,36 +32,83 @@ import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 /**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
+ * Classe que representa o fragmento de uma sala
+ * Estende a classe Fragment.
  */
 public class RoomFragment extends Fragment {
+    /**
+     * Constante para a chave da posição da sala no resultado.
+     */
     public static final String RESULT_ROOM_POSITION = "RESULT_ROOM_POSITION";
+    /**
+     * Constante para a chave da posição do dispositivo no resultado.
+     */
     public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
 
+    /**
+     * Variável que gerencia a casa.
+     */
     private HouseManager houseManager;
+    /**
+     * Variável para o RecyclerView dos dispositivos.
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Adaptador para os dispositivos.
+     */
     private RecycleDevicesAdapter dAdapter;
+    /**
+     * Variável para o TextView do estado de conexão dos dispositivos.
+     */
     private TextView txtDevConState;
+    /**
+     * Variável para o Switch de habilitação/desabilitação de todos os dispositivos.
+     */
     private Switch allDevSwitch;
+    /**
+     * Variável para o botão de adição de dispositivos.
+     */
     private Button addDeviceButton;
+    /**
+     * Variável estática que indica se os dispositivos estão habilitados.
+     */
     private static boolean devicesEnable;
+    /**
+     * Variável que armazena a posição da sala.
+     */
     private int room_position;
 
 
-
+    /**
+     * Método onCreateView() é chamado quando o fragmento é criado. Ele infla o layout do fragment_room
+     * e o retorna como a visualização do fragmento.
+     * @param inflater objeto LayoutInflater que é usado para inflar o layout do fragmento
+     * @param container objeto ViewGroup que é o contêiner do fragmento
+     * @param savedInstanceState objeto Bundle que contém o estado salvo anteriormente do fragmento
+     * @return a visualização do fragmento
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_room, container, false);
     }
 
+    /**
+     * Método onDestroyView() é chamado quando a visualização do fragmento é destruída.
+     * Ele chama o método super.onDestroyView() da classe pai e adiciona o FragmentsEnum.ROOM_FRAGMENT
+     * ao conjunto de fragmentos visitados.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         MainActivity.addFragmentViseted(FragmentsEnum.ROOM_FRAGMENT);
     }
 
+    /**
+     * Método onCreate() é chamado quando o fragmento é criado. Ele obtém a posição da sala
+     * do Bundle passado como argumento e salva em uma variável room_position.
+     * @param savedInstanceState objeto Bundle que contém o estado salvo anteriormente do fragmento
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +116,10 @@ public class RoomFragment extends Fragment {
         System.out.println(room_position);
     }
 
+    /**
+     *Método onStart é chamado quando o fragmento é iniciado.
+     * Ele inicializa a RecyclerView, seta o título da toolbar e configura a funcionalidade do botão "Adicionar dispositivo" e do switch "Habilitar/Desabilitar dispositivos".
+     */
     @Override
     public void onStart() {
         Context context = this.getContext();
@@ -132,16 +183,27 @@ public class RoomFragment extends Fragment {
 
     }
 
+    /**
+     * Método que atualiza o estado de conexão dos dispositivos.
+     */
     public void updateDevicesConnectionState(){
         int numberOfDevicesConnect = houseManager.numberOfDevicesConnect();
         txtDevConState.setText(numberOfDevicesConnect > 0 ?
                 numberOfDevicesConnect + getResources().getString(R.string.txt_DevicesConnected)  : getResources().getString(R.string.txt_DevicesDisconnected));
     }
 
+    /**
+     * Método que retorna se os dispositivos estão habilitados.
+     * @return boolean devicesEnable
+     */
     public static boolean isDevicesEnable() {
         return devicesEnable;
     }
 
+    /**
+     * Método que define se os dispositivos estão habilitados ou não.
+     * @param devicesEnable
+     */
     public static void setDevicesEnable(boolean devicesEnable) {
         RoomFragment.devicesEnable = devicesEnable;
     }

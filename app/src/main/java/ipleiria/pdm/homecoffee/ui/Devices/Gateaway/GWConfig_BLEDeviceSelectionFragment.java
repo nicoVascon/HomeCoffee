@@ -45,70 +45,197 @@ import ipleiria.pdm.homecoffee.adapter.RecycleBLEDevicesAdapter;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
+/**
+ * Classe responsável por gerenciar a seleção de dispositivos BLE e configurações de dispositivos BLE.
+ * Possui constantes de UUIDs de características e serviços, estados de configuração, constantes de tempo,
+ * variáveis para armazenar informações sobre dispositivos BLE e objetos Bluetooth para gerenciamento de conexão.
+ */
 public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
+    /**
+     * UUID do serviço alvo
+     */
     public static final String TARGET_SERVICE_UUID = "0000000000000001";
+    /**
+     * UUID da característica do tipo de dispositivo
+     */
     public static final String DEVICE_TYPE_CHARACTERISTIC_UUID = "c000000000000001";
+    /**
+     * UUID da característica do nome do anúncio
+     */
     public static final String ADVERT_NAME_CHARACTERISTIC_UUID = "c000000000000002";
+    /**
+     * UUID da característica do código EUI do dispositivo
+     */
     public static final String DEVICE_EUI_CODE_CHARACTERISTIC_UUID = "c000000000000003";
+    /**
+     * UUID da característica do código EUI da aplicação
+     */
     public static final String APP_EUI_CODE_CHARACTERISTIC_UUID = "c000000000000004";
+    /**
+     * UUID da caracteristica da chave de acesso da aplicação
+     */
     public static final String APP_KEY_CODE_CHARACTERISTIC_UUID = "c000000000000005";
+    /**
+     * UUID da caracteristica do nome do servidor BLE
+     */
     public static final String BLE_SERVER_NAME_CHARACTERISTIC_UUID = "c000000000000006";
+    /**
+     * UUID da caracteristica que diz o estado da conexão entre a app e o TTN
+     */
     public static final String TTN_APP_JOIN_STATE_CHARACTERISTIC_UUID = "c000000000000007";
+    /**
+     * UUID da caracteristica que diz o estado da configuração
+     */
     public static final String CONFIGURATION_STATE_CHARACTERISTIC_UUID = "c000000000000008";
 
+    /**
+     * Representa o estado de configuração pronta
+     */
     public static final String CONFIGURATION_READY_STATE = "CONFIGURATION READY";
+    /**
+     * Representa o estado de conexão com TTN estabelecida
+     */
     public static final String TTN_JOINED_STATE = "JOINED";
+    /**
+     * Representa o estado de conexão com TTN não estabelecida
+     */
     public static final String TTN_NOT_JOINED_STATE = "NOT JOINED";
-
+    /**
+     * Representa o número máximo de operações de configuração
+     */
     public static final int CONFIG_OPERATIONS_NUMBER = 7;
 
-
+    /**
+     * Representa o tempo limite de espera
+     */
     private static final int TIMEOUT = 10;
+    /**
+     * Representa o tempo de espera entre escrita de características
+     */
     private static final int WRITE_TIME_SLEEP = 1;
+    /**
+     * Representa o número máximo de inteiro aleatório
+     */
     private static final int MAX_RANDOM_INTEGER = 1000;
+    /**
+     * Representa o tempo de espera para conexão com o TTN
+     */
     private static final int TTN_JOIN_TIME_SLEEP = 3000;
 
+    /**
+     * Atributo booleano que indica se a descoberta de serviços foi bem sucedida
+     */
     public boolean discoverServicesSucceed = false;
+    /**
+     * Atributo booleano que indica se a leitura de características foi bem sucedida
+     */
     public boolean readCharacteristicsSucceed = false;
+    /**
+     * Atributo booleano que indica se a escrita de características foi bem sucedida
+     */
     public boolean writeCharacteristicsSucceed = false;
+    /**
+     * Atributo booleano que indica se o dispositivo está conectado
+     */
     public boolean deviceConnectionState = false;
 
+    /**
+     * Atributo booleano que indica se o botão foi pressionado
+     */
     private boolean buttonPressed = false;
+    /**
+     * Atributo booleano que indica se o botão de continuar foi pressionado
+     */
     private boolean continuePressed = false;
-
+    /**
+     * Atributo inteiro que conta as operações de configuração
+     */
     private int configOperationsCounter;
-
+    /**
+     * Atributo do tipo BluetoothAdapter que representa o adaptador Bluetooth do dispositivo
+     */
     private BluetoothAdapter bluetoothAdapter;
+    /**
+     * Lista de dispositivos Bluetooth encontrados
+     */
     private List<BluetoothDevice> devices;
+    /**
+     * Lista de serviços Bluetooth Gatt encontrados
+     */
     private List<BluetoothGattService> services;
+    /**
+     * Dispositivo Bluetooth selecionado
+     */
     private BluetoothDevice selectedDevice;
+    /**
+     * Serviço Bluetooth Gatt selecionado
+     */
     private BluetoothGattService selectedService;
+    /**
+     * Atributo do tipo BluetoothGatt que representa a conexão GATT com o dispositivo
+     */
     private BluetoothGatt gatt;
-
+    /**
+     * Diálogo de carregamento
+     */
     private LoadingDialog loadingDialog;
+    /**
+     * Atributo do tipo RecyclerView que exibe uma lista de dispositivos Bluetooth
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Adaptador para a lista de dispositivos Bluetooth
+     */
     private RecycleBLEDevicesAdapter dAdapter;
 
+    /**
+     * Código EUI da aplicação
+     */
     private String appEUICode;
+
+    /**
+     * Código de acesso á aplicação
+     */
     private String appKeyCode;
+
+    /**
+     * Código que identifica ao gateway
+     */
     private String devEuiCode;
 
+    /**
+     * Método chamado quando é criado o fragmento. Ele infla o layout e inicializa os componentes da view.
+     * @param inflater O inflater que vai inflar o layout
+     * @param container O container onde o layout será adicionado
+     * @param savedInstanceState O estado salvo da instância
+     * @return View criada para o fragmento.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ble_device_selection, container, false);
     }
 
+    /**
+     * Método chamado quando o fragmento é criado. Ele inicializa o adaptador Bluetooth e verifica se o Bluetooth está habilitado
+     * @param savedInstanceState - Bundle contendo o estado salvo da instância anterior do fragmento.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Método chamado quando a view do fragmento é destruída. Ele adiciona o fragmento a uma lista de visitados
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         MainActivity.addFragmentViseted(FragmentsEnum.SLIDES_HOW_FRAGMENT);
     }
 
+    /**
+     * Método chamado quando o fragmento é iniciado. Ele inicializa os componentes da view e configura os eventos de clique
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -146,6 +273,9 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    /**
+     * Método que cria uma caixa de diálogo de carregamento com uma duração de 5 segundos
+     */
     public void openLoadingDialog()
     {
         loadingDialog = new LoadingDialog(getActivity());
@@ -160,6 +290,11 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         },5000); //You can change this time as you wish
     }
 
+    /**
+     * Método que é chamado quando um dispositivo BLE é selecionado na lista de dispositivos. Ele conecta ao dispositivo selecionado, lê características e inicia a configuração do dispositivo.
+     *
+     * @param position Posição do dispositivo BLE selecionado na lista de dispositivos.
+     */
     public void onBLEDevItemClick(int position){
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog();
@@ -256,6 +391,11 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         }
     }
 
+    /**
+     * O método Continue é responsável por continuar o processo de configuração do dispositivo BLE selecionado.
+     * Ele é chamado após o usuário pressionar o botão "Continue" na tela de seleção de dispositivo BLE.
+     * @param position Posição do dispositivo BLE selecionado na lista de dispositivos encontrados.
+     */
     public void Continue(int position){
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog(true);
@@ -436,6 +576,12 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         loadingDialog.dismisDialog();
     }
 
+    /**
+     * Método scanLeDevice() é usado para escanear dispositivos BLE (Bluetooth Low Energy) disponíveis.
+     * Ele mostra uma caixa de diálogo de carregamento enquanto os dispositivos são escaneados. Se o aplicativo não tiver permissão para escanear dispositivos BLE, ele exibirá uma mensagem de erro.
+     * Ele usa a classe BluetoothLeScanner para escanear os dispositivos e uma instância da classe ScanCallback para lidar com os resultados do escaneamento.
+     * Ao encontrar um dispositivo, ele é adicionado à lista de dispositivos encontrados e o adaptador da lista é notificado para atualizar a exibição.
+     */
     private void scanLeDevice() {
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog();
@@ -479,6 +625,12 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         bluetoothLeScanner.startScan(scanCallback);
     }
 
+    /**
+     * Método para ler uma string de um característica Bluetooth Gatt.
+     * @param targetCharacteristic Característica Bluetooth Gatt a ser lida.
+     * @param characteristicName Nome da característica sendo lida.
+     * @return Retorna o valor lido da característica em formato de string.
+     */
     public String readString(BluetoothGattCharacteristic targetCharacteristic, String characteristicName){
         read(targetCharacteristic);
         //        int intValue = targetCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 0);
@@ -495,6 +647,10 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         return null;
     }
 
+    /**
+     * Método para ler um característica Bluetooth Gatt.
+     * @param targetCharacteristic Característica Bluetooth Gatt a ser lida.
+     */
     public void read(BluetoothGattCharacteristic targetCharacteristic) {
         if(!deviceConnectionState){
             connect(selectedDevice);
@@ -532,6 +688,12 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         }
     }
 
+    /**
+     * Método que escreve uma string em uma característica específica do dispositivo conectado via Bluetooth.
+     * @param targetCharacteristic característica do dispositivo a qual a string será escrita.
+     * @param stringValue string a ser escrita na característica.
+     * @param characteristicName nome da característica a qual a string será escrita.
+     */
     public void writeString(BluetoothGattCharacteristic targetCharacteristic, String stringValue, String characteristicName){
         byte[] value = stringValue.getBytes(StandardCharsets.UTF_8);
         write(targetCharacteristic, value);
@@ -542,6 +704,11 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         }
     }
 
+    /**
+     * Método que escreve um valor em uma característica específica do dispositivo conectado via Bluetooth.
+     * @param targetCharacteristic característica do dispositivo a qual o valor será escrito.
+     * @param value valor a ser escrito na característica.
+     */
     public void write(BluetoothGattCharacteristic targetCharacteristic, byte[] value){
         if(!deviceConnectionState){
             connect(selectedDevice);
@@ -587,6 +754,15 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         }
     }
 
+    /**
+     *Método para conectar-se a um dispositivo Bluetooth. Ele exibe uma caixa de diálogo de carregamento com o texto "Conectando ao dispositivo" enquanto tenta conectar-se ao dispositivo.
+     * @param device O dispositivo Bluetooth ao qual deseja-se conectar.
+     * Caso o dispositivo já esteja conectado, o método retorna sem fazer nada.
+     * Verifica se a permissão BLUETOOTH_CONNECT foi concedida, caso contrário, imprime uma mensagem de erro e retorna.
+     * Tenta criar um vínculo entre o dispositivo e o dispositivo do usuário. Se a tentativa falhar, imprime uma mensagem de erro e retorna.
+     * Registra um callback BluetoothGattCallback para gerenciar mudanças de estado na conexão. Caso a conexão seja bem-sucedida, o método discoverServices é chamado.
+     * Caso a conexão seja perdida, uma mensagem Toast é exibida informando o usuário.
+     */
     public void connect(BluetoothDevice device) {
         loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_ConnectingToDevice));
 
@@ -744,6 +920,14 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
 
     }
 
+    /**
+     * Este método é utilizado para converter um UUID (Universally Unique Identifier) em uma string.
+     * Ele primeiramente remove os traços presentes no UUID, depois percorre o código UUID em dois em dois caracteres,
+     * convertendo-os em um valor inteiro hexadecimal e então convertendo este valor inteiro em um caractere.
+     * O resultado é um string com caracteres que representam o UUID original.
+     * @param uuid Uma UUID a ser convertida em string
+     * @return Retorna uma string representando o UUID passado como argumento
+     */
     public String getUUID_toString(UUID uuid){
         String uuidCode = uuid.toString().replace("-", "");
         StringBuilder strUUID = new StringBuilder();

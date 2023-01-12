@@ -42,59 +42,145 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleBLEDevicesAdapter;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
 
+/**
+ * Classe que representa o fragmento Slideshow.
+ * Possui constantes estáticas para os UUIDs dos características do dispositivo, como o tipo de dispositivo,
+ * o nome de anúncio, o código EUI do dispositivo, o código EUI da aplicação, a chave da aplicação,
+ * o nome do servidor BLE e o estado de junção da aplicação TTN. Também possui uma constante para o
+ * estado de configuração do dispositivo e uma constante para o número de operações de configuração.
+ */
 public class SlideshowFragment extends Fragment {
+    /**
+     *  UUID do serviço alvo
+     */
     public static final String TARGET_SERVICE_UUID = "0000000000000001";
+    /**
+     * UUID da característica do tipo de dispositivo
+     */
     public static final String DEVICE_TYPE_CHARACTERISTIC_UUID = "c000000000000001";
+    /**
+     * UUID da característica do nome de anúncio
+     */
     public static final String ADVERT_NAME_CHARACTERISTIC_UUID = "c000000000000002";
+    /**
+     * UUID da característica do código EUI do dispositivo
+     */
     public static final String DEVICE_EUI_CODE_CHARACTERISTIC_UUID = "c000000000000003";
+    /**
+     * UUID da característica do código EUI da aplicação
+     */
     public static final String APP_EUI_CODE_CHARACTERISTIC_UUID = "c000000000000004";
+    /**
+     * UUID da característica da chave da aplicação
+     */
     public static final String APP_KEY_CODE_CHARACTERISTIC_UUID = "c000000000000005";
+    /**
+     * UUID da característica do nome do servidor BLE
+     */
     public static final String BLE_SERVER_NAME_CHARACTERISTIC_UUID = "c000000000000006";
+    /**
+     * UUID da característica do estado de junção da aplicação TTN
+     */
     public static final String TTN_APP_JOIN_STATE_CHARACTERISTIC_UUID = "c000000000000007";
+    /**
+     * UUID da característica do estado de configuração
+     */
     public static final String CONFIGURATION_STATE_CHARACTERISTIC_UUID = "c000000000000008";
 
+    /**
+     * Estado de configuração pronto
+     */
     public static final String CONFIGURATION_READY_STATE = "CONFIGURATION READY";
-
+    /**
+     * Número de operações de configuração
+     */
     public static final int CONFIG_OPERATIONS_NUMBER = 7;
 
-
+    /**
+     * Variáveis de timeout e sleep para as operações de escrita
+     */
     private static final int TIMEOUT = 10;
     private static final int WRITE_TIME_SLEEP = 1;
-
+    /**
+     * Variáveis booleanas para indicar o estado das operações de descobrimento de serviços, leitura e escrita de características
+     * e o estado de conexão com o dispositivo BLE.
+     */
     public boolean discoverServicesSucceed = false;
     public boolean readCharacteristicsSucceed = false;
     public boolean writeCharacteristicsSucceed = false;
     public boolean deviceConnectionState = false;
 
+    /**
+     * Atributo que armazena a instância do adaptador Bluetooth do dispositivo.
+     */
     private BluetoothAdapter bluetoothAdapter;
+    /**
+     * Atributo que armazena uma lista de dispositivos Bluetooth pareados.
+     */
     List<BluetoothDevice> devices;
+    /**
+     * Atributo que armazena uma lista de serviços disponíveis em dispositivos Bluetooth pareados.
+     */
     List<BluetoothGattService> services;
+    /**
+     * Atributo que armazena o dispositivo Bluetooth selecionado pelo usuário.
+     */
     BluetoothDevice selectedDevice;
+    /**
+     * Atributo que armazena o serviço Bluetooth selecionado pelo usuário.
+     */
     BluetoothGattService selectedService;
+    /**
+     * Atributo que armazena a conexão GATT com o dispositivo Bluetooth selecionado.
+     */
     BluetoothGatt gatt;
-
+    /**
+     * Atributo que armazena a referência a um diálogo de carregamento.
+     */
     LoadingDialog loadingDialog;
-
+    /**
+     * Atributo que armazena a referência a um RecyclerView para exibir dispositivos pareados.
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Atributo que armazena a referência ao adapter do RecyclerView que exibe dispositivos pareados.
+     */
     private RecycleBLEDevicesAdapter dAdapter;
 
-
+    /**
+     * Método que é chamado quando a view do fragmento é criada.
+     * @param inflater O objeto LayoutInflater responsável por inflar a view do fragmento.
+     * @param container O container onde a view do fragmento será adicionada.
+     * @param savedInstanceState O estado salvo da instância do fragmento.
+     * @return A view do fragmento inflada.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_slideshow, container, false);
     }
 
+    /**
+     * Método que é chamado quando o fragmento é criado.
+     * @param savedInstanceState O estado salvo da instância do fragmento.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Método que é chamado quando a view do fragmento é destruída.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         MainActivity.addFragmentViseted(FragmentsEnum.SLIDES_HOW_FRAGMENT);
     }
 
+    /**
+     * Método que é chamado quando o fragmento é iniciado.
+     * Ele verifica a disponibilidade do BLE no dispositivo e configura um botão para iniciar a busca de dispositivos BLE.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -181,6 +267,9 @@ public class SlideshowFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    /**
+     * Método que exibe um diálogo de carregamento e o fecha após 5 segundos.
+     */
     public void openLoadingDialog()
     {
         loadingDialog = new LoadingDialog(getActivity());
@@ -195,6 +284,11 @@ public class SlideshowFragment extends Fragment {
         },5000); //You can change this time as you wish
     }
 
+    /**
+     * Método que é chamado quando um item de dispositivo BLE é clicado na lista de dispositivos pareados.
+     * Ele exibe um diálogo de carregamento, seleciona o dispositivo selecionado, conecta-se a ele e exibe suas características.
+     * @param position A posição do item clicado na lista de dispositivos pareados.
+     */
     public void onBLEDevItemClick(int position){
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog();
@@ -338,6 +432,11 @@ public class SlideshowFragment extends Fragment {
         loadingDialog.dismisDialog();
     }
 
+    /**
+     * Método que dá scan aos dispositivos BLE e confirma se tem permissão ou não para o fazer
+     * Adiciona os dispositivos encontrados
+     *
+     */
     private void scanLeDevice() {
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog();
