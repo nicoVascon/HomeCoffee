@@ -189,7 +189,7 @@ public class AddDeviceFragment extends Fragment implements SaveData {
                 newDevChannel = deviceToEdit.getChannel();
                 newDevType = deviceToEdit.getType();
                 newDevMode = (deviceToEdit instanceof Sensor) ? 0 : 1;
-                int selectedDevRoomPosition = HouseManager.getInstance().getRoomIndex(HouseManager.getInstance().searchRoomDevice(deviceToEdit));
+                int selectedDevRoomPosition = HouseManager.getInstance().getRoomIndex(HouseManager.getInstance().searchRoomByDevice(deviceToEdit));
                 bundle.putInt(AddDeviceSelectRoomFragment.RESULT_NEW_DEV_ROOM, selectedDevRoomPosition);
             }
         }

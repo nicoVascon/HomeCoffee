@@ -24,10 +24,13 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
+import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
@@ -100,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 setCurrentUser();
             }
         } else {
-            houseManager = (HouseManager) savedInstanceState.getSerializable("contactos");
+            //houseManager = (HouseManager) savedInstanceState.getSerializable("contactos");
         }
 
         PahoDemo.getInstance().start_mqtt();
@@ -239,7 +242,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         currentFragment = new AddDeviceSelectRoomFragment();
                         break;
                     case DEVICE_DETAILS_FRAGMENT:
-                        currentFragment = new DeviceDetailsFragment();
+                        ArrayList<Device> devicesArrayList = HouseManager.getInstance().getDevices();
+                        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+                            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+                            Room room = HouseManager.getInstance().getRoom(roomPosition);
+                            devicesArrayList = room.getDevices();
+                        }
+                        currentFragment = new DeviceDetailsFragment(devicesArrayList);
                         break;
                     case ADD_DEVICES_SELECT_SENSOR_FRAGMENT:
                         currentFragment = new AddDeviceSelectSensorFragment();

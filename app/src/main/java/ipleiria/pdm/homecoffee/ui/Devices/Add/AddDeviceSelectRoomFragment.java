@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
@@ -28,6 +30,8 @@ import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_ROOM = "RESULT_NEW_DEV_ROOM";
@@ -101,14 +105,25 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
 
     private void edit(){
         if (newDevRoom != null){
-            int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
-            Device selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+            Device selectedDevice = null;
+            ArrayList<Device> deviceArrayList = null;
+            if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+                int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+                Room room = HouseManager.getInstance().getRoom(roomPosition);
+                int devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
+                selectedDevice = room.getDevices().get(devPosition);
+                deviceArrayList = room.getDevices();
+            }else{
+                int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
+                selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+                deviceArrayList = HouseManager.getInstance().getDevices();
+            }
             selectedDevice.setName(newDevName);
             selectedDevice.setChannel(newDevChannel);
             selectedDevice.setType(newDevType);
             selectedDevice.set_Room(newDevRoom);
             ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
-                    replace(R.id.fragment_container, new DeviceDetailsFragment(DeviceDetailsFragment.SETTINGS_TAB_INDEX)).commit();
+                    replace(R.id.fragment_container, new DeviceDetailsFragment(deviceArrayList, DeviceDetailsFragment.SETTINGS_TAB_INDEX)).commit();
             return;
         }
         Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevRoom, Toast.LENGTH_LONG).show();
@@ -160,7 +175,6 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_SELECT_ROOM_FRAGMENT);
     }
 
     @Override

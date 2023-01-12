@@ -73,7 +73,11 @@ public class HomeFragment extends Fragment  {
             @Override
             public void onItemClick(View v, int position){
                 super.onItemClick(v,position);
-                Bundle bundle = new Bundle();
+                Bundle bundle = HouseManager.getBundle();
+                if (bundle == null){
+                    bundle = new Bundle();
+                    HouseManager.setBundle(bundle);
+                }
                 bundle.putInt(RESULT_ROOM_POSITION, position);
                 //((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RoomFragment()).commit();
                 RoomFragment roomFragment = new RoomFragment();
@@ -243,22 +247,4 @@ public class HomeFragment extends Fragment  {
         queue.add(jsonObjectRequest);
 
     }
-/*
-    public void setSendorData(){
-        // Create a new CayenneLPP object with a maximum payload size of 100 bytes
-        CayenneLPP lpp = new CayenneLPP(100);
-
-        // Add a temperature sensor value to the payload
-        lpp.addTemperature(1, 25.5);
-
-        // Add a humidity sensor value to the payload
-        lpp.addRelativeHumidity(2, 50.0);
-
-        // Get the byte array containing the encoded payload
-        byte[] payload = lpp.getBuffer();
-
-        // Send the payload over a LoRaWAN network
-        sendDataOverLoRaWAN(payload);
-    }
-*/
 }

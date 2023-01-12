@@ -30,11 +30,13 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.Map;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
+import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.model.Sensor;
@@ -57,7 +59,7 @@ public class HouseManager implements Serializable , Cloneable{
 
     private User user;
 
-    static final long serialVersionUID = 19L;
+    static final long serialVersionUID = 20L;
 
     private boolean loginMade=FALSE;
 
@@ -135,8 +137,10 @@ public class HouseManager implements Serializable , Cloneable{
         return false;
     }
 
-    public void removeDevice(int pos) {
-        devices.remove(pos);
+    public void removeDevice(int position) {
+        Device device = devices.get(position);
+        HouseManager.getInstance().searchRoomByDevice(device).getDevices().remove(device);
+        devices.remove(position);
     }
 
     public Device getDevice(int pos) {
@@ -194,13 +198,8 @@ public class HouseManager implements Serializable , Cloneable{
     }
 
     public void addInitialDevices() {
-        Room initialRoom;
-        if (!rooms.isEmpty()){
-            initialRoom = rooms.get(0);
-        }else{
-            initialRoom = new Room( "Sala", RoomType.LIVING_ROOM);
-            rooms.add(initialRoom);
-        }
+        Room initialRoom = new Room( "Sala (P/ TESTE)", RoomType.LIVING_ROOM);
+        rooms.add(initialRoom);
 
         Device dev1 = new Actuator(4, "Alarme de Temperatura", DeviceType.TEMPERATURE, initialRoom);
         Device dev2 = new Sensor(3, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
@@ -310,7 +309,129 @@ public class HouseManager implements Serializable , Cloneable{
         this.rooms = rooms;
     }
 
-    public void getUserRooms(RecycleRoomsAdapter adapter, LoadingDialog loadingDialog) {
+//    public void getUserRooms(RecycleRoomsAdapter adapter,LoadingDialog loadingDialog) {
+//        HouseManager.modificable = false;
+//
+//        //If this function is done getting users's rooms or not
+//        ArrayList<Room> rooms_user = new ArrayList<>();
+//        this.devices.clear();
+//        this.sensors.clear();
+//        this.rooms.clear();
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        String userMail = user.getEmail();
+//        CollectionReference usersRef = db.collection("users");
+//        Query query = usersRef.whereEqualTo("User_Email", userMail);
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    QuerySnapshot result = task.getResult();
+//                    if (!result.isEmpty()) {
+//                        DocumentSnapshot userDoc = result.getDocuments().get(0);
+//                        CollectionReference roomsRef = userDoc.getReference().collection("rooms");
+//                        roomsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    ArrayList<Device> receivedSensors = new ArrayList<>();
+//
+//                                    QuerySnapshot roomsSnapshot = task.getResult();
+//                                    for (DocumentSnapshot roomSnapshot : roomsSnapshot) {
+//                                        Map<String, Object> map = roomSnapshot.getData();
+//                                        System.out.println("Map: " + map.toString());
+//                                        String name = (String) map.get("Room_Name");
+//                                        String typeName = (String) map.get("Room_Type");
+//                                        RoomType type = RoomType.valueOf(typeName);
+//                                        Room newRoom = new Room(name, type);
+//                                        ArrayList<Map> devicesMap = (ArrayList<Map>) map.get("Devices");
+//                                        for(Map devMap : devicesMap){
+//                                            Device newDevice = null;
+//
+//                                            String nameDev = (String) devMap.get("name");
+//                                            Long channelDev = (Long) devMap.get("channel");
+//                                            String typeDevName = (String) devMap.get("type");
+//                                            DeviceType typeDev = DeviceType.valueOf(typeDevName);
+//                                            ArrayList<Notification> notifications = (ArrayList<Notification>) devMap.get("notifications");
+//                                            ArrayList<DataPointImpl> dataPoints = (ArrayList<DataPointImpl>) devMap.get("dataPoints");
+//                                            double value = (Double) devMap.get("value");
+//                                            double valueSaved = (Double) devMap.get("valueSaved");
+//                                            boolean connectionState = (Boolean) devMap.get("connectionState");
+//                                            boolean connectionStateSaved = (Boolean) devMap.get("connectionStateSaved");
+//                                            if(devMap.containsKey("associatedSensor")){
+//                                                Map<String, Object> associateSensorMap = (Map<String, Object>) devMap.get("associatedSensor");
+//                                                newDevice = new Actuator(Integer.parseInt(String.valueOf(channelDev)), nameDev, typeDev, newRoom);
+//                                                if(associateSensorMap.containsKey("channel")){
+//                                                    Sensor sensorToAssociate = HouseManager.getInstance().searchSensorByChannel(
+//                                                            (Integer) associateSensorMap.get("channel"));
+//                                                    if(sensorToAssociate == null){
+//                                                        String nameSensorToAssociate = (String) associateSensorMap.get("name");
+//                                                        int channelSensorToAssociate = (Integer) associateSensorMap.get("channel");
+//                                                        String typeSensorToAssociateName = (String) associateSensorMap.get("type");
+//                                                        DeviceType typeSensorToAssociate = DeviceType.valueOf(typeSensorToAssociateName);
+//                                                        ArrayList<Notification> notificationsSensorToAssociate = (ArrayList<Notification>) associateSensorMap.get("notifications");
+//                                                        ArrayList<DataPointImpl> dataPointsSensorToAssociate = (ArrayList<DataPointImpl>) associateSensorMap.get("dataPoints");
+//                                                        double valueSensorToAssociate = (Double) associateSensorMap.get("value");
+//                                                        double valueSavedSensorToAssociate = (Double) associateSensorMap.get("valueSaved");
+//                                                        boolean connectionStateSensorToAssociate = (Boolean) associateSensorMap.get("connectionState");
+//                                                        boolean connectionStateSavedSensorToAssociate = (Boolean) associateSensorMap.get("connectionStateSaved");
+//
+//                                                        sensorToAssociate = new Sensor(channelSensorToAssociate, nameSensorToAssociate, typeSensorToAssociate,
+//                                                                newRoom);
+//                                                        sensorToAssociate.setValue(valueSensorToAssociate);
+//                                                        sensorToAssociate.setValueSaved(valueSavedSensorToAssociate);
+//                                                        sensorToAssociate.setNotifications(notificationsSensorToAssociate);
+//                                                        sensorToAssociate.setDataPoints(dataPointsSensorToAssociate);
+//                                                        sensorToAssociate.setConnectionState(connectionStateSensorToAssociate);
+//                                                        sensorToAssociate.setConnectionStateSaved(connectionStateSavedSensorToAssociate);
+//                                                        HouseManager.getInstance().addDevice(sensorToAssociate);
+//                                                    }
+//                                                    ((Actuator) newDevice).setAssociatedSensor(sensorToAssociate);
+//                                                }
+//                                            }else{
+//                                                newDevice = new Sensor(Integer.parseInt(String.valueOf(channelDev)), nameDev, typeDev, newRoom);
+//                                            }
+//
+//                                            if(newDevice != null){
+//                                                newDevice.setValue(value);
+//                                                newDevice.setValueSaved(valueSaved);
+//                                                newDevice.setNotifications(notifications);
+//                                                newDevice.setDataPoints(dataPoints);
+//                                                newDevice.setConnectionState(connectionState);
+//                                                newDevice.setConnectionStateSaved(connectionStateSaved);
+//                                                HouseManager.getInstance().addDevice(newDevice);
+//                                            }
+//                                        }
+//
+//                                        HouseManager.getInstance().addRoom(newRoom);
+////                                        System.out.println(room.toString());
+////                                        //addRoom(room);
+////                                        rooms_user.add(room);
+//
+//                                    }
+//
+////                                    HouseManager.getInstance().setRooms(rooms_user);
+//                                    HouseManager.getInstance().addInitialDevices();
+//                                    adapter.notifyDataSetChanged();
+//                                    try {
+//                                        loadingDialog.dismisDialog();
+//                                    }catch (Exception e){
+//                                        // Exception Raised when the data downloading finish so fast. Can be ignored.
+//                                    }
+////                                    loadingDialog.dismisDialog();
+//                                    HouseManager.modificable = true;
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//
+//
+//            }
+//
+//        });
+//    }
+
+    public void getUserRooms(RecycleRoomsAdapter adapter,LoadingDialog loadingDialog) {
         //If this function is done getting users's rooms or not
         ArrayList<Room> rooms_user = new ArrayList<>();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -328,26 +449,31 @@ public class HouseManager implements Serializable , Cloneable{
                         roomsRef.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    QuerySnapshot roomsSnapshot = task.getResult();
-                                    for (DocumentSnapshot roomSnapshot : roomsSnapshot) {
-                                        Room room = roomSnapshot.toObject(Room.class);
-                                        System.out.println(room.toString());
-                                        //addRoom(room);
-                                        rooms_user.add(room);
+                                try {
+                                    if (task.isSuccessful()) {
+                                        QuerySnapshot roomsSnapshot = task.getResult();
+                                        for (DocumentSnapshot roomSnapshot : roomsSnapshot) {
+                                            Room room = roomSnapshot.toObject(Room.class);
+                                            System.out.println(room.toString());
+                                            //addRoom(room);
+                                            rooms_user.add(room);
 
-                                    }
+                                        }
 
-                                    HouseManager.getInstance().setRooms(rooms_user);
-                                    HouseManager.getInstance().addInitialDevices();
-                                    adapter.notifyDataSetChanged();
-                                    try {
+                                        HouseManager.getInstance().setRooms(rooms_user);
+                                        HouseManager.getInstance().addInitialDevices();
+                                        adapter.notifyDataSetChanged();
                                         loadingDialog.dismisDialog();
-                                    }catch (Exception e){
-                                        // Exception Raised when the data downloading finish so fast. Can be ignored.
                                     }
-//                                    loadingDialog.dismisDialog();
+                                }catch (Exception e){
+                                    System.out.println("Exception: getUserRooms: " + e.getMessage());
                                 }
+
+//                                HouseManager.getInstance().setRooms(rooms_user);
+//                                HouseManager.getInstance().addInitialDevices();
+//                                adapter.notifyDataSetChanged();
+//                                loadingDialog.dismisDialog();
+
                             }
                         });
                     }
@@ -359,7 +485,8 @@ public class HouseManager implements Serializable , Cloneable{
         });
 
     }
-    public Room searchRoomDevice(Device device){
+
+    public Room searchRoomByDevice(Device device){
 
         for(Room room : rooms){
             ArrayList<Device> devices= room.getDevices();

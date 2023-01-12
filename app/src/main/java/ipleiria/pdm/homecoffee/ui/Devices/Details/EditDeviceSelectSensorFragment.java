@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -19,11 +21,14 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesMiniAdapter;
 import ipleiria.pdm.homecoffee.model.Actuator;
+import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
 public class EditDeviceSelectSensorFragment extends Fragment {
     private RecyclerView mRecyclerView;
@@ -80,8 +85,14 @@ public class EditDeviceSelectSensorFragment extends Fragment {
                                     Toast.makeText(getContext(), getResources().getString(R.string.toastMessage_AssociateSensorFail),
                                             Toast.LENGTH_LONG).show();
                                 }
+                                ArrayList<Device> devicesArrayList = HouseManager.getInstance().getDevices();
+                                if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+                                    int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+                                    Room room = HouseManager.getInstance().getRoom(roomPosition);
+                                    devicesArrayList = room.getDevices();
+                                }
                                 ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
-                                        replace(R.id.fragment_container, new DeviceDetailsFragment(DeviceDetailsFragment.CONTROL_TAB_INDEX)).commit();
+                                        replace(R.id.fragment_container, new DeviceDetailsFragment(devicesArrayList, DeviceDetailsFragment.CONTROL_TAB_INDEX)).commit();
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.txt_no), null)

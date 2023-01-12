@@ -166,7 +166,9 @@ public class AddRoomFragment extends Fragment {
         //room.put("User_Email", userMail);
         room.put("Room_Name", nome);
         room.put("Room_Type", type);
-        room.put("Devices", newRoom.getDevices());
+//        room.put("Devices", newRoom.getDevices());
+        room.put("Sensors", newRoom.getSensors());
+        room.put("Actuators", newRoom.getSensors());
 
 
         CollectionReference usersRef = db.collection("users");

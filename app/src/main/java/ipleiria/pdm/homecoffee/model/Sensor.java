@@ -2,6 +2,7 @@ package ipleiria.pdm.homecoffee.model;
 
 import com.jjoe64.graphview.series.DataPoint;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -9,6 +10,12 @@ import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
 public class Sensor extends Device{
+
+    public Sensor(){
+        this.notifications = new ArrayList<>();
+        this.dataPoints = new ArrayList<>();
+    }
+
     public Sensor(int channel, String name, DeviceType type, Room room) {
         super(channel, name, type, room);
     }

@@ -22,6 +22,8 @@ import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class DeviceSettingsFragment extends Fragment {
     public static boolean editingDevice;
@@ -51,8 +53,16 @@ public class DeviceSettingsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
-        selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+        int devPosition;
+        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+            Room room = HouseManager.getInstance().getRoom(roomPosition);
+            devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
+            selectedDevice = room.getDevices().get(devPosition);
+        }else{
+            devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
+            selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+        }
 
         txt_devName = getView().findViewById(R.id.textView_DeviceName_SettingsFragment);
         txt_devChannel = getView().findViewById(R.id.textView_DeviceChannel_SettingsFragment);
@@ -144,7 +154,7 @@ public class DeviceSettingsFragment extends Fragment {
     }
 
     public void initRoomLayout(){
-        Room devRoom = HouseManager.getInstance().searchRoomDevice(selectedDevice);
+        Room devRoom = HouseManager.getInstance().searchRoomByDevice(selectedDevice);
         if(devRoom == null){
             return;
         }

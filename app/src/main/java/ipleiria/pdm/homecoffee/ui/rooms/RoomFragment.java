@@ -60,6 +60,11 @@ public class RoomFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         MainActivity.addFragmentViseted(FragmentsEnum.ROOM_FRAGMENT);
+
+        // "MainActivity.clearFragmentsVisitedList();" This method is unnecessary due FragmentsEnum.ROOM_FRAGMENT is not
+        // defined in the Backpressed method, so the application will return to the HomeFragment (default).
+        // This implementation is better than clear the FragmentVisited List due keep a user route part.
+        // This Fragment must not be part of the user route.
     }
 
     @Override
@@ -89,9 +94,9 @@ public class RoomFragment extends Fragment {
                     bundle = new Bundle();
                     HouseManager.setBundle(bundle);
                 }
-                bundle.putInt(DevicesFragment.RESULT_DEV_POSITION, position);
+                bundle.putInt(RESULT_DEV_POSITION, position);
                 ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new DeviceDetailsFragment()).commit();
+                        replace(R.id.fragment_container, new DeviceDetailsFragment(devices)).commit();
             }
         };
         mRecyclerView.setAdapter(dAdapter);

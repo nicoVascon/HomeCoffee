@@ -24,6 +24,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectBLEDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Gateaway.GWConfig_BLEDeviceSelectionFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
 public class DevicesFragment extends Fragment {
     public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
@@ -68,7 +69,7 @@ public class DevicesFragment extends Fragment {
                 }
                 bundle.putInt(RESULT_DEV_POSITION, position);
                 ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new DeviceDetailsFragment()).commit();
+                        replace(R.id.fragment_container, new DeviceDetailsFragment(HouseManager.getInstance().getDevices())).commit();
             }
         };
         mRecyclerView.setAdapter(dAdapter);

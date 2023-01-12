@@ -19,7 +19,6 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected boolean connectionState;
     protected boolean connectionStateSaved;
     protected DeviceType type;
-
     protected ArrayList<DataPointImpl> dataPoints;
     protected ArrayList<Notification> notifications;
     protected double value;
@@ -91,12 +90,24 @@ public abstract class Device implements Serializable, Comparable<Device> {
         return value;
     }
 
+    public void setValue(double value) {
+        this.value = value;
+    }
+
     public int getNumNotifications(){
         return notifications.size();
     }
 
     public Notification getNotification(int position){
         return notifications.get(position);
+    }
+
+    public ArrayList<Notification> getNotifications() {
+        return notifications;
+    }
+
+    public void setNotifications(ArrayList<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     public void addNotification(Notification newNotification){
@@ -116,6 +127,10 @@ public abstract class Device implements Serializable, Comparable<Device> {
 
     public ArrayList<DataPointImpl> getDataPoints() {
         return dataPoints;
+    }
+
+    public void setDataPoints(ArrayList<DataPointImpl> dataPoints) {
+        this.dataPoints = dataPoints;
     }
 
     public void addDataPoint(DataPointImpl dataPoint){

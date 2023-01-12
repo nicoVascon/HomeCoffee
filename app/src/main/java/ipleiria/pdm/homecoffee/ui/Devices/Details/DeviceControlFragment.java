@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import org.checkerframework.checker.units.qual.A;
 
+import java.util.ArrayList;
+
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
@@ -23,8 +25,11 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.components.CircleSliderView;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class DeviceControlFragment extends Fragment {
     //public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
@@ -52,8 +57,15 @@ public class DeviceControlFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
-        selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+            Room room = HouseManager.getInstance().getRoom(roomPosition);
+            int devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
+            selectedDevice = room.getDevices().get(devPosition);
+        }else{
+            int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
+            selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+        }
 
         TextView textView_CSDesiredValueLabel = getView().findViewById(R.id.textView_CSDesiredValueLabel);
         circleSlider_valueControl = getView().findViewById(R.id.circleSliderView_valueControler);

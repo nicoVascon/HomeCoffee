@@ -33,7 +33,10 @@ import ipleiria.pdm.homecoffee.adapter.TabAdapter;
 import ipleiria.pdm.homecoffee.components.GraphView_Custom;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class DeviceActivityFragment extends Fragment {
     public static final int MAX_NUM_LABELS = 5;
@@ -72,8 +75,15 @@ public class DeviceActivityFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
-        selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+            Room room = HouseManager.getInstance().getRoom(roomPosition);
+            int devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
+            selectedDevice = room.getDevices().get(devPosition);
+        }else{
+            int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
+            selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+        }
 
         TextView txtNoNotificationsMessage = getView().findViewById(R.id.textViewNoNotificationsMessage);
         if(selectedDevice.getNumNotifications() > 0){

@@ -19,6 +19,8 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.util.ArrayList;
+
 import ipleiria.pdm.homecoffee.Tests.Tab3Fragment;
 import ipleiria.pdm.homecoffee.adapter.TabAdapter;
 import ipleiria.pdm.homecoffee.components.CircleSliderView;
@@ -29,9 +31,11 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
+import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
 public class DeviceDetailsFragment extends Fragment implements SaveData {
     public static final int CONTROL_TAB_INDEX = 0;
@@ -54,11 +58,11 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
             R.drawable.settings_cute_tab_icon
     };
 
-    public DeviceDetailsFragment(){
-        super();
+    public DeviceDetailsFragment(ArrayList<Device> devices){
+        this(devices, 0);
     }
 
-    public DeviceDetailsFragment(int initialTab){
+    public DeviceDetailsFragment(ArrayList<Device> devices, int initialTab){
         super();
         this.initialTab = initialTab;
     }
@@ -82,7 +86,6 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devDetails));
 
 
-
 //        Bundle bundle = HouseManager.getBundle();
 //        if (bundle == null){
 //            bundle = new Bundle();
@@ -90,8 +93,8 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
 //        }
 //        bundle.putInt(DevicesFragment.RESULT_DEV_POSITION, 1);
 
-        viewPager = (ViewPager2) getView().findViewById(R.id.viewPager);
-        tabLayout = (TabLayout) getView().findViewById(R.id.tabLayout);
+        viewPager = getView().findViewById(R.id.viewPager);
+        tabLayout = getView().findViewById(R.id.tabLayout);
         adapter = new TabAdapter(this);
         //adapter.addFragment(new Tab1Fragment(), "Tab 1");
         adapter.addFragment(new DeviceControlFragment(), "Tab 1");
@@ -177,7 +180,14 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
     public void recoverData() {
         Bundle bundle = HouseManager.getBundle();
         int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
-        this.selectedDevice = HouseManager.getInstance().getDevice(selectedDevPosition);
+
+        ArrayList<Device> devicesArrayList = HouseManager.getInstance().getDevices();
+        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+            Room room = HouseManager.getInstance().getRoom(roomPosition);
+            devicesArrayList = room.getDevices();
+        }
+        this.selectedDevice = devicesArrayList.get(selectedDevPosition);
     }
 
     @Override
@@ -188,5 +198,8 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
             return;
         }
         MainActivity.addFragmentViseted(FragmentsEnum.DEVICE_DETAILS_FRAGMENT);
+        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+            HouseManager.getBundle().remove(HomeFragment.RESULT_ROOM_POSITION);
+        }
     }
 }
