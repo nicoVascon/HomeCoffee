@@ -1,5 +1,8 @@
 package ipleiria.pdm.homecoffee.Enums;
 
+/**
+ *Classe Enumerada que representa os fragmentos das telas da aplicação.
+ */
 public enum FragmentsEnum {
     HOME_FRAGMENT,
     GALLERY_FRAGMENT,

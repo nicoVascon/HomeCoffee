@@ -18,13 +18,20 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
-
+/**
+ * Classe adaptador para exibir notificações em um RecyclerView
+ */
 public class RecycleNotificationsAdapter extends RecyclerView.Adapter<RecycleNotificationsAdapter.NotificationsHolder> {
     private HouseManager houseManager;
     private Context context;
     private LayoutInflater mInflater;
     private Device selectedDevice;
 
+
+    /**
+     * Construtor
+     * @param context contexto atual
+     */
     public RecycleNotificationsAdapter(Context context){
         mInflater = LayoutInflater.from(context);
         this.houseManager = HouseManager.getInstance();
@@ -34,20 +41,30 @@ public class RecycleNotificationsAdapter extends RecyclerView.Adapter<RecycleNot
         int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
         this.selectedDevice = HouseManager.getInstance().getDevice(selectedDevPosition);
     }
-
+    /**
+     * Cria uma nova visualização (ou holder) para uma notificação
+     * @param parent ViewGroup pai da visualização criada
+     * @param viewType tipo de visualização a ser criada
+     */
     public RecycleNotificationsAdapter.NotificationsHolder onCreateViewHolder(@NonNull ViewGroup parent, int
             viewType) {
         View mItemView = mInflater.inflate(R.layout.item_notification_layout,parent, false);
         return new NotificationsHolder(mItemView, this);
     }
-
+    /**
+     * Classe interna que representa o holder de uma notificação
+     */
     public class NotificationsHolder extends RecyclerView.ViewHolder {
         public final TextView txtNotificationDate;
         public final TextView txtNotificationDescription;
         public final ImageView imgPhoto;
         public final Button deleteButton;
         final RecycleNotificationsAdapter dAdapter;
-
+        /**
+         * Construtor
+         * @param itemView visualização da notificação
+         * @param adapter adaptador atual
+         */
         public NotificationsHolder(@NonNull View itemView, RecycleNotificationsAdapter adapter) {
             super(itemView);
 
@@ -59,6 +76,11 @@ public class RecycleNotificationsAdapter extends RecyclerView.Adapter<RecycleNot
         }
     }
 
+    /**
+     * Este método é chamado quando um ViewHolder é vinculado à sua posição. Ele atualiza os campos de texto e imagem do ViewHolder com dados da notificação na posição especificada. Ele também adiciona um evento de clique para o botão "excluir" que exclui a notificação na posição especificada.
+     * @param holder O ViewHolder que está sendo vinculado.
+     * @param position A posição da notificação que deve ser exibida no ViewHolder.
+     */
     @Override
     public void onBindViewHolder(@NonNull RecycleNotificationsAdapter.NotificationsHolder holder, int position) {
         Notification currentNotification = this.selectedDevice.getNotification(position);
@@ -78,15 +100,26 @@ public class RecycleNotificationsAdapter extends RecyclerView.Adapter<RecycleNot
 
     }
 
+     /**
+     * Este método é chamado quando o botão "excluir" é clicado. Ele remove a notificação na posição especificada.
+     * @param position A posição da notificação que deve ser excluída.
+     */
+
     public void onDeleteClick(int position){
         selectedDevice.removeNotification(position);
     }
-
+    /**
+     * Este método retorna o número total de notificações do dispositivo selecionado.
+     * @return Número total de notificações do dispositivo selecionado.
+     */
     @Override
     public int getItemCount() {
         return selectedDevice.getNumNotifications();
     }
-
+    /**
+     * Este método retorna o contexto atual.
+     * @return O contexto atual.
+     */
     public Context getContext() {
         return context;
     }

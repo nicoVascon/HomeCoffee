@@ -20,24 +20,44 @@ import java.util.List;
 
 import ipleiria.pdm.homecoffee.R;
 
+/**
+ * Classe adapter para a exibição de abas utilizando FragmentStateAdapter.
+ * Permite adicionar fragmentos e títulos de aba para exibir.
+ */
 public class TabAdapter extends FragmentStateAdapter {
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
+    /**
+     * Construtor.
+     * @param fragment O fragmento base para o qual o adapter é criado.
+     */
     public TabAdapter(Fragment fragment) {
         super(fragment);
     }
+    /**
+     * Adiciona um fragmento e um título de aba.
+     * @param fragment O fragmento a ser adicionado.
+     * @param title O título da aba para o fragmento.
+     */
     public void addFragment(Fragment fragment, String title) {
         mFragmentList.add(fragment);
         mFragmentTitleList.add(title);
     }
-
+    /**
+     * Cria o fragmento para a posição especificada.
+     * @param position A posição para qual o fragmento deve ser criado.
+     * @return O fragmento para a posição especificada.
+     */
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         return mFragmentList.get(position);
     }
 
+    /**
+     * @return O número de itens (fragmentos) no adapter.
+     */
     @Override
     public int getItemCount() {
         return mFragmentList.size();

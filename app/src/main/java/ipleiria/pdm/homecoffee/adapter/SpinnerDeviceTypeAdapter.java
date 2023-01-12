@@ -10,14 +10,27 @@ import android.widget.TextView;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.R;
-
+/**
+ * Classe adapter para o spinner de tipos de dispositivos. Cria a exibição personalizada para cada tipo de dispositivo.
+ */
 public class SpinnerDeviceTypeAdapter extends ArrayAdapter<DeviceType> {
 
-
+    /**
+     * Construtor.
+     * @param context O contexto atual.
+     * @param resource O recurso de layout do spinner.
+     * @param deviceTypes Array de tipos de dispositivos.
+     */
     public SpinnerDeviceTypeAdapter(Context context, int resource, DeviceType[] deviceTypes){
         super(context, resource, deviceTypes);
     }
-
+    /**
+     * Cria a exibição personalizada para um tipo de dispositivo.
+     * @param position Posição do tipo de dispositivo.
+     * @param convertView A visão a ser convertida.
+     * @param parent O grupo pai que contém o spinner.
+     * @return A exibição personalizada para o tipo de dispositivo na posição especificada.
+     */
     public View getCustomView(int position, View convertView, ViewGroup parent){
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View layout = inflater.inflate(R.layout.item_devicetype_layout, parent, false);
@@ -63,12 +76,26 @@ public class SpinnerDeviceTypeAdapter extends ArrayAdapter<DeviceType> {
     }
 
     // It gets a View that displays in the drop down popup the data at the specified position
+    /**
+     * Este método é chamado para obter a exibição personalizada para um item no dropdown do spinner.
+     * @param position Posição do item.
+     * @param convertView A visão a ser convertida.
+     * @param parent O grupo pai que contém o spinner.
+     * @return A exibição personalizada para o item na posição especificada.
+     */
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
         return getCustomView(position, convertView, parent);
     }
 
     // It gets a View that displays the data at the specified position
+    /**
+     * Este método é chamado para obter a exibição personalizada para um item no spinner.
+     * @param position Posição do item.
+     * @param convertView A visão a ser convertida.
+     * @param parent O grupo pai que contém o spinner.
+     * @return A exibição personalizada para o item na posição especificada.
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         return getCustomView(position, convertView, parent);

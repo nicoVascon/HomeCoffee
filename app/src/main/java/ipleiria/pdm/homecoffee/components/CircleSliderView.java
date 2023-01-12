@@ -13,7 +13,23 @@ import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
 
-
+/**
+ * Classe CircleSliderView, estende da View.
+ *
+ * Possui métodos para criar e exibir uma view de um controle deslizante circular.
+ *
+ * Possibilita ajustar cor, tamanho e outras características.
+ *
+ * Possibilita adicionar um listener para detectar mudanças no tempo.
+ *
+ * Utiliza diversas variáveis e objetos do tipo Paint para desenhar elementos gráficos,
+ *
+ * como círculo, linha, botão e números.
+ *
+ * Utiliza variáveis para armazenar informações como posição, tamanho, cor.
+ *
+ * Utiliza variáveis para armazenar informações sobre o estado atual, como ângulo atual.
+ */
 public class CircleSliderView extends View {
     private static final String TAG = "CircleSliderView";
 
@@ -84,19 +100,37 @@ public class CircleSliderView extends View {
 
     private OnTimeChangedListener mListener;
 
+    /**
+     * Construtor da classe CircleSliderView que inicializa o componente com o contexto, atributos e estilo passados como parâmetros.
+     * @param context Contexto da aplicação
+     * @param attrs Atributos para configuração da visualização
+     * @param defStyleAttr Estilo padrão para a visualização
+     */
     public CircleSliderView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initialize();
     }
 
+    /**
+     * Construtor da classe CircleSliderView que inicializa o componente com o contexto e atributos passados como parâmetros.
+     * @param context Contexto da aplicação
+     * @param attrs Atributos para configuração da visualização
+     */
     public CircleSliderView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
+    /**
+     * Construtor da classe CircleSliderView que inicializa o componente com o contexto passado como parâmetro.
+     * @param context Contexto da aplicação
+     */
     public CircleSliderView(Context context) {
         this(context, null);
     }
 
+    /**
+     * Método que inicializa as configurações padrões do componente ou lê os atributos especificados em XML.
+     */
     private void initialize() {
         Log.d(TAG, "initialize");
         // Set default dimension or read xml attributes
@@ -178,7 +212,10 @@ public class CircleSliderView extends View {
         // Solve the target version related to shadow
         // setLayerType(View.LAYER_TYPE_SOFTWARE, null); // use this, when targetSdkVersion is greater than or equal to api 14
     }
-
+    /**
+     * Método responsável por desenhar os elementos gráficos na tela
+     * @param canvas O canvas onde os elementos serão desenhados
+     */
     @Override
     protected void onDraw(Canvas canvas) {
 
@@ -260,6 +297,11 @@ public class CircleSliderView extends View {
         super.onDraw(canvas);
     }
 
+    /**
+     * Este método é usado para calcular a altura da fonte. Ele é usado para ajustar a posição da numeração no círculo.
+     * @param paint objeto Paint com as configurações da fonte usada para desenhar a numeração
+     * @return altura da fonte
+     */
     private float getFontHeight(Paint paint) {
         // FontMetrics sF = paint.getFontMetrics();
         // return sF.descent - sF.ascent;
@@ -268,6 +310,12 @@ public class CircleSliderView extends View {
         return rect.height();
     }
 
+    /**
+     * Este método é chamado quando o usuário interage com o componente através de toques na tela.
+     * Ele é usado para detectar se o usuário está tocando na área do botão de ajuste de tempo, e para calcular o ângulo de ajuste de tempo baseado na posição do toque.
+     * @param event objeto MotionEvent com detalhes sobre o evento de toque
+     * @return true para indicar que o evento foi tratado
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction() & event.getActionMasked()) {
@@ -334,7 +382,12 @@ public class CircleSliderView extends View {
 
     }
 
-
+    /**
+     * Verifica se o evento de clique está dentro do botão circular.
+     * @param x - coordenada x do evento de clique
+     * @param y - coordenada y do evento de clique
+     * @return true se o evento de clique estiver dentro do botão circular, false caso contrário
+     */
     // Whether the down event inside circle button
     private boolean mInCircleButton1(float x, float y) {
         float r = mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine;
@@ -346,6 +399,13 @@ public class CircleSliderView extends View {
         return false;
     }
 
+    /**
+     *
+     * Verifica se o evento de toque ocorreu dentro do botão de circulo.
+     * @param x Coordenada x do evento de toque.
+     * @param y Coordenada y do evento de toque.
+     * @return true se o evento ocorreu dentro do botão de circulo, caso contrário false.
+     */
     // Whether the down event inside circle button
     private boolean mInCircleButton(float x, float y) {
         float r = mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine;
@@ -357,6 +417,13 @@ public class CircleSliderView extends View {
         return false;
     }
 
+
+    /**
+     * Método que utiliza trigonometria para calcular o radiano a partir de coordenadas x e y.
+     * @param x Coordenada x
+     * @param y Coordenada y
+     * @return Radiano calculado.
+     */
     // Use tri to cal radian
     private float getRadian(float x, float y) {
         float alpha = (float) Math.atan((x - mCx) / (mCy - y));
@@ -374,6 +441,12 @@ public class CircleSliderView extends View {
         return alpha;
     }
 
+    /**
+     * Sobrescrita do método onMeasure para garantir que a largura seja igual à altura e calcular
+     * as posições e tamanhos necessários.
+     * @param widthMeasureSpec Espaço disponível para largura
+     * @param heightMeasureSpec Espaço disponível para altura
+     * */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         Log.d(TAG, "onMeasure");
@@ -393,6 +466,10 @@ public class CircleSliderView extends View {
         setMeasuredDimension(width, height);
     }
 
+    /**
+     * Método chamado quando é necessário salvar o estado atual da View. Ele cria um Bundle, adiciona o estado parcelável da super classe e também adiciona o valor atual de mCurrentRadian.
+     * @return Um objeto do tipo {@link Parcelable} contendo o estado atual da View.
+     */
     @Override
     protected Parcelable onSaveInstanceState() {
         Bundle bundle = new Bundle();
@@ -401,6 +478,12 @@ public class CircleSliderView extends View {
         return bundle;
     }
 
+    /**
+     * Método chamado quando é necessário restaurar o estado anterior da View.
+     * Ele verifica se o estado é uma instância de Bundle, se sim, ele recupera o estado parcelável da super classe e o valor de mCurrentRadian.
+     * Caso contrário, ele passa o estado para a super classe.
+     * @param state O estado anterior da View que deve ser restaurado.
+     */
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         if (state instanceof Bundle) {
@@ -413,39 +496,80 @@ public class CircleSliderView extends View {
         super.onRestoreInstanceState(state);
     }
 
+    /**
+     * Método chamado quando o tamanho da View é alterado. Ele chama o método da super classe.
+     * @param w Nova largura da View.
+     * @param h Nova altura da View.
+     * @param oldw Largura anterior da View.
+     * @param oldh Altura anterior da View.
+     */
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
+    /**
+     * Método para definir o listener de mudança de tempo.
+     * @param listener - Ouvinte de mudança de tempo
+     */
     public void setOnTimeChangedListener(OnTimeChangedListener listener) {
         if (null != listener) {
             this.mListener = listener;
         }
     }
 
+    /**
+     * Interface que contém métodos chamados quando a hora é modificada.
+     */
     public interface OnTimeChangedListener {
         double MAX_VALUE = 3600.0;
 
+        /**
+         * Chamado quando o tempo começa a ser modificado
+         * @param starting - O tempo inicial
+         */
         void start(String starting);
 
+        /**
+         * Chamado quando o tempo acaba de ser modificado
+         * @param ending - O tempo final
+         */
         void end(String ending);
 
+        /**
+         * Define o texto com o valor do tempo
+         * @param value - o valor do tempo
+         * @return String - o texto formatado
+         */
         String setText(double value);
     }
 
+    /**
+     * @return Retorna o tempo atual
+     */
     public double getmCurrentTime() {
         return mCurrentTime;
     }
 
+    /**
+     * Atualiza o tempo atual
+     * @param mCurrentTime - novo tempo
+     */
     public void setmCurrentTime(double mCurrentTime) {
         this.mCurrentTime = mCurrentTime;
     }
 
+    /**
+     * @return Retorna o radiano atual
+     */
     public float getmCurrentRadian() {
         return mCurrentRadian;
     }
 
+    /**
+     * Atualiza o radiano atual
+     * @param mCurrentRadian - novo radiano
+     */
     public void setmCurrentRadian(float mCurrentRadian) {
         this.mCurrentRadian = mCurrentRadian;
     }
