@@ -233,7 +233,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                         builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
+                                buttonPressed = true;
                             }
                         });
 

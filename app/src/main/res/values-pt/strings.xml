@@ -109,4 +109,8 @@
     <string name="deviceTypeName_Analog">Analógico</string>
     <string name="txt_MesuredValue">Valor Medido</string>
     <string name="NotificationDescription_NewValue">"Novo Valor Recebido: "</string>
+    <string name="toastMessage_DevicesAddedSuccessfully">" Dispositivos Adicionados com Sucesso"</string>
+    <string name="txt_AlertDialog_AddDevicesTitle">Adicionar Dispositivos</string>
+    <string name="txt_AlertDialog_AddDevices_Part1">"Foram Encontrados "</string>
+    <string name="txt_AlertDialog_AddDevices_Part2">" Deseja adicioná-los?"</string>
 </resources>

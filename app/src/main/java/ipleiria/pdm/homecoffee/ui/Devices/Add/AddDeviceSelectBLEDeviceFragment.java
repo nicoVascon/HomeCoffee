@@ -22,7 +22,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,31 +35,30 @@ import java.util.Random;
 import java.util.UUID;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
-import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleBLEDevicesAdapter;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
+import ipleiria.pdm.homecoffee.model.Actuator;
+import ipleiria.pdm.homecoffee.model.Device;
+import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 
 public class AddDeviceSelectBLEDeviceFragment extends Fragment {
-    public static final String TARGET_SERVICE_UUID = "0000000000000001";
-    public static final String DEVICE_TYPE_CHARACTERISTIC_UUID = "c000000000000001";
-    public static final String ADVERT_NAME_CHARACTERISTIC_UUID = "c000000000000002";
-    public static final String DEVICE_EUI_CODE_CHARACTERISTIC_UUID = "c000000000000003";
-    public static final String APP_EUI_CODE_CHARACTERISTIC_UUID = "c000000000000004";
-    public static final String APP_KEY_CODE_CHARACTERISTIC_UUID = "c000000000000005";
-    public static final String BLE_SERVER_NAME_CHARACTERISTIC_UUID = "c000000000000006";
-    public static final String TTN_APP_JOIN_STATE_CHARACTERISTIC_UUID = "c000000000000007";
-    public static final String CONFIGURATION_STATE_CHARACTERISTIC_UUID = "c000000000000008";
+    public static final String CONFIG_SERVICE_UUID = "00000000-0000-0000-0000-000000000001";
+    public static final String CHANNELS_CONFIG_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000000";
+    public static final String BLE_SERVER_NAME_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000001";
+    public static final String DEVICES_INFO_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000002";
 
-    public static final String CONFIGURATION_READY_STATE = "CONFIGURATION READY";
+    public static final String DEVICE_MODE_SENSOR = "SENSOR";
+    public static final String DEVICE_MODE_ACTUATOR = "ACTUATOR";
 
     public static final int CONFIG_OPERATIONS_NUMBER = 7;
+    public static final int ATTEMPTS_MAX_NUM = 5;
 
-    public static final String RESULT_DEVICE_TYPE = "RESULT_DEVICE_TYPE";
+    public static final String RESULT_BLE_SERVER_NAME = "RESULT_BLE_SERVER_NAME";
     public static final String RESULT_DEVICE_MODE = "RESULT_DEVICE_MODE";
 
 
@@ -150,193 +148,243 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
 
         connect(selectedDevice);
         if (!deviceConnectionState || selectedService == null){
-            loadingDialog.dismisDialog();
+            errorMessage();
             return;
         }
         List<BluetoothGattCharacteristic> characteristics = selectedService.getCharacteristics();
 
-        BluetoothGattCharacteristic deviceTypeCharacteristic = null;
-        for (BluetoothGattCharacteristic characteristic : characteristics) {
-            System.out.println("Characteristic: " + getUUID_toString(characteristic.getUuid()));
-            switch (getUUID_toString(characteristic.getUuid())){
-                case DEVICE_TYPE_CHARACTERISTIC_UUID:
-                    deviceTypeCharacteristic = characteristic;
-                    break;
-            }
-        }
-        if (deviceTypeCharacteristic == null) {
-            System.out.println("Target Device Type characteristic not found");
-        }else{
-            String value = readString(deviceTypeCharacteristic, "Device Type");
-            if (readCharacteristicsSucceed){
-                Bundle bundle = HouseManager.getBundle();
-                if(bundle == null){
-                    bundle = new Bundle();
-                    HouseManager.setBundle(bundle);
-                }
-                String[] valueSplit = value.split(" ");
-                if(valueSplit.length == 2){
-                    bundle.putInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE, DeviceType.valueOf(valueSplit[0]).ordinal());
-                    bundle.putInt(AddDeviceFragment.RESULT_NEW_DEV_MODE, valueSplit[1] == "SENSOR"? 0:1);
-
-                    ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                            replace(R.id.fragment_container, new AddDeviceFragment()).commit();
-                }
-            }
-        }
-
-        loadingDialog.dismisDialog();
-    }
-
-    public void Continue(int position){
-        loadingDialog = new LoadingDialog(getActivity());
-        loadingDialog.startLoadingDialog();
-
-        selectedDevice = devices.get(position);
-
-        connect(selectedDevice);
-        if (!deviceConnectionState || selectedService == null){
-            loadingDialog.dismisDialog();
-            return;
-        }
-        List<BluetoothGattCharacteristic> characteristics = selectedService.getCharacteristics();
-
-        BluetoothGattCharacteristic deviceTypeCharacteristic = null;
-        BluetoothGattCharacteristic advertNameCharacteristic = null;
-        BluetoothGattCharacteristic devEuiCodeCharacteristic = null;
-        BluetoothGattCharacteristic appEuiCodeCharacteristic = null;
-        BluetoothGattCharacteristic appKeyCodeCharacteristic = null;
+        BluetoothGattCharacteristic channelsConfigCharacteristic = null;
         BluetoothGattCharacteristic bleServerNameCharacteristic = null;
-        BluetoothGattCharacteristic ttnAppJoinStateCharacteristic = null;
-        BluetoothGattCharacteristic configurationStateCharacteristic = null;
+        BluetoothGattCharacteristic devicesInfoCharacteristic = null;
         for (BluetoothGattCharacteristic characteristic : characteristics) {
             System.out.println("Characteristic: " + getUUID_toString(characteristic.getUuid()));
-            switch (getUUID_toString(characteristic.getUuid())){
-                case DEVICE_TYPE_CHARACTERISTIC_UUID:
-                    deviceTypeCharacteristic = characteristic;
-                    break;
-                case ADVERT_NAME_CHARACTERISTIC_UUID:
-                    advertNameCharacteristic = characteristic;
-                    break;
-                case DEVICE_EUI_CODE_CHARACTERISTIC_UUID:
-                    devEuiCodeCharacteristic = characteristic;
-                    break;
-                case APP_EUI_CODE_CHARACTERISTIC_UUID:
-                    appEuiCodeCharacteristic = characteristic;
-                    break;
-                case APP_KEY_CODE_CHARACTERISTIC_UUID:
-                    appKeyCodeCharacteristic = characteristic;
+            System.out.println("\t" + characteristic.getUuid().toString());
+            switch (characteristic.getUuid().toString()){
+                case CHANNELS_CONFIG_CHARACTERISTIC_UUID:
+                    channelsConfigCharacteristic = characteristic;
                     break;
                 case BLE_SERVER_NAME_CHARACTERISTIC_UUID:
                     bleServerNameCharacteristic = characteristic;
                     break;
-                case TTN_APP_JOIN_STATE_CHARACTERISTIC_UUID:
-                    ttnAppJoinStateCharacteristic = characteristic;
-                    break;
-                case CONFIGURATION_STATE_CHARACTERISTIC_UUID:
-                    configurationStateCharacteristic = characteristic;
+                case DEVICES_INFO_CHARACTERISTIC_UUID:
+                    devicesInfoCharacteristic = characteristic;
                     break;
             }
         }
 
-        int configOperationsCounter = 0;
-        if (deviceTypeCharacteristic == null) {
-            System.out.println("Target Device Type characteristic not found");
-        }else{
-            String value = readString(deviceTypeCharacteristic, "Device Type");
-            if (readCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
-        }
 
-        if (advertNameCharacteristic == null) {
-            System.out.println("Target Advertising Name characteristic not found");
-        }else{
-            String stringValue = "Oiii BLE";
-            writeString(advertNameCharacteristic, stringValue, "Advertising Name");
-            if (writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
-        }
+        int attemptsNum = 0;
 
-        String devEuiCode = null;
-        if (devEuiCodeCharacteristic == null) {
-            System.out.println("Target Device Eui Code characteristic not found");
-        }else{
-            devEuiCode = readString(devEuiCodeCharacteristic, "Device Eui Code");
-            if (readCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
-        }
-
-        if (appEuiCodeCharacteristic == null) {
-            System.out.println("Target App Eui Code characteristic not found");
-        }else{
-            String stringValue = "0000000000000111";
-            writeString(appEuiCodeCharacteristic, stringValue, "App Eui Code");
-            if (writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
-        }
-
-        if (appKeyCodeCharacteristic == null) {
-            System.out.println("Target App Key Code characteristic not found");
-        }else{
-            String stringValue = "abc0000000000111";
-            writeString(appKeyCodeCharacteristic, stringValue, "App Key Code");
-            if(writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
-        }
-
-        String gatewayName = null;
         if (bleServerNameCharacteristic == null) {
             System.out.println("Target BLE Server Name characteristic not found");
+            errorMessage();
+            return;
         }else{
-            Random random = new Random();
-            gatewayName = "GATEWAY#" + random.nextInt(MAX_RANDOM_INTEGER);
-            writeString(bleServerNameCharacteristic, gatewayName, "BLE Server Name");
-            if(writeCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
+            attemptsNum = 0;
+            String bleServerName = null;
+            do{
+                attemptsNum++;
+                try{
+                    bleServerName = readString(devicesInfoCharacteristic, "Devices Information");
+                } catch (Exception e) {
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (bleServerName == null && attemptsNum < ATTEMPTS_MAX_NUM);
+            HouseManager.addString_send_ttn(1, "RESULT_BLE_SERVER_NAME:" + bleServerName);
         }
 
-        if (ttnAppJoinStateCharacteristic == null) {
-            System.out.println("Target TTN App Join State characteristic not found");
+        String value = null;
+        if (devicesInfoCharacteristic == null) {
+            System.out.println("Target Devices Information characteristic not found");
+            errorMessage();
+            return;
         }else{
-            String value = readString(ttnAppJoinStateCharacteristic, "TTN App Join State");
-            if(readCharacteristicsSucceed){
-                configOperationsCounter++;
-            }
+            attemptsNum = 0;
+            do{
+                attemptsNum++;
+                try{
+                    value = readString(devicesInfoCharacteristic, "Devices Information");
+                } catch (Exception e) {
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (value == null && attemptsNum < ATTEMPTS_MAX_NUM);
         }
 
-        if (configurationStateCharacteristic == null) {
-            System.out.println("Target Configuration State State characteristic not found");
+        if(!readCharacteristicsSucceed){
+            errorMessage();
+            return;
+        }
+
+        String[] devicesDescriptions = value.split(",");
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                new AlertDialog.Builder(getContext())
+                        .setTitle(getResources().getString(R.string.txt_AlertDialog_AddDevicesTitle))
+                        .setMessage(getResources().getString(R.string.txt_AlertDialog_AddDevices_Part1) +
+                                devicesDescriptions.length + getResources().getString(R.string.txt_DevicesFragTitle) +
+                                "\n\n" +
+                                getResources().getString(R.string.txt_AlertDialog_AddDevices_Part2))
+                        .setPositiveButton(getResources().getString(R.string.txt_yes), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                continuePressed = true;
+                                buttonPressed = true;
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.txt_no), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                buttonPressed = true;
+                            }
+                        })
+                        .setIcon(R.drawable.link_icon)
+                        .show();
+            }
+        });
+
+        try {
+            while(!buttonPressed){
+                Thread.sleep(1);
+            }
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage());
+        }
+
+        if(!continuePressed){
+            errorMessage();
+            return;
+        }
+
+        StringBuilder channelsConfig = new StringBuilder();
+        int nextChannelAvailable = HouseManager.getInstance().getDevices().size();
+
+        for(int i = nextChannelAvailable; i < nextChannelAvailable + devicesDescriptions.length; i++){
+            channelsConfig.append(i + ",");
+        }
+
+        if (channelsConfigCharacteristic == null) {
+            System.out.println("Target Channels Configuration characteristic not found");
+            errorMessage();
+            return;
         }else{
-            String value = readString(configurationStateCharacteristic, "Configuration State");
-            int configOperationsCounter_temp = configOperationsCounter;
-            String GateWayName = gatewayName;
-            String GateWayEuiCode = devEuiCode;
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if(value.equals(CONFIGURATION_READY_STATE) && configOperationsCounter_temp == CONFIG_OPERATIONS_NUMBER){
+            do{
+                attemptsNum++;
+                try {
+                    writeString(bleServerNameCharacteristic, channelsConfig.toString(), "Advertising Name");
+                }catch (Exception e){
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (!writeCharacteristicsSucceed && attemptsNum < ATTEMPTS_MAX_NUM);
+        }
+
+        if(!writeCharacteristicsSucceed){
+            errorMessage();
+            return;
+        }
+
+        int numSuccessfullyAddedDevices = 0;
+        for (String devDescrip : devicesDescriptions){
+            String[] descripValues = devDescrip.split(":");
+            if(descripValues.length < 2){
+                continue;
+            }
+
+            Device newDevice = null;
+
+            String devTypeName = null;
+
+            DeviceType devType = DeviceType.searchByAcronym(descripValues[0]);
+            if(devType == null){
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
                         Toast.makeText(getContext(),
-                                getResources().getString(R.string.toastMessage_BLEDeviceConfigurationSucceeded),
-                                Toast.LENGTH_LONG).show();
-                        HouseManager.getInstance().setGatewayBLEServerName(GateWayName);
-                        HouseManager.getInstance().setGatewayBLEServerDevEuiCode(GateWayEuiCode);
-                        ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
-                                replace(R.id.fragment_container, new DevicesFragment()).commit();
-                    }else{
-                        Toast.makeText(getContext(),
-                                getResources().getString(R.string.toastMessage_BLEDeviceConfigurationError),
+                                getResources().getString(R.string.toastMessage_AddDeviceFail),
                                 Toast.LENGTH_LONG).show();
                     }
+                });
+                continue;
+            }
+            String principalDevMode = descripValues[1];
+            Random random = new Random();
+            if(principalDevMode.equals(DEVICE_MODE_SENSOR)){
+                newDevice = new Sensor(
+                        nextChannelAvailable,
+                        "DEVICE #" + random.nextInt(1000),
+                        devType,
+                        HouseManager.getInstance().getRoom(0));
+            }else if (principalDevMode.equals(DEVICE_MODE_ACTUATOR)){
+                newDevice = new Actuator(
+                        nextChannelAvailable,
+                        "DEVICE #" + random.nextInt(1000),
+                        devType,
+                        HouseManager.getInstance().getRoom(0));
+                if(descripValues.length == 3){
+                    String auxDevMode = descripValues[2];
+                    if(auxDevMode.equals(DEVICE_MODE_SENSOR)){
+                        Sensor auxSensor = new Sensor(
+                                nextChannelAvailable,
+                                "DEVICE #" + random.nextInt(1000),
+                                devType,
+                                HouseManager.getInstance().getRoom(0));
+                        ((Actuator) newDevice).setAssociatedSensor(auxSensor);
+
+                        if(HouseManager.getInstance().addDevice(auxSensor)){
+                            numSuccessfullyAddedDevices++;
+                        }else{
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getContext(),
+                                            getResources().getString(R.string.toastMessage_AssociateSensorFail),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }
                 }
-            });
+            }
+            if(HouseManager.getInstance().addDevice(newDevice)){
+                numSuccessfullyAddedDevices++;
+            }else{
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getContext(),
+                                getResources().getString(R.string.toastMessage_AddDeviceFail),
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            nextChannelAvailable++;
         }
 
+        final int numSuccessfullyAddedDevices_Temp = numSuccessfullyAddedDevices;
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), numSuccessfullyAddedDevices_Temp +
+                                getResources().getString(R.string.toastMessage_DevicesAddedSuccessfully),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
+
+        loadingDialog.dismisDialog();
+        ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
+                replace(R.id.fragment_container, new DevicesFragment()).commit();
+    }
+
+    private void errorMessage(){
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(),
+                        getResources().getString(R.string.toastMessage_BLEDeviceConfigurationError),
+                        Toast.LENGTH_LONG).show();
+            }
+        });
         loadingDialog.dismisDialog();
     }
 
@@ -626,10 +674,12 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
             str.append("\nUUID Received: " + service.getUuid().toString());
             String strUUID = getUUID_toString(service.getUuid());
             str.append("\n" + strUUID);
-            if (strUUID.equals(TARGET_SERVICE_UUID)){
+            if (strUUID.equals(CONFIG_SERVICE_UUID) || service.getUuid().toString().equals(CONFIG_SERVICE_UUID)){
                 selectedService = service;
             }
         }
+
+        System.out.println(str.toString());
 
         if (selectedService == null) {
             System.out.println("Target service not found");
