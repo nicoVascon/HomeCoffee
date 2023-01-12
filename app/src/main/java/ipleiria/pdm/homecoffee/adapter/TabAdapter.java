@@ -25,7 +25,13 @@ import ipleiria.pdm.homecoffee.R;
  * Permite adicionar fragmentos e títulos de aba para exibir.
  */
 public class TabAdapter extends FragmentStateAdapter {
+    /**
+     * Lista de fragmentos que serão exibidos na tab.
+     */
     private final List<Fragment> mFragmentList = new ArrayList<>();
+    /**
+     * Lista dos títulos dos fragmentos.
+     */
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
     /**

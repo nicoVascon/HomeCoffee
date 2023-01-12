@@ -8,8 +8,16 @@ import android.os.Handler;
 
 import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
 
+/**
+ * Classe responsável por iniciar a Activity do SplashScreen
+ */
 public class SplashActivity extends AppCompatActivity {
-
+    /**
+     * Método chamado quando a activity é criada.
+     *
+     * Ele esconde a barra de ação e inicia um temporizador para o fechamento da tela
+     * @param savedInstanceState - estado salvo da activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

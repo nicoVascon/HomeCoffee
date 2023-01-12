@@ -31,13 +31,25 @@ import android.view.View;
  * Utiliza variáveis para armazenar informações sobre o estado atual, como ângulo atual.
  */
 public class CircleSliderView extends View {
+    /**
+     * TAG é uma string estática que é usada para debugar a classe.
+     */
     private static final String TAG = "CircleSliderView";
 
     // Status
+    /**
+     * INSTANCE_STATUS é uma string estática que é usada para salvar o status da instância da classe.
+     */
     private static final String INSTANCE_STATUS = "instance_status";
+    /**
+     * STATUS_RADIAN é uma string estática que é usada para salvar o ângulo radiano atual do controlador de tempo.
+     */
     private static final String STATUS_RADIAN = "status_radian";
 
     // Default dimension in dp/pt
+    /**
+     * Dimensões da CircleSliderView
+     */
     private static final float DEFAULT_GAP_BETWEEN_CIRCLE_AND_LINE = 30;
     private static final float DEFAULT_NUMBER_SIZE = 10;
     private static final float DEFAULT_LINE_WIDTH = 0.5f;
@@ -46,6 +58,9 @@ public class CircleSliderView extends View {
     private static final float DEFAULT_TIMER_NUMBER_SIZE = 38;
     private static final float DEFAULT_TIMER_TEXT_SIZE = 18;
 
+    /**
+     * Cores da CircleSliderView
+     */
     // Default color
     private static final int DEFAULT_CIRCLE_COLOR = 0xFFE9E2D9;
     private static final int DEFAULT_CIRCLE_BUTTON_COLOR = 0xFFFFFFFF;
@@ -56,6 +71,9 @@ public class CircleSliderView extends View {
     private static final int DEFAULT_TIMER_COLON_COLOR = 0xFFFA7777;
     private static final int DEFAULT_TIMER_TEXT_COLOR = 0x99F0F9FF;
 
+    /**
+     * Atributos relacionados a desenho do componente
+     */
     // Paint
     private Paint mCirclePaint;
     private Paint mHighlightLinePaint;
@@ -65,7 +83,9 @@ public class CircleSliderView extends View {
     private Paint mTimerNumberPaint;
     private Paint mTimerTextPaint;
     private Paint mTimerColonPaint;
-
+    /**
+     * Atributos relacionados às dimensões do componente
+     */
     // Dimension
     private float mGapBetweenCircleAndLine;
     private float mNumberSize;
@@ -75,6 +95,9 @@ public class CircleSliderView extends View {
     private float mTimerNumberSize;
     private float mTimerTextSize;
 
+    /**
+     * Atributos relacionados ás cores do componente
+     */
     // Color
     private int mCircleColor;
     private int mCircleButtonColor;
@@ -83,7 +106,9 @@ public class CircleSliderView extends View {
     private int mNumberColor;
     private int mTimerNumberColor;
     private int mTimerTextColor;
-
+    /**
+     * Atributos relacionados aos parâmetros do componente
+     */
     // Parameters
     private float mCx;
     private float mCy;
@@ -97,7 +122,9 @@ public class CircleSliderView extends View {
     private double mCurrentTime; // seconds
 
 
-
+    /**
+     * Interface para notificar quando a hora atual do cronômetro é alterada.
+     */
     private OnTimeChangedListener mListener;
 
     /**

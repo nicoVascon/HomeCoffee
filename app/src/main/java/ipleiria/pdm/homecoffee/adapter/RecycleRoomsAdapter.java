@@ -23,10 +23,21 @@ import ipleiria.pdm.homecoffee.model.Room;
  * Classe adapter para RecyclerView para exibir quartos em uma lista. Utiliza o singleton HouseManager para obter informações sobre quartos.
  */
 public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapter.RoomsHolder>{
+    /**
+     * Variável houseManager é responsável por armazenar a instância de HouseManager para obtenção dos dados dos quartos.
+     */
     private HouseManager houseManager;
+    /**
+     * Variável context é responsável por armazenar o contexto da aplicação.
+     */
     private Context context;
+    /**
+     * Variável mInflater é responsável por armazenar a instância de LayoutInflater para inflar as Views de cada quarto.
+     */
     private LayoutInflater mInflater;
-
+    /**
+     * Variável lastSelectedItemView é responsável por armazenar a View do último item selecionado na lista de quartos.
+     */
     private View lastSelectedItemView;
     /**
      * Construtor. Inicializa as variáveis de instância.

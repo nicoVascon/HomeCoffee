@@ -22,9 +22,21 @@ import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
  * Classe adaptador para exibir notificações em um RecyclerView
  */
 public class RecycleNotificationsAdapter extends RecyclerView.Adapter<RecycleNotificationsAdapter.NotificationsHolder> {
+    /**
+     * Instância da classe HouseManager, que gerencia as informações da casa.
+     */
     private HouseManager houseManager;
+    /**
+     * Contexto da aplicação.
+     */
     private Context context;
+    /**
+     * Instância da classe LayoutInflater, que é utilizada para inflar layouts.
+     */
     private LayoutInflater mInflater;
+    /**
+     * Dispositivo selecionado para exibição das notificações.
+     */
     private Device selectedDevice;
 
 

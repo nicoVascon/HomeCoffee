@@ -23,9 +23,21 @@ import ipleiria.pdm.homecoffee.model.Sensor;
  * @param <D> extensão para os Devices
  */
 public class RecycleDevicesMiniAdapter<D extends Device> extends RecyclerView.Adapter<RecycleDevicesMiniAdapter.DevicesHolder> {
-    private HouseManager gestorContactos;
+    /**
+     * HouseManager é um objeto que gerencia a casa e seus dispositivos.
+     */
+    private HouseManager houseManager;
+    /**
+     * Context é o contexto da aplicação.
+     */
     private Context context;
+    /**
+     * LayoutInflater é um objeto usado para inflar layouts.
+     */
     private LayoutInflater mInflater;
+    /**
+     * ArrayList<D> é uma lista de objetos do tipo D que estende a classe Device.
+     */
     private ArrayList<D> itemsList;
 
     /**
@@ -35,7 +47,7 @@ public class RecycleDevicesMiniAdapter<D extends Device> extends RecyclerView.Ad
      */
     public RecycleDevicesMiniAdapter(Context context, ArrayList<D> itemsList){
         mInflater = LayoutInflater.from(context);
-        this.gestorContactos = HouseManager.getInstance();
+        this.houseManager = HouseManager.getInstance();
         this.context=context;
         this.itemsList = itemsList;
     }

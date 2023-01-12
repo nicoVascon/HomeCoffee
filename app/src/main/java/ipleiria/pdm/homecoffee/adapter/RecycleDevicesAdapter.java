@@ -31,11 +31,29 @@ import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
  *
  */
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
+    /**
+     * Atributo que contém a instância do objeto que gerencia as casas.
+     */
     private HouseManager houseManager;
+    /**
+     * Atributo que contém a instância do objeto contexto da aplicação.
+     */
     private Context context;
+    /**
+     * Atributo que contém a instância do objeto que é responsável por inflar os layouts de itens de lista.
+     */
     private LayoutInflater mInflater;
+    /**
+     * Atributo que contém a instância do fragmento de dispositivos.
+     */
     private DevicesFragment devicesFragment;
+    /**
+     * Atributo que contém a instância do fragmento de quartos.
+     */
     private RoomFragment roomFragment;
+    /**
+     * Atributo que contém uma lista de objetos do tipo Device.
+     */
     private ArrayList<Device> devices;
     /**
      * Construtor para a classe RecycleDevicesAdapter, ele é usado no DevicesFragment
