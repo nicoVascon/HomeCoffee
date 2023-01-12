@@ -93,7 +93,7 @@ public class DeviceActivityFragment extends Fragment {
         }
 
         mRecyclerView = getView().findViewById(R.id.recyclerViewNotifications);
-        dAdapter = new RecycleNotificationsAdapter(this.getContext()){
+        dAdapter = new RecycleNotificationsAdapter(this.getContext(), selectedDevice){
             @Override
             public void onDeleteClick(int position) {
                 super.onDeleteClick(position);

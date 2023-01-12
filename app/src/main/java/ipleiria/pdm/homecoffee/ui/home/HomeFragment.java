@@ -99,9 +99,12 @@ public class HomeFragment extends Fragment  {
 
         getSensorData();
 
-
         LoadingDialog loadingDialog = new LoadingDialog(this.getActivity());
-        loadingDialog.startLoadingDialog();
+        try {
+            loadingDialog.startLoadingDialog();
+        }catch (Exception e){
+            // The dialog may be already showed
+        }
         loadingDialog.setMainText("Getting rooms...");
         houseManager.getUserRooms(mAdapter,loadingDialog);
 

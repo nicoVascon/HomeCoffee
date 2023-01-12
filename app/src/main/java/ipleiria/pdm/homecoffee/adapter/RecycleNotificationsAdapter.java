@@ -20,19 +20,15 @@ import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 public class RecycleNotificationsAdapter extends RecyclerView.Adapter<RecycleNotificationsAdapter.NotificationsHolder> {
-    private HouseManager houseManager;
     private Context context;
     private LayoutInflater mInflater;
     private Device selectedDevice;
 
-    public RecycleNotificationsAdapter(Context context){
+    public RecycleNotificationsAdapter(Context context, Device selectedDevice){
         mInflater = LayoutInflater.from(context);
-        this.houseManager = HouseManager.getInstance();
         this.context=context;
 
-        Bundle bundle = HouseManager.getBundle();
-        int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
-        this.selectedDevice = HouseManager.getInstance().getDevice(selectedDevPosition);
+        this.selectedDevice = selectedDevice;
     }
 
     public RecycleNotificationsAdapter.NotificationsHolder onCreateViewHolder(@NonNull ViewGroup parent, int
