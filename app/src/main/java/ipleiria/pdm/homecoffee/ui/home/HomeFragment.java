@@ -45,7 +45,6 @@ import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 public class HomeFragment extends Fragment  {
     public static final String RESULT_ROOM_POSITION = "RESULT_ROOM_POSITION";
     //private FragmentHomeBinding binding;
-    private HouseManager houseManager;
     private RecyclerView mRecyclerView;
     private RecycleRoomsAdapter mAdapter;
     private TextView textViewTemp;
@@ -62,14 +61,11 @@ public class HomeFragment extends Fragment  {
     @Override
     public void onStart() {
         super.onStart();
-        Context context = this.getActivity();
-        houseManager = HouseManager.getInstance();
         MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.app_name));
 
         mRecyclerView = getView().findViewById(R.id.RecyclerViewMain);
         mAdapter = new RecycleRoomsAdapter(this.getActivity()){
-
             @Override
             public void onItemClick(View v, int position){
                 super.onItemClick(v,position);
@@ -82,8 +78,8 @@ public class HomeFragment extends Fragment  {
                 //((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RoomFragment()).commit();
                 RoomFragment roomFragment = new RoomFragment();
                 roomFragment.setArguments(bundle);
-                ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, roomFragment).commit();
-
+                ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                        replace(R.id.fragment_container, roomFragment).commit();
             }
         };
         mRecyclerView.setAdapter(mAdapter);
@@ -97,17 +93,43 @@ public class HomeFragment extends Fragment  {
             }
         });
 
-        getSensorData();
+        //getSensorData();
 
-        LoadingDialog loadingDialog = new LoadingDialog(this.getActivity());
-        try {
-            loadingDialog.startLoadingDialog();
-        }catch (Exception e){
-            // The dialog may be already showed
-        }
-        loadingDialog.setMainText("Getting rooms...");
-        houseManager.getUserRooms(mAdapter,loadingDialog);
 
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+                loadingDialog.startLoadingDialog();
+                try {
+//            loadingDialog.startLoadingDialog();
+                }catch (Exception e){
+                    System.out.println("Exception: " +e.getCause());
+                    // The dialog may be already showed
+                }
+                loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_GettingRooms));
+                while (!HouseManager.userRoomsRefGotten){
+                    try {
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                HouseManager.getInstance().getUserRooms(mAdapter,loadingDialog);
+            }
+        });
+        thread.start();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

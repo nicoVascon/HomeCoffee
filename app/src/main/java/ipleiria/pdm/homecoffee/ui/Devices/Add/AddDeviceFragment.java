@@ -10,9 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
@@ -20,6 +18,7 @@ import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
+import ipleiria.pdm.homecoffee.adapter.SpinnerDeviceTypeAdapter;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
@@ -32,11 +31,11 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     public static final String RESULT_NEW_DEV_TYPE = "RESULT_NEW_DEV_TYPE";
     public static final String RESULT_NEW_DEV_MODE = "RESULT_NEW_DEV_MODE";
 
+    private Spinner deviceTypeSpinner;
     private Spinner deviceModeSpinner;
     private Button btn_next;
     private EditText editTextNewDevName;
-    private TextView txt_devTypeName;
-    private ImageView imageView_devType;
+    private EditText editTextNewDevChannel;
 
     private String newDevName;
     private int newDevChannel;
@@ -47,7 +46,6 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         recoverData();
-
         return inflater.inflate(R.layout.fragment_add_device, container, false);
     }
 
@@ -61,13 +59,11 @@ public class AddDeviceFragment extends Fragment implements SaveData {
             MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
         }
 
+        deviceTypeSpinner = getView().findViewById(R.id.deviceType_spinner);
         deviceModeSpinner = getView().findViewById(R.id.deviceMode_spinner);
         btn_next = getView().findViewById(R.id.button_devNextAdd);
         editTextNewDevName = getView().findViewById(R.id.editTextDevNameAdd);
-
-        View deviceTypeLayout = getView().findViewById(R.id.DeviceTypeLayout);
-        txt_devTypeName = deviceTypeLayout.findViewById(R.id.textViewDeviceName_spinner);
-        imageView_devType = deviceTypeLayout.findViewById(R.id.imageViewDeviceTypePhoto_spinner);
+        editTextNewDevChannel = getView().findViewById(R.id.editTextDevChannelAdd);
 
         btn_next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,9 +72,9 @@ public class AddDeviceFragment extends Fragment implements SaveData {
             }
         });
 
-//        SpinnerDeviceTypeAdapter adapter = new SpinnerDeviceTypeAdapter(this.getContext(),
-//                R.layout.item_devicetype_layout, DeviceType.values());
-//        deviceTypeSpinner.setAdapter(adapter);
+        SpinnerDeviceTypeAdapter adapter = new SpinnerDeviceTypeAdapter(this.getContext(),
+                R.layout.item_devicetype_layout, DeviceType.values());
+        deviceTypeSpinner.setAdapter(adapter);
         String[] deviceModeNames = {getContext().getResources().getString(R.string.devModeSpinner_Sensor),
                                     getContext().getResources().getString(R.string.devModeSpinner_Actuator)};
         ArrayAdapter<String> devModeArrayAdapter = new ArrayAdapter<>(this.getContext(),
@@ -86,25 +82,23 @@ public class AddDeviceFragment extends Fragment implements SaveData {
         deviceModeSpinner.setAdapter(devModeArrayAdapter);
 
         editTextNewDevName.setText(newDevName);
-//        editTextNewDevChannel.setText(String.valueOf(newDevChannel));
-//        deviceTypeSpinner.setSelection(newDevType.ordinal());
+        editTextNewDevChannel.setText(String.valueOf(newDevChannel));
+        deviceTypeSpinner.setSelection(newDevType.ordinal());
         deviceModeSpinner.setSelection(newDevMode);
-
-        initDevTypeLayout();
     }
 
     private void next(){
         newDevName = editTextNewDevName.getText().toString().trim();
-//        String newDevChannelAsString = editTextNewDevChannel.getText().toString();
+        String newDevChannelAsString = editTextNewDevChannel.getText().toString();
 
         if (newDevName.isEmpty()){
             Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevName, Toast.LENGTH_LONG).show();
             return;
         }
-//        if (newDevChannelAsString.isEmpty()){
-//            Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevChannel, Toast.LENGTH_LONG).show();
-//            return;
-//        }
+        if (newDevChannelAsString.isEmpty()){
+            Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevChannel, Toast.LENGTH_LONG).show();
+            return;
+        }
         saveData();
 
         if(deviceModeSpinner.getSelectedItemPosition() == 0) {
@@ -117,45 +111,23 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
+    public void onPause() {
+        super.onPause();
+        saveData();
     }
 
-    public void initDevTypeLayout(){
-
-        switch (newDevType){
-            case HUMIDITY:
-                imageView_devType.setImageResource(R.drawable.humiditysensor);
-                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Humidity));
-                break;
-            case TEMPERATURE:
-                imageView_devType.setImageResource(R.drawable.temperaturesensor);
-                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Temperature));
-                break;
-            case LUMINOSITY:
-                imageView_devType.setImageResource(R.drawable.lightsensor);
-                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Light));
-                break;
-            case ACCELERATION:
-                imageView_devType.setImageResource(R.drawable.accelerationsensor);
-                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Acceleration));
-                break;
-            case PRESSURE:
-                imageView_devType.setImageResource(R.drawable.preassuresensor);
-                txt_devTypeName.setText(getContext().getResources().getString(R.string.deviceTypeName_Pressure));
-                break;
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
     }
 
     @Override
     public void saveData() {
         newDevName = editTextNewDevName.getText().toString().trim();
-//        String newDevChannelAsString = editTextNewDevChannel.getText().toString();
-        String newDevChannelAsString = "";
+        String newDevChannelAsString = editTextNewDevChannel.getText().toString();
         newDevChannel = newDevChannelAsString.isEmpty() ? 0: Integer.parseInt(newDevChannelAsString);
-//        newDevType = (DeviceType) deviceTypeSpinner.getSelectedItem();
+        newDevType = (DeviceType) deviceTypeSpinner.getSelectedItem();
         newDevMode = deviceModeSpinner.getSelectedItemPosition();
         Bundle bundle = HouseManager.getBundle();
         if(bundle == null){
@@ -172,14 +144,10 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     public void recoverData() {
         Bundle bundle = HouseManager.getBundle();
         if (bundle != null){
-            int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
-            newDevType = DeviceType.values()[devTypePosition];
-            newDevMode = bundle.getInt(RESULT_NEW_DEV_MODE);
-
             if(bundle.containsKey(AddDeviceFragment.RESULT_NEW_DEV_NAME)){
                 newDevName = bundle.getString(AddDeviceFragment.RESULT_NEW_DEV_NAME);
                 newDevChannel = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_CHANNEL);
-                devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
+                int devTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
                 newDevType = DeviceType.values()[devTypePosition];
                 newDevMode = bundle.getInt(RESULT_NEW_DEV_MODE);
             }else if (DeviceSettingsFragment.editingDevice) {

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
+import ipleiria.pdm.homecoffee.components.LoadingDialog;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
@@ -54,9 +55,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     private NavigationView navigationView;
-    private HouseManager houseManager;
 
     private FirebaseAuth mAuth;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         HouseManager.lerFicheiro(this);
-        houseManager = HouseManager.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -87,73 +88,93 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View header = navigationView.getHeaderView(0);
         TextView textHeader = header.findViewById(R.id.textViewUser);
 
-        //Users and their rooms on firebase's realtime database
-        setCurrentUser();
+        setInitialFragment();
+//        if (savedInstanceState == null) {
+//            //houseManager.setrImage(android.R.drawable.btn_star_big_on);
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
+//                    MODE_NIGHT_NO);
+//            //setInitialFragment();
+//            if(!HouseManager.getInstance().isLoginMade()){
+//                setLoginFragment();
+//            }
+//            else {
+//                setInitialFragment();
+//            }
+//        } else {
+//            //houseManager = (HouseManager) savedInstanceState.getSerializable("contactos");
+//        }
 
-        if (savedInstanceState == null) {
-            //houseManager.setrImage(android.R.drawable.btn_star_big_on);
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
-                    MODE_NIGHT_NO);
-            //setInitialFragment();
-            if(houseManager.isLoginMade()!=TRUE){
-                setLoginFragment();
-            }
-            else {
-                setInitialFragment();
-                setCurrentUser();
-            }
-        } else {
-            //houseManager = (HouseManager) savedInstanceState.getSerializable("contactos");
-        }
-
-        PahoDemo.getInstance().start_mqtt();
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-//                int i=0;
+                PahoDemo.getInstance().start_mqtt();
                 while(true) {
-//                    i++;
-
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
 
-//                    if(i==10) {
-//                        i=0;
+                    if (HouseManager.isModificable()){
+                        PahoDemo.getInstance().submitMessage();
+                    }
 
-                        //Onde correr metodo a cada 5s
-                        if (HouseManager.isModificable()){
-                            PahoDemo.getInstance().submitMessage();
-                        }
-
-                        ((MainActivity) context).runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(GalleryFragment.textLogs!=null){
-                                    StringBuilder msgs_received = houseManager.getMsgs_received();
-                                    GalleryFragment.textLogs.setText(msgs_received.toString());
-                                }
-                                DeviceActivityFragment.updateValues();
+                    ((MainActivity) context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(GalleryFragment.textLogs!=null){
+                                StringBuilder msgs_received = HouseManager.getInstance().getMsgs_received();
+                                GalleryFragment.textLogs.setText(msgs_received.toString());
                             }
-                        });
-//                    }
+                            DeviceActivityFragment.updateValues();
+                        }
+                    });
                 }
             }
         }) ;
         thread.start();
 
-
-
-
+//        if(!HouseManager.gettingUserRooms){
+//            HouseManager.gettingUserRooms = true;
+//            LoadingDialog loadingDialog = new LoadingDialog(this);
+////        loadingDialog.startLoadingDialog();
+//            try {
+//                loadingDialog.startLoadingDialog();
+//            }catch (Exception e){
+//                System.out.println("Exception: " +e.getCause());
+//                // The dialog may be already showed
+//            }
+//            loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_GettingRooms));
+//            Thread thread2 = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        Thread.sleep(5000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    //loadingDialog.dismisDialog();
+//                    HouseManager.gettingUserRooms = false;
+//                    while (!HouseManager.userRoomsRefGotten){
+//                        try {
+//                            Thread.sleep(1);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+////                HouseManager.getInstance().getUserRooms(mAdapter,loadingDialog);
+////                HouseManager.getInstance().getUserRooms(loadingDialog);
+//                }
+//            });
+//            thread2.start();
+//        }
     }
 
     private void setCurrentUser() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         String user_mail = currentUser.getEmail();
         User user = new User(user_mail);
-        houseManager.setUser(user);
+        HouseManager.getInstance().setUser(user);
 
     }
 
@@ -173,12 +194,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("contactos", houseManager);
+        outState.putSerializable("contactos", HouseManager.getInstance());
     }
     @Override
     protected void onPause() {
         super.onPause();
-        houseManager.gravarFicheiro(this);
+        HouseManager.gravarFicheiro(this);
     }
 
     @Override

@@ -30,8 +30,10 @@ import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
+import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
+import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
@@ -54,7 +56,7 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
     private int[] tabsSelectedIcon = {
             R.drawable.camera_tab_icon2,
             R.drawable.statistics_tab_icon,
-            R.drawable.schedule_tab_icon,
+            //R.drawable.schedule_tab_icon,
             R.drawable.settings_cute_tab_icon
     };
 
@@ -97,7 +99,7 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         tabLayout = getView().findViewById(R.id.tabLayout);
         adapter = new TabAdapter(this);
         //adapter.addFragment(new Tab1Fragment(), "Tab 1");
-        adapter.addFragment(new DeviceControlFragment(), "Tab 1");
+        adapter.addFragment(new DeviceControlFragment(viewPager), "Tab 1");
 //        adapter.addFragment(new Tab2Fragment(), "Tab 2");
         DeviceActivityFragment myDeviceActivityFragment = new DeviceActivityFragment();
         adapter.addFragment(myDeviceActivityFragment, "Tab 2");
@@ -121,13 +123,15 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
 
 
         Context context = this.getContext();
-        viewPager.setUserInputEnabled(false);
+        viewPager.setUserInputEnabled(selectedDevice instanceof Sensor || !selectedDevice.isConnectionState());
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 tab.getIcon().setColorFilter(null);
                 if (tab.getPosition() == 0){
-                    viewPager.setUserInputEnabled(false);
+//                    viewPager.setUserInputEnabled(false);
+                    viewPager.setUserInputEnabled(selectedDevice instanceof Sensor ||
+                            !selectedDevice.isConnectionState());
                 }else{
                     viewPager.setUserInputEnabled(true);
                 }
@@ -172,8 +176,14 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
     }
 
     @Override
-    public void saveData() {
+    public void onPause() {
+        super.onPause();
+        saveData();
+    }
 
+    @Override
+    public void saveData() {
+        initialTab = viewPager.getCurrentItem();
     }
 
     @Override

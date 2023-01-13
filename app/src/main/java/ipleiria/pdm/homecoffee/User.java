@@ -1,9 +1,12 @@
 package ipleiria.pdm.homecoffee;
 
+import com.google.firebase.firestore.CollectionReference;
+
 import java.io.Serializable;
 
 public class User implements Serializable {
     private String email;
+    private CollectionReference roomsRef;
 
     public User() {
     }
@@ -20,4 +23,11 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public CollectionReference getRoomsRef() {
+        return roomsRef;
+    }
+
+    public void setRoomsRef(CollectionReference roomsRef) {
+        this.roomsRef = roomsRef;
+    }
 }

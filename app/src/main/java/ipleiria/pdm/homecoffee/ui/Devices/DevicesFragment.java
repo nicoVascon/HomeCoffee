@@ -1,8 +1,10 @@
 package ipleiria.pdm.homecoffee.ui.Devices;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +24,7 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectBLEDeviceFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Gateaway.GWConfig_BLEDeviceSelectionFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
@@ -101,10 +104,26 @@ public class DevicesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DeviceSettingsFragment.editingDevice = false;
-//                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-//                        replace(R.id.fragment_container, new AddDeviceFragment()).commit();
-                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new AddDeviceSelectBLEDeviceFragment()).commit();
+
+                new AlertDialog.Builder(getContext())
+                        .setTitle(getResources().getString(R.string.txt_AlertDialog_AddDeviceTitle))
+                        .setMessage(getResources().getString(R.string.txt_AlertDialog_AddDevice))
+                        .setPositiveButton(getResources().getString(R.string.txt_Automatic), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                                        replace(R.id.fragment_container, new AddDeviceSelectBLEDeviceFragment()).commit();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.txt_Manual), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                                        replace(R.id.fragment_container, new AddDeviceFragment()).commit();
+                            }
+                        })
+                        .setIcon(R.drawable.add_icon)
+                        .show();
+
             }
         });
 
