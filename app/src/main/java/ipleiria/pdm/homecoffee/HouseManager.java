@@ -435,6 +435,8 @@ public class HouseManager implements Serializable , Cloneable{
 //        });
 //    }
 
+
+
     public void getUserRooms(LoadingDialog loadingDialog) {
         //If this function is done getting users's rooms or not
         rooms.clear();
