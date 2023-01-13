@@ -46,7 +46,6 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         recoverData();
-
         return inflater.inflate(R.layout.fragment_add_device, container, false);
     }
 
@@ -112,9 +111,14 @@ public class AddDeviceFragment extends Fragment implements SaveData {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        saveData();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
-
         MainActivity.addFragmentViseted(FragmentsEnum.ADD_DEVICES_FRAGMENT);
     }
 

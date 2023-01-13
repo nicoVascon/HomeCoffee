@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class DeviceControlFragment extends Fragment {
     //public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
+    private ViewPager2 viewPager;
 
     private Device selectedDevice;
 
@@ -41,6 +43,10 @@ public class DeviceControlFragment extends Fragment {
     private TextView textView_actuatorSensorValue;
     private Switch devSwitch;
     private CircleSliderView circleSlider_valueControl;
+
+    public DeviceControlFragment(ViewPager2 viewPager2) {
+        this.viewPager = viewPager2;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -220,6 +226,7 @@ public class DeviceControlFragment extends Fragment {
                         getResources().getColorStateList(R.color.ButtonOn) :
                         getResources().getColorStateList(R.color.ButtonOff));
 
+                viewPager.setUserInputEnabled(selectedDevice instanceof Sensor || !selectedDevice.isConnectionState());
             }
         });
     }

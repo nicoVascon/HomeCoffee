@@ -135,4 +135,5 @@
     <string name="txt_AlertDialog_AddDevice">Do you want to Add a Device in Automatic or Manual mode?</string>
     <string name="txt_Automatic">Automatic</string>
     <string name="txt_Manual" translatable="false">Manual</string>
+    <string name="txt_loadingDialog_GettingRooms">Getting Rooms...</string>
 </resources>

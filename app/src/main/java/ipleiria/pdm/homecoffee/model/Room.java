@@ -56,54 +56,66 @@ public class Room implements Serializable, Comparable<Room> {
         this.Actuators = actuators;
     }
 
-
     public String getRoom_Name() {
         return Room_Name;
     }
 
-
-
     public void updateRoomDev(){
-
         //Saving to Firebase
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String userMail = HouseManager.getInstance().getUser().getEmail();
-        CollectionReference usersRef = db.collection("users");
-        Query query = usersRef.whereEqualTo("User_Email", userMail);
+        Query query = HouseManager.getInstance().getUser().getRoomsRef().whereEqualTo("Room_Name", Room_Name);
         query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
-                    QuerySnapshot result = task.getResult();
-                    if (!result.isEmpty()) {
-                        DocumentSnapshot userDoc = result.getDocuments().get(0);
-                        CollectionReference roomsRef = userDoc.getReference().collection("rooms");
-                        Query query = roomsRef.whereEqualTo("Room_Name", Room_Name);
-                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    QuerySnapshot roomsSnapshot = task.getResult();
-                                    if (!roomsSnapshot.isEmpty()) {
-                                        DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
+                    QuerySnapshot roomsSnapshot = task.getResult();
+                    if (!roomsSnapshot.isEmpty()) {
+                        DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
 //                                        roomDoc.getReference().update("Devices", Devices);
-                                        roomDoc.getReference().update("Sensors", Sensors);
-                                        roomDoc.getReference().update("Actuators", Actuators);
-                                    }
-
-                                }
-                            }
-                        });
+                        roomDoc.getReference().update("Sensors", Sensors);
+                        roomDoc.getReference().update("Actuators", Actuators);
                     }
+
                 }
-
-
             }
-
         });
-
-
     }
+
+//    public void updateRoomDev(){
+//
+//        //Saving to Firebase
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        String userMail = HouseManager.getInstance().getUser().getEmail();
+//        CollectionReference usersRef = db.collection("users");
+//        Query query = usersRef.whereEqualTo("User_Email", userMail);
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if (task.isSuccessful()) {
+//                    QuerySnapshot result = task.getResult();
+//                    if (!result.isEmpty()) {
+//                        DocumentSnapshot userDoc = result.getDocuments().get(0);
+//                        CollectionReference roomsRef = userDoc.getReference().collection("rooms");
+//                        Query query = roomsRef.whereEqualTo("Room_Name", Room_Name);
+//                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if (task.isSuccessful()) {
+//                                    QuerySnapshot roomsSnapshot = task.getResult();
+//                                    if (!roomsSnapshot.isEmpty()) {
+//                                        DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
+////                                        roomDoc.getReference().update("Devices", Devices);
+//                                        roomDoc.getReference().update("Sensors", Sensors);
+//                                        roomDoc.getReference().update("Actuators", Actuators);
+//                                    }
+//
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//        });
+//    }
 
 
 //    public void addDevice(Device dev){
