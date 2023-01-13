@@ -67,17 +67,20 @@ public class HouseManager implements Serializable , Cloneable{
     private boolean loginMade = false;
 
     private boolean usersRoomDone = false;
+    private boolean roomRemove = FALSE;
+
+    private int color_back_rooms=R.color.iconBackgoundRooms;
 
     //-------------------------------------- TTN ---------------------------------------------
     public static synchronized HashMap<Integer, String> getString_send_ttn() {
         return HouseManager.string_send_ttn;
     }
 
-    public static void addString_send_ttn(int channel, String string_to_add){
-        HouseManager.getString_send_ttn().put(channel,string_to_add);
+    public static void addString_send_ttn(int channel, String string_to_add) {
+        HouseManager.getString_send_ttn().put(channel, string_to_add);
     }
 
-    private static HashMap<Integer, String> string_send_ttn=new HashMap<Integer, String>();
+    private static HashMap<Integer, String> string_send_ttn = new HashMap<Integer, String>();
 
     public static StringBuilder msgs_received = new StringBuilder();
 
@@ -278,13 +281,71 @@ public class HouseManager implements Serializable , Cloneable{
 //            dev2.getDataPoints().add(dataPoints1[i]);
 //        }
     }
-    //-----------------------------------------------------
+
+    //---------------------ROOM--------------------------------
+
+
+    public boolean isRoomRemove() {
+        return roomRemove;
+    }
+
+    public void setRoomRemove(boolean roomRemove) {
+        this.roomRemove = roomRemove;
+    }
+
     public void addRoom(Room room) {
         if (!rooms.contains(room)) {
             rooms.add(room);
             Collections.sort(rooms);
         }
     }
+
+    public void removeRoom(Room room) {
+        if (rooms.contains(room)) {
+            String room_name=room.getRoom_Name();
+            //Saving to Firebase
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            String userMail = HouseManager.getInstance().getUser().getEmail();
+            CollectionReference usersRef = db.collection("users");
+            Query query = usersRef.whereEqualTo("User_Email", userMail);
+            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        QuerySnapshot result = task.getResult();
+                        if (!result.isEmpty()) {
+                            DocumentSnapshot userDoc = result.getDocuments().get(0);
+                            CollectionReference roomsRef = userDoc.getReference().collection("rooms");
+                            Query query = roomsRef.whereEqualTo("Room_Name", room_name);
+                            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        QuerySnapshot roomsSnapshot = task.getResult();
+                                        if (!roomsSnapshot.isEmpty()) {
+                                            DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
+                                            roomDoc.getReference().delete();
+                                        }
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+
+                }
+
+            });
+
+
+        }
+
+
+        rooms.remove(room);
+        Collections.sort(rooms);
+    }
+
     public void adicionarDadosIniciais() {
         Room c1 = new Room( "Sala",RoomType.LIVING_ROOM);
         Room c2 = new Room( "Cozinha",RoomType.KITCHEN);
@@ -510,6 +571,19 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return null;
     }
+
+
+
+
+
+    public int getColor_back_rooms() {
+        return color_back_rooms;
+    }
+
+    public void setColor_back_rooms(int color_back_rooms) {
+        this.color_back_rooms = color_back_rooms;
+    }
+
     public boolean isUsersRoomDone() {
         return usersRoomDone;
     }

@@ -2,8 +2,13 @@ package ipleiria.pdm.homecoffee;
 
 import static java.lang.Boolean.TRUE;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,15 +22,19 @@ import com.google.firebase.auth.FirebaseUser;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
@@ -57,13 +66,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
 
     private FirebaseAuth mAuth;
+    private static final int REQUEST_CODE = 101;
 
+    private static final int REQUEST_CODE_BLUETOOTH_PERMISSIONS = 1;
+    List<String> permissions;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Context context = this;
+        Activity activity = this;
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -72,6 +85,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         HouseManager.lerFicheiro(this);
+
+        //Permissions to ask for
+        permissions = new ArrayList<>();
+        permissions.add(Manifest.permission.INTERNET);
+        permissions.add(Manifest.permission.ACCESS_NETWORK_STATE);
+
+        permissions.add(Manifest.permission.BLUETOOTH_SCAN);
+        permissions.add(Manifest.permission.BLUETOOTH_ADVERTISE);
+        permissions.add(Manifest.permission.BLUETOOTH_CONNECT);
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (Build.VERSION.SDK_INT < 30) {
+
+            permissions.add(Manifest.permission.BLUETOOTH);
+            permissions.add(Manifest.permission.BLUETOOTH_ADMIN);
+        }
+
+        //Method that asks for permissions
+        checkBluetoothPermissions();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -107,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                PahoDemo.getInstance().start_mqtt();
+                PahoDemo.getInstance().start_mqtt(activity);
                 while(true) {
                     try {
                         Thread.sleep(500);
@@ -134,40 +166,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }) ;
         thread.start();
 
-//        if(!HouseManager.gettingUserRooms){
-//            HouseManager.gettingUserRooms = true;
-//            LoadingDialog loadingDialog = new LoadingDialog(this);
-////        loadingDialog.startLoadingDialog();
-//            try {
-//                loadingDialog.startLoadingDialog();
-//            }catch (Exception e){
-//                System.out.println("Exception: " +e.getCause());
-//                // The dialog may be already showed
-//            }
-//            loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_GettingRooms));
-//            Thread thread2 = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        Thread.sleep(5000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    //loadingDialog.dismisDialog();
-//                    HouseManager.gettingUserRooms = false;
-//                    while (!HouseManager.userRoomsRefGotten){
-//                        try {
-//                            Thread.sleep(1);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-////                HouseManager.getInstance().getUserRooms(mAdapter,loadingDialog);
-////                HouseManager.getInstance().getUserRooms(loadingDialog);
-//                }
-//            });
-//            thread2.start();
-//        }
+
     }
 
     private void setCurrentUser() {
@@ -335,6 +334,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setLoginFragment();
         drawer.closeDrawer(GravityCompat.START);
         //finish();
+    }
+
+    private void checkBluetoothPermissions() {
+        boolean allPermissionsGranted = true;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                allPermissionsGranted = false;
+                break;
+            }
+        }
+        if (!allPermissionsGranted) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Bluetooth Permissions")
+                    .setMessage("This app needs access to Bluetooth and location to function properly. Please grant the permissions.")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            ActivityCompat.requestPermissions(MainActivity.this, permissions.toArray(permissions.toArray(new String[permissions.size()])), REQUEST_CODE_BLUETOOTH_PERMISSIONS);
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .create()
+                    .show();
+        }
+    }
+
+    //    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == REQUEST_CODE_BLUETOOTH_PERMISSIONS) {
+//            boolean allGranted = true;
+//            for (int grantResult : grantResults) {
+//                if (grantResult != PackageManager.PERMISSION_GRANTED) {
+//                    allGranted = false;
+//                    break;
+//                }
+//            }
+//            if (allGranted) {
+//                // Permissions were granted, continue with the Bluetooth functionality
+//            } else {
+//                // Permissions were denied, show a message to the user
+//                Toast.makeText(this, "Permissions were denied, Bluetooth features won't work", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+//    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE_BLUETOOTH_PERMISSIONS) {
+            for (int i = 0; i < permissions.length; i++) {
+                String permission = permissions[i];
+                if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
+                    if (permission.equals(Manifest.permission.BLUETOOTH)) {
+                        Toast.makeText(this, "Bluetooth permission denied", Toast.LENGTH_SHORT).show();
+                    } else if (permission.equals(Manifest.permission.BLUETOOTH_ADMIN)) {
+                        Toast.makeText(this, "Bluetooth admin permission denied", Toast.LENGTH_SHORT).show();
+                    } else if (permission.equals(Manifest.permission.BLUETOOTH_SCAN)) {
+                        Toast.makeText(this, "Bluetooth scan permission denied", Toast.LENGTH_SHORT).show();
+                    } else if (permission.equals(Manifest.permission.BLUETOOTH_ADVERTISE)) {
+                        Toast.makeText(this, "Bluetooth advertise permission denied", Toast.LENGTH_SHORT).show();
+                    } else if (permission.equals(Manifest.permission.BLUETOOTH_CONNECT)) {
+                        Toast.makeText(this, "Bluetooth connect permission denied", Toast.LENGTH_SHORT).show();
+                    } else if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                        Toast.makeText(this, "Access fine location permission denied", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        }
     }
 
     public void button_send_loopy(View view) {

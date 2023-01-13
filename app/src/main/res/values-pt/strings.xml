@@ -116,5 +116,8 @@
     <string name="txt_AlertDialog_AddDeviceTitle">Adicionar Dispositivo</string>
     <string name="txt_AlertDialog_AddDevice">Deseja Adicionar o Dispositivo em Modo Automático ou Manual</string>
     <string name="txt_Automatic">Automático</string>
+    <string name="RoomEliminated">Quarto eliminado</string>
+    <string name="ELiminateMode">Modo eliminar quarto desativado</string>
+    <string name="SelectRoomEliminate">Seleciona o quarto a eliminar\nClica duas vezes para cancelar</string>
     <string name="txt_loadingDialog_GettingRooms">Obtendo Quartos...</string>
 </resources>

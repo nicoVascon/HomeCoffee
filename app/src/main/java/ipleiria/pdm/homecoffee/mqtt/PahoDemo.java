@@ -1,5 +1,8 @@
 package ipleiria.pdm.homecoffee.mqtt;
 
+import android.app.Activity;
+import android.widget.Toast;
+
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -32,11 +35,11 @@ public class PahoDemo implements MqttCallback, Serializable {
         return INSTANCE;
     }
 
-    public void start_mqtt() {
+    public void start_mqtt(Activity activity) {
         try {
             INSTANCE = new PahoDemo();
 //            INSTANCE.initDemo("v3/teste-rs2022@ttn/devices/eui-70b3d54990a17f82/up");
-            INSTANCE.initDemo("messagesFromCroatia/data");
+            INSTANCE.initDemo(activity,"messagesFromCroatia/data");
         } catch (MqttException e) {
             e.printStackTrace();
             System.out.println("\n\n\n\nException: " + e.getMessage());
@@ -86,7 +89,7 @@ public class PahoDemo implements MqttCallback, Serializable {
         }
     }
 
-    public void initDemo(String topic) throws MqttException {
+    public void initDemo(Activity activity, String topic) throws MqttException {
         try {
 //            String username = "teste-rs2022@ttn";
 //            String password = "NNSXS.AINW4RAXBJWKUI2U756QHW2PY3VA3OJ3URDXBZA.RMNVJ7R5POJVUXEDSYQXRVGU5JMJAG22K6H57KJKJHR6KIXCRJFQ";
@@ -107,6 +110,7 @@ public class PahoDemo implements MqttCallback, Serializable {
 //            options.setCleanSession(true);
             options.setCleanSession(false);
             options.setAutomaticReconnect(true);
+            options.setConnectionTimeout(1);
 //            options.setUserName(username);
 //            options.setPassword(password.toCharArray());
 
@@ -118,6 +122,12 @@ public class PahoDemo implements MqttCallback, Serializable {
             client.subscribe(topic);
         } catch (MqttException e) {
             e.printStackTrace();
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(activity, "PLEASE USE ANOTHER NETWORK", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 

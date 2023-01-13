@@ -135,5 +135,8 @@
     <string name="txt_AlertDialog_AddDevice">Do you want to Add a Device in Automatic or Manual mode?</string>
     <string name="txt_Automatic">Automatic</string>
     <string name="txt_Manual" translatable="false">Manual</string>
+    <string name="RoomEliminated">Room eliminated</string>
+    <string name="ELiminateMode">Room eliminate mode deactivated</string>
+    <string name="SelectRoomEliminate">Select the room to remove \nClick twice to cancel</string>
     <string name="txt_loadingDialog_GettingRooms">Getting Rooms...</string>
 </resources>

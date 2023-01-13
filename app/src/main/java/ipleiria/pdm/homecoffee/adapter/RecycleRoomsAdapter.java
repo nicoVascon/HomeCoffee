@@ -52,6 +52,16 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
     public void onBindViewHolder(@NonNull RoomsHolder holder, int position) {
         Room mCurrent = houseManager.getRooms().get(position);
         holder.txtName.setText(mCurrent.getRoom_Name());
+        //TESTE COR
+        int color = houseManager.getColor_back_rooms();
+        System.out.println("Vou mudar a cor para :");
+        System.out.println(color);
+        CardView cardView = holder.itemView.findViewById(R.id.cardViewRoomItem);
+        cardView.setCardBackgroundColor(color);
+
+//        cardView.setAlpha(0.5f);
+       // holder.itemView.findViewById(R.id.cardViewRoomItem).setBackgroundColor(color);
+
         switch (mCurrent.getRoom_Type()) {
             case BEDROOM:
                 holder.imgPhoto.setImageResource(R.drawable.bedroom_alternative);
