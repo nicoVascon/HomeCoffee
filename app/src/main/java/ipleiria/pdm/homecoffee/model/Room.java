@@ -3,15 +3,18 @@ package ipleiria.pdm.homecoffee.model;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -89,6 +92,62 @@ public class Room implements Serializable, Comparable<Room> {
 //                                        roomDoc.getReference().update("Devices", Devices);
                                         roomDoc.getReference().update("Sensors", Sensors);
                                         roomDoc.getReference().update("Actuators", Actuators);
+                                    }
+
+                                }
+                            }
+                        });
+                    }
+                }
+
+
+            }
+
+        });
+
+
+    }
+
+
+    public void removeRoomDev(){
+
+        //Saving to Firebase
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userMail = HouseManager.getInstance().getUser().getEmail();
+        CollectionReference usersRef = db.collection("users");
+        Query query = usersRef.whereEqualTo("User_Email", userMail);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot result = task.getResult();
+                    if (!result.isEmpty()) {
+                        DocumentSnapshot userDoc = result.getDocuments().get(0);
+                        CollectionReference roomsRef = userDoc.getReference().collection("rooms");
+                        Query query = roomsRef.whereEqualTo("Room_Name", Room_Name);
+                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    QuerySnapshot roomsSnapshot = task.getResult();
+                                    if (!roomsSnapshot.isEmpty()) {
+                                        DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
+//                                        roomDoc.getReference().update("Devices", Devices);
+                                        roomDoc.getReference().get(Source.valueOf("Sensors")).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                            @Override
+                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                List<Sensor> sensors = (List<Sensor>) documentSnapshot.get("Sensors");
+                                                // make changes to the sensors list here
+//                                                roomDoc.getReference().update("Sensors", sensors);
+                                                System.out.println(sensors.toString());
+                                            }
+                                        });
+
+
+
+
+//                                        roomDoc.getReference().update("Sensors", Sensors);
+//                                        roomDoc.getReference().update("Actuators", Actuators);
                                     }
 
                                 }

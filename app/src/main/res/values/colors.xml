@@ -19,5 +19,6 @@
     <color name="iconBackgoundRooms">#1600EAFF</color>
     <color name="ButtonOn">#2DB607</color>
     <color name="ButtonOff">#FF0000</color>
+    <color name="RoomRemoveMode">#DF6359</color>
 
 </resources>

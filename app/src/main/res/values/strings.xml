@@ -127,4 +127,10 @@
     <string name="deviceTypeName_Analog">Analog</string>
     <string name="txt_MesuredValue">Measured Vale</string>
     <string name="NotificationDescription_NewValue">New value received:</string>
+    <string name="RoomEliminated">Room eliminated</string>
+    <string name="ELiminateMode">Room eliminate mode deactivated</string>
+    <string name="SelectRoomEliminate">Select the room to remove \nClick twice to cancel</string>
+    <string name="RoomLoading">Getting rooms...</string>
+
+
 </resources>

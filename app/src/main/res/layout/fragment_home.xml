@@ -2,15 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayoutHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_logn"
     tools:context=".ui.home.HomeFragment">
-
-
-
-
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -46,7 +42,6 @@
             style="@style/Sub_Title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
             android:fontFamily="@font/days_one"
             android:text="Your Rooms"
             android:textAlignment="center"
@@ -54,28 +49,10 @@
             android:textSize="24sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/RecyclerViewMain"
-            app:layout_constraintEnd_toStartOf="@+id/buttonAddRoom"
-            app:layout_constraintStart_toStartOf="@+id/textViewWelcome"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-
-        <Button
-            android:id="@+id/buttonAddRoom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="40dp"
-            android:backgroundTint="#1600EAFF"
-            android:fontFamily="@font/days_one"
-            android:text=" Add"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="#EAEAEA"
-            android:textSize="20sp"
-            android:theme="@style/Button.LightBlue"
-            app:cornerRadius="15dp"
-            app:layout_constraintBottom_toTopOf="@+id/RecyclerViewMain"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecyclerViewMain"
@@ -99,6 +76,45 @@
             app:layout_constraintEnd_toEndOf="@+id/textViewWelcome"
             app:layout_constraintStart_toStartOf="@+id/textViewWelcome"
             app:layout_constraintTop_toBottomOf="@+id/textViewWelcome" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingButtonAdd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:visibility="invisible"
+            android:src="@drawable/ic_fb_add_a_room"
+            app:backgroundTint="#76D173"
+            app:backgroundTintMode="src_in"
+            app:layout_constraintBottom_toTopOf="@+id/floatingButtonEdit"
+            app:layout_constraintEnd_toEndOf="@+id/floatingButtonEdit" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingButtonRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:clickable="true"
+            android:src="@drawable/icons8_smart_home_remove_90"
+            android:visibility="invisible"
+            app:backgroundTint="#ED7676"
+            app:backgroundTintMode="src_in"
+            app:layout_constraintBottom_toTopOf="@+id/floatingButtonAdd"
+            app:layout_constraintEnd_toEndOf="@+id/floatingButtonAdd"
+            app:rippleColor="#00FFFFFF" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingButtonEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:src="@drawable/ic_fb_add_room"
+            app:backgroundTint="#3276FF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

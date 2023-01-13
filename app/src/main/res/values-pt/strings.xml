@@ -109,4 +109,11 @@
     <string name="deviceTypeName_Analog">Analógico</string>
     <string name="txt_MesuredValue">Valor Medido</string>
     <string name="NotificationDescription_NewValue">"Novo Valor Recebido: "</string>
+    <string name="RoomEliminated">Quarto eliminado</string>
+    <string name="ELiminateMode">Modo eliminar quarto desativado</string>
+    <string name="SelectRoomEliminate">Seleciona o quarto a eliminar\nClica duas vezes para cancelar</string>
+    <string name="RoomLoading">A ir buscar quartos...</string>
+
+
+
 </resources>

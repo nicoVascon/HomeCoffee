@@ -1,16 +1,20 @@
 package ipleiria.pdm.homecoffee.ui.home;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -23,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +55,15 @@ public class HomeFragment extends Fragment  {
     private RecycleRoomsAdapter mAdapter;
     private TextView textViewTemp;
 
-    private Button addRoomButton;
+    private FloatingActionButton addRoomButton;
+    private FloatingActionButton fbButtonRemove;
+    private FloatingActionButton fbButtonEdit;
+
+    private Animation rotateOpen;
+    private Animation rotateClose;
+    private Animation fromBottom;
+    private Animation toBottom;
+    private Boolean btnEditClicked;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -68,32 +81,100 @@ public class HomeFragment extends Fragment  {
         MainActivity.setToolBarTitle(getResources().getString(R.string.app_name));
 
         mRecyclerView = getView().findViewById(R.id.RecyclerViewMain);
+        btnEditClicked= Boolean.FALSE;
+
+        rotateOpen = AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim);
+        rotateClose = AnimationUtils.loadAnimation(context, R.anim.rotate_close_anim);
+        fromBottom = AnimationUtils.loadAnimation(context, R.anim.from_bottom_anim);
+        toBottom = AnimationUtils.loadAnimation(context, R.anim.to_bottom_anim);
+
+
         mAdapter = new RecycleRoomsAdapter(this.getActivity()){
 
             @Override
-            public void onItemClick(View v, int position){
-                super.onItemClick(v,position);
-                Bundle bundle = HouseManager.getBundle();
-                if (bundle == null){
-                    bundle = new Bundle();
-                    HouseManager.setBundle(bundle);
-                }
-                bundle.putInt(RESULT_ROOM_POSITION, position);
-                //((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RoomFragment()).commit();
-                RoomFragment roomFragment = new RoomFragment();
-                roomFragment.setArguments(bundle);
-                ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, roomFragment).commit();
+            public void onItemClick(View v, int position) {
 
+                if (houseManager.isRoomRemove()) {
+                    Room room_remove=houseManager.getRoom(position);
+                    houseManager.removeRoom(room_remove);
+                    mAdapter.notifyDataSetChanged();
+                    houseManager.setRoomRemove(false);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        houseManager.setColor_back_rooms(getContext().getColor(R.color.iconBackgoundRooms));
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                    Toast.makeText(context,R.string.RoomEliminated,Toast.LENGTH_SHORT).show();
+
+                } else {
+                    super.onItemClick(v, position);
+                    Bundle bundle = HouseManager.getBundle();
+                    if (bundle == null) {
+                        bundle = new Bundle();
+                        HouseManager.setBundle(bundle);
+                    }
+                    bundle.putInt(RESULT_ROOM_POSITION, position);
+                    //((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RoomFragment()).commit();
+                    RoomFragment roomFragment = new RoomFragment();
+                    roomFragment.setArguments(bundle);
+                    ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, roomFragment).commit();
+                }
             }
         };
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this.getActivity(),2));
 
-        addRoomButton = getView().findViewById(R.id.buttonAddRoom);
+
+        fbButtonEdit = getView().findViewById(R.id.floatingButtonEdit);
+        fbButtonEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setVisibility(btnEditClicked);
+                setAnimation(btnEditClicked);
+                setClickable(btnEditClicked);
+                btnEditClicked=!btnEditClicked;
+            }
+        });
+
+
+        addRoomButton = getView().findViewById(R.id.floatingButtonAdd);
         addRoomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AddRoomFragment()).commit();
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            houseManager.setColor_back_rooms(getContext().getColor(R.color.iconBackgoundRooms));
+        }
+
+        fbButtonRemove = getView().findViewById(R.id.floatingButtonRemove);
+        fbButtonRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (houseManager.isRoomRemove()) {
+                    houseManager.setRoomRemove(false);
+                    Toast.makeText(context, R.string.ELiminateMode, Toast.LENGTH_SHORT).show();
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        houseManager.setColor_back_rooms(getContext().getColor(R.color.iconBackgoundRooms));
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+                } else {
+                    houseManager.setRoomRemove(true);
+//                    houseManager.removeRoom();
+                    Toast.makeText(context, R.string.SelectRoomEliminate, Toast.LENGTH_SHORT).show();
+                    //houseManager.setColor_back_rooms(R.color.tabBarColor);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        houseManager.setColor_back_rooms(getContext().getColor(R.color.RoomRemoveMode));
+
+                    }
+                    mAdapter.notifyDataSetChanged();
+
+
+                }
             }
         });
 
@@ -105,9 +186,41 @@ public class HomeFragment extends Fragment  {
         }catch (Exception e){
             // The dialog may be already showed
         }
-        loadingDialog.setMainText("Getting rooms...");
+        loadingDialog.setMainText(this.getContext().getString(R.string.RoomLoading));
         houseManager.getUserRooms(mAdapter,loadingDialog);
 
+    }
+
+    private void setAnimation(Boolean clicked) {
+        if(!clicked){
+            addRoomButton.startAnimation(fromBottom);
+            fbButtonRemove.startAnimation(fromBottom);
+            fbButtonEdit.startAnimation(rotateOpen);
+        }else{
+            addRoomButton.startAnimation(toBottom);
+            fbButtonRemove.startAnimation(toBottom);
+            fbButtonEdit.startAnimation(rotateClose);
+        }
+    }
+
+    private void setVisibility(Boolean clicked) {
+        if(!clicked){
+            addRoomButton.setVisibility(View.VISIBLE);
+            fbButtonRemove.setVisibility(View.VISIBLE);
+        }else{
+            addRoomButton.setVisibility(View.INVISIBLE);
+            fbButtonRemove.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void setClickable(Boolean clicked) {
+        if(!clicked){
+            addRoomButton.setClickable(true);
+            fbButtonRemove.setClickable(true);
+        }else{
+            addRoomButton.setClickable(false);
+            fbButtonRemove.setClickable(false);
+        }
     }
 
     @Override

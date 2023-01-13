@@ -1,6 +1,7 @@
 package ipleiria.pdm.homecoffee.adapter;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
         public final ImageView imgPhoto;
         final RecycleRoomsAdapter mAdapter;
 
+
         public RoomsHolder(@NonNull View itemView,  RecycleRoomsAdapter adapter) {
             super(itemView);
 
@@ -52,6 +54,16 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
     public void onBindViewHolder(@NonNull RoomsHolder holder, int position) {
         Room mCurrent = houseManager.getRooms().get(position);
         holder.txtName.setText(mCurrent.getRoom_Name());
+        //TESTE COR
+        int color = houseManager.getColor_back_rooms();
+        System.out.println("Vou mudar a cor para :");
+        System.out.println(color);
+        CardView cardView = holder.itemView.findViewById(R.id.cardViewRoomItem);
+        cardView.setCardBackgroundColor(color);
+
+//        cardView.setAlpha(0.5f);
+       // holder.itemView.findViewById(R.id.cardViewRoomItem).setBackgroundColor(color);
+
         switch (mCurrent.getRoom_Type()) {
             case BEDROOM:
                 holder.imgPhoto.setImageResource(R.drawable.bedroom_alternative);
@@ -78,16 +90,23 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
                 onItemClick(v, itemPosition);
             }
         });
+
     }
 
+
     public void onItemClick(View v, int position){
+
         if (lastSelectedItemView != null){
             CardView lastCardView = lastSelectedItemView.findViewById(R.id.cardViewRoomItem);
-            lastCardView.setCardBackgroundColor(context.getResources().getColor(R.color.iconBackgoundRooms));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                lastCardView.setCardBackgroundColor(getContext().getColor(R.color.iconBackgoundRooms));
+            }
         }
         lastSelectedItemView = v;
         CardView cardView = v.findViewById(R.id.cardViewRoomItem);
-        cardView.setCardBackgroundColor(context.getResources().getColor(R.color.devIconBackground));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            cardView.setCardBackgroundColor(getContext().getColor(R.color.iconBackgoundRooms));
+        }
     }
 
     @Override
