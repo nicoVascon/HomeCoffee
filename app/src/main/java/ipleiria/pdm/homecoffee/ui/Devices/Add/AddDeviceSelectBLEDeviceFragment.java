@@ -238,7 +238,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
                                 buttonPressed = true;
                             }
                         })
-                        .setIcon(R.drawable.link_icon)
+                        .setIcon(R.drawable.add_icon)
                         .show();
             }
         });

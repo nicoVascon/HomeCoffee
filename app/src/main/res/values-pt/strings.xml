@@ -113,4 +113,7 @@
     <string name="txt_AlertDialog_AddDevicesTitle">Adicionar Dispositivos</string>
     <string name="txt_AlertDialog_AddDevices_Part1">"Foram Encontrados "</string>
     <string name="txt_AlertDialog_AddDevices_Part2">" Deseja adicioná-los?"</string>
+    <string name="txt_AlertDialog_AddDeviceTitle">Adicionar Dispositivo</string>
+    <string name="txt_AlertDialog_AddDevice">Deseja Adicionar o Dispositivo em Modo Automático ou Manual</string>
+    <string name="txt_Automatic">Automático</string>
 </resources>
