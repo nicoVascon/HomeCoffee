@@ -139,4 +139,5 @@
     <string name="ELiminateMode">Room eliminate mode deactivated</string>
     <string name="SelectRoomEliminate">Select the room to remove \nClick twice to cancel</string>
     <string name="txt_loadingDialog_GettingRooms">Getting Rooms...</string>
+    <string name="txt_NotAssociateSensor">Not Associate Sensor</string>
 </resources>

@@ -16,7 +16,7 @@ import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 public abstract class Device implements Serializable, Comparable<Device> {
     protected int channel;
     protected String name;
-    protected boolean connectionState;
+    protected boolean connectionState = true;
     protected boolean connectionStateSaved;
     protected DeviceType type;
     protected ArrayList<DataPointImpl> dataPoints;
@@ -163,6 +163,6 @@ public abstract class Device implements Serializable, Comparable<Device> {
 
     @Override
     public int compareTo(Device device) {
-        return 0;
+        return device.getChannel() > this.channel ? 1 : -1;
     }
 }

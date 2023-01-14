@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -49,12 +51,24 @@ public class AddDeviceSelectSensorFragment extends Fragment {
         mRecyclerView = getView().findViewById(R.id.recyclerViewSelectSensor);
         Bundle bundle = HouseManager.getBundle();
         int deviceTypePosition = bundle.getInt(AddDeviceFragment.RESULT_NEW_DEV_TYPE);
-        dAdapter = new RecycleDevicesMiniAdapter<Sensor>(this.getActivity(),
-                houseManager.searchSensors(DeviceType.values()[deviceTypePosition])){
+        ArrayList<Sensor> sensorsSameType = new ArrayList<>();
+        sensorsSameType.add(null);
+        sensorsSameType.addAll(houseManager.searchSensors(DeviceType.values()[deviceTypePosition]));
+        dAdapter = new RecycleDevicesMiniAdapter<Sensor>(this.getActivity(),sensorsSameType
+                ){
             @Override
             public void onItemClick(View view, int position) {
                 super.onItemClick(view, position);
                 Sensor sensorToAssociate = getItem(position);
+
+                if(sensorToAssociate == null){
+                    AddDeviceSelectRoomFragment addDeviceSelectRoomFragment = new AddDeviceSelectRoomFragment();
+                    addDeviceSelectRoomFragment.setSensorToAssociate(sensorToAssociate);
+                    ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
+                            replace(R.id.fragment_container, addDeviceSelectRoomFragment).commit();
+                    return;
+                }
+
                 new AlertDialog.Builder(getContext())
                         .setTitle(getResources().getString(R.string.txt_AlertDialog_AssociateSensorTitle))
                         .setMessage(getResources().getString(R.string.txt_AlertDialog_associateSensor) +

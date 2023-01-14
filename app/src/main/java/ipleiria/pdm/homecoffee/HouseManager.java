@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -30,13 +29,11 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.Map;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
-import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.model.Sensor;
@@ -46,7 +43,7 @@ import ipleiria.pdm.homecoffee.model.Room;
 
 public class HouseManager implements Serializable , Cloneable{
 
-    static final long serialVersionUID = 20L;
+    static final long serialVersionUID = 23L;
 
     public static boolean gettingUserRooms;
     public static boolean userRoomsRefGotten;
@@ -63,6 +60,7 @@ public class HouseManager implements Serializable , Cloneable{
     private ArrayList<Room> rooms;
     private ArrayList<Device> devices;
     private ArrayList<Sensor> sensors;
+    private ArrayList<Actuator> actuators;
 
     private boolean loginMade = false;
 
@@ -135,6 +133,9 @@ public class HouseManager implements Serializable , Cloneable{
             if(device instanceof Sensor){
                 sensors.add((Sensor) device);
                 Collections.sort(sensors);
+            }else{
+                actuators.add((Actuator) device);
+                Collections.sort(actuators);
             }
             return true;
         }
@@ -171,15 +172,15 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return null;
     }
-    public void saveDeviceConnectionState(){
-        for (Device device : devices){
-            device.setConnectionStateSaved(device.isConnectionState());
+    public void saveActuatorValue(){
+        for (Actuator actuator : actuators){
+            actuator.setConnectionStateSaved(actuator.isConnectionState());
         }
     }
 
-    public void recoverSavedDeviceConnectionState(){
-        for (Device device : devices){
-            device.setConnectionState(device.isConnectionStateSaved());
+    public void recoverSavedActuatorValue(){
+        for (Actuator actuator : actuators){
+            actuator.setConnectionState(actuator.isConnectionStateSaved());
         }
     }
 
@@ -496,37 +497,6 @@ public class HouseManager implements Serializable , Cloneable{
 //        });
 //    }
 
-    public void getUserRooms(LoadingDialog loadingDialog) {
-        //If this function is done getting users's rooms or not
-        rooms.clear();
-        devices.clear();
-        sensors.clear();
-        user.getRoomsRef().get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                try {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot roomsSnapshot = task.getResult();
-                        for (DocumentSnapshot roomSnapshot : roomsSnapshot) {
-                            Room room = roomSnapshot.toObject(Room.class);
-                            System.out.println(room.toString());
-                            //addRoom(room);
-                            addRoom(room);
-                            for(Device device : room.getDevices()){
-                                addDevice(device);
-                            }
-                        }
-//                        HouseManager.getInstance().setRooms(userRooms);
-//                        HouseManager.getInstance().addInitialDevices();
-                        loadingDialog.dismisDialog();
-                    }
-                }catch (Exception e){
-                    System.out.println("Exception: getUserRooms: " + e.getMessage());
-                }
-            }
-        });
-    }
-
     public void getUserRooms(RecycleRoomsAdapter adapter,LoadingDialog loadingDialog) {
         //If this function is done getting users's rooms or not
         rooms.clear();
@@ -541,14 +511,12 @@ public class HouseManager implements Serializable , Cloneable{
                         for (DocumentSnapshot roomSnapshot : roomsSnapshot) {
                             Room room = roomSnapshot.toObject(Room.class);
                             System.out.println(room.toString());
-                            //addRoom(room);
                             addRoom(room);
                             for(Device device : room.getDevices()){
                                 addDevice(device);
                             }
                         }
-//                        HouseManager.getInstance().setRooms(userRooms);
-//                        HouseManager.getInstance().addInitialDevices();
+                        HouseManager.gettingUserRooms = false;
                         adapter.notifyDataSetChanged();
                         loadingDialog.dismisDialog();
                     }
@@ -604,6 +572,7 @@ public class HouseManager implements Serializable , Cloneable{
         rooms = new ArrayList<>();
         devices = new ArrayList<>();
         sensors = new ArrayList<>();
+        actuators = new ArrayList<>();
         bundle = new Bundle();
     }
 
