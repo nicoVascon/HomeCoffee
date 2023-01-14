@@ -155,6 +155,8 @@ public class HouseManager implements Serializable , Cloneable{
         devices.remove(device);
         if(device instanceof Sensor){
             sensors.remove(device);
+            ((Sensor) device).getAssociatedActuator().setAssociatedSensor(null);
+            ((Sensor) device).getAssociatedActuator().setAssociateddSensorRef(null);
         }else{
             actuators.remove(device);
         }

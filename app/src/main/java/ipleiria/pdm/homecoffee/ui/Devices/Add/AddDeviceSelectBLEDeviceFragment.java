@@ -185,7 +185,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
             do{
                 attemptsNum++;
                 try{
-                    bleServerName = readString(devicesInfoCharacteristic, "Devices Information");
+                    bleServerName = readString(bleServerNameCharacteristic, "Devices Information");
                 } catch (Exception e) {
                     System.out.println("Exception: " + e.getMessage());
                 }
@@ -271,7 +271,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
             do{
                 attemptsNum++;
                 try {
-                    writeString(bleServerNameCharacteristic, channelsConfig.toString(), "Advertising Name");
+                    writeString(channelsConfigCharacteristic, channelsConfig.toString(), "Advertising Name");
                 }catch (Exception e){
                     System.out.println("Exception: " + e.getMessage());
                 }
@@ -291,8 +291,6 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
             }
 
             Device newDevice = null;
-
-            String devTypeName = null;
 
             DeviceType devType = DeviceType.searchByAcronym(descripValues[0]);
             if(devType == null){
@@ -328,6 +326,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
                                 "DEVICE #" + random.nextInt(1000),
                                 devType,
                                 HouseManager.getInstance().getRoom(0));
+//                        HouseManager.getInstance().getRoom(0).addDevice(auxSensor);
                         ((Actuator) newDevice).setAssociatedSensor(auxSensor);
 
                         if(HouseManager.getInstance().addDevice(auxSensor)){
@@ -345,6 +344,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
                     }
                 }
             }
+//            HouseManager.getInstance().getRoom(0).addDevice(newDevice);
             if(HouseManager.getInstance().addDevice(newDevice)){
                 numSuccessfullyAddedDevices++;
             }else{

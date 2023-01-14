@@ -13,6 +13,7 @@ import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 public class Sensor extends Device{
 
     private DocumentReference associatedRoomRef;
+    private Actuator associatedActuator;
 
     public Sensor(){
         this.notifications = new ArrayList<>();
@@ -42,6 +43,14 @@ public class Sensor extends Device{
 
     public DocumentReference getAssociatedRoomRef() {
         return associatedRoomRef;
+    }
+
+    public Actuator getAssociatedActuator() {
+        return associatedActuator;
+    }
+
+    public void setAssociatedActuator(Actuator associatedActuator) {
+        this.associatedActuator = associatedActuator;
     }
 
     public void setAssociatedRoomRef(DocumentReference associatedRoomRef) {
