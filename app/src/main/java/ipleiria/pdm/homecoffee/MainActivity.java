@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         HouseManager.lerFicheiro(this);
 
-        //Permissions to ask for
+        //Permissions  to ask for
         permissions = new ArrayList<>();
         permissions.add(Manifest.permission.INTERNET);
         permissions.add(Manifest.permission.ACCESS_NETWORK_STATE);
