@@ -146,8 +146,8 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
             }else{
                 Actuator newActuator = new Actuator(newDevChannel, newDevName, newDevType, newDevRoom);
                 HouseManager.getInstance().addDevice(newActuator);
-                newDevRoom.addDevice(newActuator);
-                newDevRoom.updateRoomDev();
+//
+//                newDevRoom.updateRoomDev();
                 if(sensorToAssociate != null){
                     Sensor currentAssociatedSensor = newActuator.setAssociatedSensor(sensorToAssociate);
                     if(currentAssociatedSensor == sensorToAssociate){
@@ -158,6 +158,7 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
                                 Toast.LENGTH_LONG).show();
                     }
                 }
+                newDevRoom.addDevice(newActuator);
                 if(HouseManager.getInstance().addDevice(newActuator)){
                     Toast.makeText(this.getContext(), getResources().getString(R.string.toastMessage_AddDeviceSuccess),
                             Toast.LENGTH_LONG).show();

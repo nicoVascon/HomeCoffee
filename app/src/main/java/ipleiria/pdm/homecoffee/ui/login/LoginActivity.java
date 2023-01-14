@@ -74,7 +74,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 sing_in();
-                //((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
             }
         });
         register.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +82,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 Intent switchActivityIntent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(switchActivityIntent);
-                //((MainActivity) mAdapter.getContext()).setInitialFragment();
                 finish();
             }
         });

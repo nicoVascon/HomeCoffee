@@ -121,4 +121,7 @@
     <string name="SelectRoomEliminate">Seleciona o quarto a eliminar\nClica duas vezes para cancelar</string>
     <string name="txt_loadingDialog_GettingRooms">Obtendo Quartos...</string>
     <string name="txt_NotAssociateSensor">Não Associar Sensor</string>
+    <string name="txt_addRoomName">Insere um nome</string>
+    <string name="txt_NameProtection">Insere um nome diferente</string>
+    <string name="toastMessage_NoRooms">Ñao tem rooms adicionados</string>
 </resources>

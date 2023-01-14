@@ -82,4 +82,10 @@ public class LoadingDialog {
             }
         });
     }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+
 }

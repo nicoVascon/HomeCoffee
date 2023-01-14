@@ -107,20 +107,7 @@ public class SlideshowFragment extends Fragment {
         btnScanBLE.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                selectedDevice = null;
-//                selectedService = null;
-//                gatt = null;
-//                scanLeDevice();
 
-//                androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
-//                LayoutInflater inflater = getActivity().getLayoutInflater();
-//                View view = inflater.inflate(R.layout.alertdialog_gwconfig_layout,null);
-//
-//                builder.setView(view);
-//                builder.setCancelable(false);
-//
-//                AlertDialog alertDialog = builder.create();
-//                alertDialog.show();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle(getResources().getString(R.string.txt_AlertDialog_TTNEndDeviceRegistrationTitle));

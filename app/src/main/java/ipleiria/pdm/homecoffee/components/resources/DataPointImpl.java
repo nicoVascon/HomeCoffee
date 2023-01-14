@@ -54,30 +54,3 @@ public class DataPointImpl implements DataPointInterface, Serializable, Comparab
         return 1;
     }
 }
-
-//public class DataPointImpl extends DataPoint implements Comparable<DataPointImpl> {
-//
-//    public DataPointImpl(){
-//        super(0, 0);
-//    }
-//
-//    public DataPointImpl(double x, double y) {
-//        super(x, y);
-//    }
-//
-//    public DataPointImpl(Date x, double y) {
-//        super(x, y);
-//    }
-//
-//    public void setw(double x){
-//        this.set
-//    }
-//
-//    @Override
-//    public int compareTo(DataPointImpl o) {
-//        if(o.getX() - this.getX() > 0){
-//            return -1;
-//        }
-//        return 1;
-//    }
-//}

@@ -23,6 +23,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected ArrayList<Notification> notifications;
     protected double value;
     protected double valueSaved;
+    private Room room;
 
     public Device(){
     }
@@ -121,8 +122,11 @@ public abstract class Device implements Serializable, Comparable<Device> {
     }
 
     public void set_Room(Room room) {
-        room.addDevice(this);
-        room.updateRoomDev();
+        this.room=room;
+    }
+
+    public Room getRoom() {
+        return room;
     }
 
     public ArrayList<DataPointImpl> getDataPoints() {

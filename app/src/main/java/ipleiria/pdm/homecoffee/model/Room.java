@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -12,6 +13,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -60,37 +63,71 @@ public class Room implements Serializable, Comparable<Room> {
         return Room_Name;
     }
 
-    public void updateRoomDev(){
-        //Saving to Firebase
-        Query query = HouseManager.getInstance().getUser().getRoomsRef().whereEqualTo("Room_Name", Room_Name);
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot roomsSnapshot = task.getResult();
-                    if (!roomsSnapshot.isEmpty()) {
-                        DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
-//                                        roomDoc.getReference().update("Devices", Devices);
-                        roomDoc.getReference().update("Sensors", Sensors);
-                        roomDoc.getReference().update("Actuators", Actuators);
-                    }
 
-                }
-            }
-        });
+
+
+    public void updateRoomDevice(Sensor sensor){
+        HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Sensors").document(String.valueOf(sensor.getChannel())).set(sensor);
+
+    }
+
+    public void updateRoomDev(){
+
+
+//
+//
+//        for (Sensor sensor : Sensors) {
+//
+//            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Sensors").document(String.valueOf(sensor.getChannel())).set(sensor);
+//        }
+
     }
 
     public void addDevice(Device dev){
+
+        dev.set_Room(this);
+        Map<String, Object> device = new HashMap<>();
+        //room.put("User_Email", userMail);
+        device.put("channel", dev.getChannel());
+        device.put("name", dev.getName());
+        device.put("type", dev.getType());
+        device.put("connectionState", dev.isConnectionState());
+        device.put("connectionStateSaved", dev.isConnectionStateSaved());
+        device.put("dataPoints", dev.getDataPoints());
+        device.put("notifications", dev.getNotifications());
+        device.put("value", dev.getValue());
+        device.put("valueSaved", dev.getValueSaved());
+
+
+//        protected boolean connectionState;
+//        protected boolean connectionStateSaved;
+//        protected DeviceType type;
+//        protected ArrayList<DataPointImpl> dataPoints;
+//        protected ArrayList<Notification> notifications;
+//        protected double value;
+//        protected double valueSaved;
+//        private DocumentReference docRefFirebase;
+
         if(dev instanceof Sensor){
             if(Sensors.contains(dev)){
                 return;
             }
             Sensors.add((Sensor) dev);
+            DocumentReference roomRef = HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name);
+            device.put("associatedRoomRef",roomRef);
+            roomRef.collection("Sensors").document(String.valueOf(dev.getChannel())).set(device);
+
         }else {
             if(Actuators.contains(dev)){
                 return;
             }
             Actuators.add((Actuator) dev);
+
+            device.put("associateddSensorRef", ((Actuator) dev).getAssociateddSensorRef());
+
+
+            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Actuators").document(String.valueOf(dev.getChannel())).set(device);
+
         }
     }
 
@@ -138,5 +175,15 @@ public class Room implements Serializable, Comparable<Room> {
     @Override
     public int compareTo(Room room) {
         return String.CASE_INSENSITIVE_ORDER.compare(this.Room_Name, room.Room_Name);
+    }
+
+    public void addLocalDevice(Device dev) {
+
+        if(dev instanceof Sensor){
+            Sensors.add((Sensor) dev);
+        }else{
+            Actuators.add((Actuator) dev);
+        }
+        dev.set_Room(this);
     }
 }
