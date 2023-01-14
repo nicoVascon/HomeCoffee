@@ -139,4 +139,8 @@
     <string name="ELiminateMode">Room eliminate mode deactivated</string>
     <string name="SelectRoomEliminate">Select the room to remove \nClick twice to cancel</string>
     <string name="txt_loadingDialog_GettingRooms">Getting Rooms...</string>
+    <string name="txt_addRoomName">Insert a name</string>
+    <string name="txt_NameProtection">Insert a different name</string>
+    <string name="toastMessage_NoRooms">No rooms added</string>
+
 </resources>

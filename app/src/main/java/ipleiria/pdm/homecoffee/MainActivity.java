@@ -4,6 +4,7 @@ import static java.lang.Boolean.TRUE;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,6 +42,7 @@ import ipleiria.pdm.homecoffee.components.LoadingDialog;
 import ipleiria.pdm.homecoffee.interfaces.SaveData;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
+import ipleiria.pdm.homecoffee.mqtt.MyForegroundService;
 import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
@@ -118,28 +120,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         View header = navigationView.getHeaderView(0);
-        TextView textHeader = header.findViewById(R.id.textViewUser);
-
+//        TextView textHeader = header.findViewById(R.id.textViewUser);
+        TextView textEmailUser = header.findViewById(R.id.textViewUserEmail);
+        textEmailUser.setText(mAuth.getCurrentUser().getEmail());
         setInitialFragment();
-//        if (savedInstanceState == null) {
-//            //houseManager.setrImage(android.R.drawable.btn_star_big_on);
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.
-//                    MODE_NIGHT_NO);
-//            //setInitialFragment();
-//            if(!HouseManager.getInstance().isLoginMade()){
-//                setLoginFragment();
-//            }
-//            else {
-//                setInitialFragment();
-//            }
-//        } else {
-//            //houseManager = (HouseManager) savedInstanceState.getSerializable("contactos");
-//        }
 
+
+
+        //runForever();
+
+        Intent serviceIntent = new Intent(this, MyForegroundService.class);
+        startService(serviceIntent);
+
+
+
+    }
+
+    private void runForever() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                PahoDemo.getInstance().start_mqtt(activity);
+                PahoDemo.getInstance().start_mqtt(MainActivity.this);
                 while(true) {
                     try {
                         Thread.sleep(500);
@@ -151,21 +152,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         PahoDemo.getInstance().submitMessage();
                     }
 
-                    ((MainActivity) context).runOnUiThread(new Runnable() {
+                    (MainActivity.this).runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+
                             if(GalleryFragment.textLogs!=null){
                                 StringBuilder msgs_received = HouseManager.getInstance().getMsgs_received();
                                 GalleryFragment.textLogs.setText(msgs_received.toString());
                             }
                             DeviceActivityFragment.updateValues();
+
                         }
                     });
                 }
             }
         }) ;
         thread.start();
-
 
     }
 
@@ -360,25 +362,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == REQUEST_CODE_BLUETOOTH_PERMISSIONS) {
-//            boolean allGranted = true;
-//            for (int grantResult : grantResults) {
-//                if (grantResult != PackageManager.PERMISSION_GRANTED) {
-//                    allGranted = false;
-//                    break;
-//                }
-//            }
-//            if (allGranted) {
-//                // Permissions were granted, continue with the Bluetooth functionality
-//            } else {
-//                // Permissions were denied, show a message to the user
-//                Toast.makeText(this, "Permissions were denied, Bluetooth features won't work", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

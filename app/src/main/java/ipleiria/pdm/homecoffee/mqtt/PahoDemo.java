@@ -38,7 +38,6 @@ public class PahoDemo implements MqttCallback, Serializable {
     public void start_mqtt(Activity activity) {
         try {
             INSTANCE = new PahoDemo();
-//            INSTANCE.initDemo("v3/teste-rs2022@ttn/devices/eui-70b3d54990a17f82/up");
             INSTANCE.initDemo(activity,"messagesFromCroatia/data");
         } catch (MqttException e) {
             e.printStackTrace();
@@ -81,8 +80,6 @@ public class PahoDemo implements MqttCallback, Serializable {
         byte[] jsonPayload = to_send.toString().getBytes();
         message.setPayload(jsonPayload);
         try {
-//            client.publish("v3/teste-rs2022@ttn/devices/eui-70b3d54990a17f82/down/push", message);
-//            client.publish("v1/95059f90-58fc-11ed-baf6-35fab7fd0ac8/things/df1a8220-58fd-11ed-baf6-35fab7fd0ac8/data/json", message);
             client.publish("messagesFromCroatia/commands", message);
         } catch (MqttException e) {
             System.out.println(e);
@@ -91,32 +88,18 @@ public class PahoDemo implements MqttCallback, Serializable {
 
     public void initDemo(Activity activity, String topic) throws MqttException {
         try {
-//            String username = "teste-rs2022@ttn";
-//            String password = "NNSXS.AINW4RAXBJWKUI2U756QHW2PY3VA3OJ3URDXBZA.RMNVJ7R5POJVUXEDSYQXRVGU5JMJAG22K6H57KJKJHR6KIXCRJFQ";
-//            String serverurl = "tcp://eu1.cloud.thethings.network:1883";
-//            String clientId = MqttClient.generateClientId();
 
-//            String username = "95059f90-58fc-11ed-baf6-35fab7fd0ac8";
-//            String password = "20e7abf2ad1b5590d51c4292ebad76a08bcb6198";
-//            String serverurl = "tcp://mqtt.mydevices.com:1883";
-//            String clientId = "df1a8220-58fd-11ed-baf6-35fab7fd0ac8";
-
-//            String username = "95059f90-58fc-11ed-baf6-35fab7fd0ac8";
-//            String password = "20e7abf2ad1b5590d51c4292ebad76a08bcb6198";
             String serverurl = "tcp://broker.hivemq.com:1883";
             String clientId = MqttClient.generateClientId();
 
             MqttConnectOptions options = new MqttConnectOptions();
-//            options.setCleanSession(true);
             options.setCleanSession(false);
             options.setAutomaticReconnect(true);
             options.setConnectionTimeout(1);
-//            options.setUserName(username);
-//            options.setPassword(password.toCharArray());
+
 
             client = new MqttClient(serverurl, clientId, null);
             client.connect(options);
-//            client.connect();
 
             client.setCallback(this);
             client.subscribe(topic);
@@ -186,62 +169,6 @@ public class PahoDemo implements MqttCallback, Serializable {
         }
 
 
-        // Extract the string after "Published to:" and before ":{"
-//        int startIndex = text.indexOf("received_at") + "received_at".length();
-//        int endIndex = text.indexOf("uplink_message", startIndex);
-//        String extractedString1 = text.substring(startIndex, endIndex);
-//
-//
-//        // Extract the string after "decoded_payload" and before ","
-//        startIndex = text.indexOf("decoded_payload") + "decoded_payload".length();
-//        endIndex = text.indexOf("rx_metadata", startIndex);
-//        String extractedString2 = text.substring(startIndex, endIndex);
-//        text = "Data: "+extractedString1+"\n   Dados: "+extractedString2+"\n\n";
-//        System.out.println(text);
-//        try {
-//            HouseManager.getInstance().getMsgs_received().append(text+"\n");
-//        } catch (Exception e) {
-//            System.out.println("Crashou: " + e.getMessage());
-//        }
-//
-//        try {
-//            String text_div = extractedString2.substring(3, extractedString2.length() - 3);
-//            System.out.println(text_div);
-//            String[] text_split = text_div.split(",");
-//            //System.out.println(text_split);
-//            String[] text_div2;
-//            String[] text_chan;
-//            String[] text_val;
-//            for (int i = 0; i < text_split.length; i++) {
-//                System.out.println(text_split[i]);
-//                text_div2=text_split[i].split(":");
-//
-//                int last_index=text_div2[0].lastIndexOf("_");
-//                int chan = Integer.parseInt(text_div2[0].substring(last_index+1, text_div2[0].length() - 1));
-//                System.out.println(chan);
-//                System.out.println(text_div2[1]);
-//                Device device = houseManager.searchSensorChannel(chan);
-//                if(device instanceof Sensor){
-//                    ((Sensor)device).setValue(Double.parseDouble(text_div2[1]));
-//                }
-//            }
-//
-//        }catch (Exception e){
-//            System.out.println("Morri muito: "+e.getMessage());
-//        }
-        //{"analog_in_1":13,"...
-//        startIndex = text.indexOf("decoded_payload") + "decoded_payload".length();
-//        endIndex = text.indexOf("rx_metadata", startIndex);
-//        String extractedString2 = text.substring(startIndex, endIndex);
-//
-//        startIndex = text.indexOf("decoded_payload") + "decoded_payload".length();
-//        endIndex = text.indexOf("rx_metadata", startIndex);
-//        String extractedString2 = text.substring(startIndex, endIndex);
-
-
-
-
-//        Toast.makeText(MainActivity.getCurrentFragment().getActivity(), text, Toast.LENGTH_SHORT).show();
     }
 
     @Override

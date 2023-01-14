@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -245,41 +246,6 @@ public class HouseManager implements Serializable , Cloneable{
         addDevice(dev4_1);
         addDevice(dev7_1);
 
-        //generate Dates
-//        Calendar calendar = Calendar.getInstance();
-//        Date d5 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d4 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d3 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d2 = calendar.getTime();
-//        calendar.add(Calendar.DATE, -1);
-//        Date d1 = calendar.getTime();
-//        // Points in different minutes
-//        calendar = Calendar.getInstance();
-//        calendar.add(Calendar.MINUTE, -15);
-//        Date dm3 = calendar.getTime();
-//        calendar.add(Calendar.MINUTE, -24);
-//        Date dm2 = calendar.getTime();
-//        calendar.add(Calendar.MINUTE, -10);
-//        Date dm1 = calendar.getTime();
-//
-//        DataPoint[] dataPoints1 = new DataPoint[] {
-//            new DataPoint(d1, 1),
-//            new DataPoint(d2, 5),
-//            new DataPoint(d3, 3),
-//            new DataPoint(d4, 2),
-//
-//            new DataPoint(dm1, 10),
-//            new DataPoint(dm2, 6),
-//            new DataPoint(dm3, 1),
-//
-//            new DataPoint(d5, 6)
-//        };
-//        for (int i = 0; i < dataPoints1.length; i++){
-//            dev2.getDataPoints().add(dataPoints1[i]);
-//        }
     }
 
     //---------------------ROOM--------------------------------
@@ -302,41 +268,46 @@ public class HouseManager implements Serializable , Cloneable{
 
     public void removeRoom(Room room) {
         if (rooms.contains(room)) {
-            String room_name=room.getRoom_Name();
-            //Saving to Firebase
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            String userMail = HouseManager.getInstance().getUser().getEmail();
-            CollectionReference usersRef = db.collection("users");
-            Query query = usersRef.whereEqualTo("User_Email", userMail);
-            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
-                        QuerySnapshot result = task.getResult();
-                        if (!result.isEmpty()) {
-                            DocumentSnapshot userDoc = result.getDocuments().get(0);
-                            CollectionReference roomsRef = userDoc.getReference().collection("rooms");
-                            Query query = roomsRef.whereEqualTo("Room_Name", room_name);
-                            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        QuerySnapshot roomsSnapshot = task.getResult();
-                                        if (!roomsSnapshot.isEmpty()) {
-                                            DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
-                                            roomDoc.getReference().delete();
-                                        }
+//            String room_name=room.getRoom_Name();
+//            //Saving to Firebase
+//            FirebaseFirestore db = FirebaseFirestore.getInstance();
+//            String userMail = HouseManager.getInstance().getUser().getEmail();
+//            CollectionReference usersRef = db.collection("users");
 
-                                    }
-                                }
-                            });
-                        }
-                    }
+            HouseManager.getInstance().getUser().getRoomsRef().document(room.getRoom_Name()).delete();
 
-
-                }
-
-            });
+//            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Actuators").document(String.valueOf(dev.getChannel())).set(dev);
+//
+//            Query query = usersRef.whereEqualTo("User_Email", userMail);
+//            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                    if (task.isSuccessful()) {
+//                        QuerySnapshot result = task.getResult();
+//                        if (!result.isEmpty()) {
+//                            DocumentSnapshot userDoc = result.getDocuments().get(0);
+//                            CollectionReference roomsRef = userDoc.getReference().collection("rooms");
+//                            Query query = roomsRef.whereEqualTo("Room_Name", room_name);
+//                            query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                    if (task.isSuccessful()) {
+//                                        QuerySnapshot roomsSnapshot = task.getResult();
+//                                        if (!roomsSnapshot.isEmpty()) {
+//                                            DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
+//                                            roomDoc.getReference().delete();
+//                                        }
+//
+//                                    }
+//                                }
+//                            });
+//                        }
+//                    }
+//
+//
+//                }
+//
+//            });
 
 
         }
@@ -543,9 +514,44 @@ public class HouseManager implements Serializable , Cloneable{
                             System.out.println(room.toString());
                             //addRoom(room);
                             addRoom(room);
-                            for(Device device : room.getDevices()){
-                                addDevice(device);
-                            }
+//                            for(Device device : room.getDevices()){
+//                                addDevice(device);
+//                                room.addDevice(device);
+//                            }
+
+                            // Retrieve the devices collection for the current room
+                            roomSnapshot.getReference().collection("Sensors")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (DocumentSnapshot deviceSnapshot : task.getResult()) {
+                                                    Sensor sensor = deviceSnapshot.toObject(Sensor.class);
+                                                    addDevice(sensor);
+                                                    room.addDevice(sensor);
+                                                    sensor.set_Room(room);
+                                                }
+                                            }
+                                        }
+                                    });
+
+                            // Retrieve the devices collection for the current room
+                            roomSnapshot.getReference().collection("Actuators")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                for (DocumentSnapshot deviceSnapshot : task.getResult()) {
+                                                    Actuator actuator = deviceSnapshot.toObject(Actuator.class);
+                                                    addDevice(actuator);
+                                                    room.addDevice(actuator);
+                                                }
+                                            }
+                                        }
+                                    });
+
                         }
 //                        HouseManager.getInstance().setRooms(userRooms);
 //                        HouseManager.getInstance().addInitialDevices();
@@ -556,7 +562,23 @@ public class HouseManager implements Serializable , Cloneable{
                     System.out.println("Exception: getUserRooms: " + e.getMessage());
                 }
             }
+
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                loadingDialog.getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(loadingDialog.getActivity(),R.string.toastMessage_NoRooms,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+                loadingDialog.dismisDialog();
+
+            }
         });
+
     }
 
     public Room searchRoomByDevice(Device device){
@@ -698,22 +720,11 @@ public class HouseManager implements Serializable , Cloneable{
         HouseManager.userRoomsRefGotten = false;
         this.user = user;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference usersRef = db.collection("users");
-        Query query = usersRef.whereEqualTo("User_Email", user.getEmail());
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot result = task.getResult();
-                    if (!result.isEmpty()) {
-                        DocumentSnapshot userDoc = result.getDocuments().get(0);
-                        CollectionReference roomsRef = userDoc.getReference().collection("rooms");
-                        user.setRoomsRef(roomsRef);
-                        HouseManager.userRoomsRefGotten = true;
-                    }
-                }
-            }
-        });
+        CollectionReference usersRef = db.collection("users").document(user.getEmail()).collection("rooms");
+
+        HouseManager.getInstance().getUser().setRoomsRef(usersRef);
+        HouseManager.userRoomsRefGotten=true;
+
     }
 
     public void setCurrentUser(FirebaseUser currentUser) {

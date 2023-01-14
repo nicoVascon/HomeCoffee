@@ -109,7 +109,6 @@ public class HomeFragment extends Fragment  {
                         HouseManager.setBundle(bundle);
                     }
                     bundle.putInt(RESULT_ROOM_POSITION, position);
-                    //((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RoomFragment()).commit();
                     RoomFragment roomFragment = new RoomFragment();
                     roomFragment.setArguments(bundle);
                     ((MainActivity) mAdapter.getContext()).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, roomFragment).commit();
@@ -159,9 +158,7 @@ public class HomeFragment extends Fragment  {
 
                 } else {
                     HouseManager.getInstance().setRoomRemove(true);
-//                    houseManager.removeRoom();
                     Toast.makeText(getContext(), R.string.SelectRoomEliminate, Toast.LENGTH_SHORT).show();
-                    //houseManager.setColor_back_rooms(R.color.tabBarColor);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         HouseManager.getInstance().setColor_back_rooms(getContext().getColor(R.color.RoomRemoveMode));
 
@@ -185,7 +182,6 @@ public class HomeFragment extends Fragment  {
                 LoadingDialog loadingDialog = new LoadingDialog(getActivity());
                 loadingDialog.startLoadingDialog();
                 try {
-//            loadingDialog.startLoadingDialog();
                 }catch (Exception e){
                     System.out.println("Exception: " +e.getCause());
                     // The dialog may be already showed

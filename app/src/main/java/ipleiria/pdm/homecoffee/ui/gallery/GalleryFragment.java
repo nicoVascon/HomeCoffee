@@ -58,7 +58,6 @@ public class GalleryFragment extends Fragment {
     public EditText editTextMessage;
     private static final int PERMISSION_REQUEST_CODE = 100;
 
-//    MqttManagerImpl mqttManager;
 
     //TTN CONNECT MQTT
     MqttClient client_ttn;
@@ -78,99 +77,11 @@ public class GalleryFragment extends Fragment {
         editTextMessage = getView().findViewById(R.id.editTextMessage);
 
         //--------------------------MQTT---------------------
-//        Mqtt3AsyncClient client = MqttClient.builder()
-//                .useMqttVersion3()
-//                .identifier("5c9496e0-58ff-11ed-bf0a-bb4ba43bd3f6")
-//                .serverHost("mqtt.mydevices.com")
-//                .serverPort(1883)
-//                .sslWithDefaultConfig()
-//                .buildAsync();
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            client.connectWith()
-//                    .simpleAuth()
-//                    .username("411755b0-58fa-11ed-bf0a-bb4ba43bd3f6")
-//                    .password("ea48065ad529cdc42764fc43645e4c10ef899ca4".getBytes())
-//                    .applySimpleAuth()
-//                    .send()
-//                    .whenComplete((connAck, throwable) -> {
-//                        if (throwable != null) {
-//                            // handle failure
-//                            System.out.println("Nao consegui conectar\n\n\n");
-//                            System.out.println(throwable.getMessage());
-//                            System.out.println(connAck.toString());
-//                        } else {
-//                            System.out.println("Consegui conectar\n\n\n");
-//
-//                            // setup subscribes or start publishing
-//                        }
-//                    });
-//        }
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//            client.publishWith()
-//                    .topic("v1/411755b0-58fa-11ed-bf0a-bb4ba43bd3f6/things/5c9496e0-58ff-11ed-bf0a-bb4ba43bd3f6/data/3")
-//                    .payload("digital_sensor,d=1".getBytes())
-//                    .send()
-//                    .whenComplete((publish, throwable) -> {
-//                        if (throwable != null) {
-//                            // handle failure to publish
-//                            System.out.println("Nao consegui enviar\n\n\n");
-//                            System.out.println(throwable.getMessage());
-//                            System.out.println(publish.toString());
-//                        } else {
-//                            // handle successful publish, e.g. logging or incrementing a metric
-//                            System.out.println("Consegui conectar\n\n\n");
-//                        }
-//                    });
-//        }
 
-
-        //textLogs.setText("oiiiiiiiiiiiiiiiiiiiiii");
-//MQTT
-        /*
-        mqttManager = new MqttManagerImpl(
-                getContext(),
-                serverUri,
-                clientId,
-                new String[]{subscriptionTopic},
-                new int[]{0}
-        );*/
-//        mqttManager.init();
-//        initMqttStatusListener();
-//        mqttManager.connect();
         Button buttonSubmit = getView().findViewById(R.id.buttonSubmit);
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//
-//                SharedPreferences prefs = getActivity().getSharedPreferences("demopref",
-//                        Context.MODE_PRIVATE);
-//                SharedPreferences.Editor editor = prefs.edit();
-//                editor.putString("demostring", "ola meros mortais");
-//                editor.apply();
-//                try {
-//                    Thread.sleep(100);
-//                    Log.d(TAG, prefs.getAll().toString());
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-
-
-
-//                String dados = editTextMessage.getText().toString();
-//                    writeToFile(dados);
-//
-//
-//
-//                Intent launchIntent = getActivity().getPackageManager().getLaunchIntentForPackage("com.zsasko.mqttandroidsample");
-//                if (launchIntent != null) {
-//                    System.out.println("Eu vou iniciar o mundo\n\n\n\n\n\n\n");
-//                    startActivity(launchIntent);//null pointer check in case package name was not found
-//                }else{
-//                    System.out.println("Eu sou null\n\n\n\n\n\n\n");
-//                }
-
 
             //TTN TRY
             String message = editTextMessage.getText().toString();
@@ -190,14 +101,7 @@ public class GalleryFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_gallery, container, false);
     }
     private void writeToFile(String data) {
-        /*try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput("mqtt_SHARE.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }*/
+
         String filename ="mqtt_sharing.txt";
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         try {
@@ -210,42 +114,6 @@ public class GalleryFragment extends Fragment {
             e.printStackTrace();
         }
 
-//        if (!editTextMessage.getText().toString().isEmpty()) {
-//            String state = Environment.getExternalStorageState();
-//            if (Environment.MEDIA_MOUNTED.equals(state)) {
-//                if (Build.VERSION.SDK_INT >= 23) {
-//                    if (checkPermission()) {
-//                        File sdcard = Environment.getExternalStorageDirectory();
-//                        File dir = new File(sdcard.getAbsolutePath() + "/text/");
-//                        dir.mkdir();
-//                        File file = new File(dir, "sample.txt");
-//                        FileOutputStream os = null;
-//                        try {
-//                            os = new FileOutputStream(file);
-//                            os.write(editTextMessage.getText().toString().getBytes());
-//                            os.close();
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {
-//                        requestPermission(); // Code for permission
-//                    }
-//                } else {
-//                    File sdcard = Environment.getExternalStorageDirectory();
-//                    File dir = new File(sdcard.getAbsolutePath() + "/text/");
-//                    dir.mkdir();
-//                    File file = new File(dir, "sample.txt");
-//                    FileOutputStream os = null;
-//                    try {
-//                        os = new FileOutputStream(file);
-//                        os.write(editTextMessage.getText().toString().getBytes());
-//                        os.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }
     }
 
 private boolean checkPermission() {
@@ -279,72 +147,3 @@ public void onRequestPermissionsResult(int requestCode, String permissions[], in
         }
 
     }
-
-//
-//    private void initMqttStatusListener() {
-//        mqttManager.mqttStatusListener = new MqttStatusListener() {
-//            @Override
-//            public void onConnectComplete(boolean reconnect, String serverURI) {
-//                if (reconnect) {
-//                    displayInDebugLog("Reconnected to : " + serverURI);
-//                } else {
-//                    displayInDebugLog("Connected to: " + serverURI);
-//                }
-//            }
-//
-//            @Override
-//            public void onConnectFailure(Throwable exception) {
-//                displayInDebugLog("Failed to connect");
-//            }
-//
-//            @Override
-//            public void onConnectionLost(Throwable exception) {
-//                displayInDebugLog("The Connection was lost.");
-//            }
-//
-//            @Override
-//            public void onMessageArrived(String topic, MqttMessage message) {
-//                displayInMessagesList(new String(message.getPayload()));
-//            }
-//
-//            @Override
-//            public void onTopicSubscriptionSuccess() {
-//                displayInDebugLog("Subscribed!");
-//            }
-//
-//            @Override
-//            public void onTopicSubscriptionError(Throwable exception) {
-//                displayInDebugLog("Failed to subscribe");
-//            }
-//        };
-//    }
-//
-//    private void displayInMessagesList(String message) {
-//        textLogs.setText(message + "\n" + textLogs.getText());
-//    }
-//
-//    private void displayInDebugLog(String message) {
-//        Log.i(TAG, message);
-//    }
-//
-//    private void submitMessage() {
-//        System.out.println("Eu vou submeter a mensagem \n\n\n\n\n\n");
-//        String message = editTextMessage.getText().toString();
-//        if (TextUtils.isEmpty(message)) {
-//            System.out.println("Eentrei no if \n\n\n\n\n\n");
-//            displayToast(R.string.general_please_write_some_message);
-//            return;
-//        }
-//        mqttManager.sendMessage(message, publishTopic);
-//        clearInputField();
-//    }
-//
-//    private void clearInputField() {
-//        editTextMessage.setText("");
-//    }
-//
-//    private void displayToast(@StringRes int messageId) {
-//        Toast.makeText(this.getContext(), messageId, Toast.LENGTH_LONG).show();
-//    }
-
-
