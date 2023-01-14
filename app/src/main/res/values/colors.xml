@@ -17,6 +17,7 @@
     <color name="gray">#798E9C</color>
     <color name="lineChartAreaColor1">#FF0000</color>
     <color name="iconBackgoundRooms">#1600EAFF</color>
+    <color name="iconBackgoundRooms2">#79164CEE</color>
     <color name="ButtonOn">#2DB607</color>
     <color name="ButtonOff">#FF0000</color>
     <color name="RoomRemoveMode">#DF6359</color>

@@ -174,35 +174,26 @@ public class HomeFragment extends Fragment  {
         });
 
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                LoadingDialog loadingDialog = new LoadingDialog(getActivity());
-                loadingDialog.startLoadingDialog();
-                try {
-//            loadingDialog.startLoadingDialog();
-                }catch (Exception e){
-                    System.out.println("Exception: " +e.getCause());
-                    // The dialog may be already showed
-                }
-                loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_GettingRooms));
-                while (!HouseManager.userRoomsRefGotten){
-                    try {
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+        if(!HouseManager.gettingUserRooms){
+            HouseManager.gettingUserRooms = true;
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    LoadingDialog loadingDialog = new LoadingDialog(getActivity());
+                    loadingDialog.startLoadingDialog();
+                    loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_GettingRooms));
+                    while (!HouseManager.userRoomsRefGotten){
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    HouseManager.getInstance().getUserRooms(mAdapter,loadingDialog);
                 }
-
-                HouseManager.getInstance().getUserRooms(mAdapter,loadingDialog);
-            }
-        });
-        thread.start();
+            });
+            thread.start();
+        }
     }
 
     private void setAnimation(Boolean clicked) {

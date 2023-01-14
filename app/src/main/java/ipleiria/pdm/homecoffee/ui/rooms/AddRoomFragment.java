@@ -184,6 +184,7 @@ public class AddRoomFragment extends Fragment {
                         CollectionReference roomsRef = db.collection("users").document(userId).collection("rooms");
                         // you can now add document to the posts collection
                         roomsRef.add(room);
+                        ((MainActivity) getActivity()).setInitialFragment();
                     }
                 } else {
                     Log.d(TAG, "Error getting documents: ", task.getException());
@@ -209,7 +210,8 @@ public class AddRoomFragment extends Fragment {
 
 
         //HouseManager.getInstance().adicionarContacto(newRoom);
-        ((MainActivity) getActivity()).setInitialFragment();
+
+//        ((MainActivity) getActivity()).setInitialFragment();
     }
 
     @Override

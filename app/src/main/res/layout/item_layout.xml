@@ -15,11 +15,11 @@
         android:layout_margin="5dp"
         android:animateLayoutChanges="true"
         android:animationCache="true"
-        app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="@color/iconBackgoundRooms2"
 
-        app:contentPadding="5dp"
-        app:cardBackgroundColor="#1600EAFF"
-        app:cardElevation="0dp">
+        app:cardCornerRadius="15dp"
+        app:cardElevation="0dp"
+        app:contentPadding="5dp">
         <!-- app:cardBackgroundColor="#EDEDED"
         app:cardElevation="5dp"-->
 

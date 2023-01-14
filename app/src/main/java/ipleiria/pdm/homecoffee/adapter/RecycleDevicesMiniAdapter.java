@@ -56,6 +56,24 @@ public class RecycleDevicesMiniAdapter<D extends Device> extends RecyclerView.Ad
     @Override
     public void onBindViewHolder(@NonNull RecycleDevicesMiniAdapter.DevicesHolder holder, int position) {
         D devCurrent = itemsList.get(position);
+
+        holder.itemView.setClickable(true);
+        int itemPosition = position;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClick(v, itemPosition);
+            }
+        });
+
+        if(devCurrent == null){
+            holder.txtDevName.setText(context.getResources().getString(R.string.txt_NoAssociatedSensor));
+            holder.cardView_dev.setCardBackgroundColor(
+                    context.getResources().getColor(android.R.color.holo_orange_light));
+            holder.imgPhoto.setImageResource(R.drawable.cancel_icon);
+            return;
+        }
+
         holder.txtDevName.setText(devCurrent.getName());
         holder.cardView_dev.setCardBackgroundColor(
                 (devCurrent instanceof Sensor) ?
@@ -87,14 +105,6 @@ public class RecycleDevicesMiniAdapter<D extends Device> extends RecyclerView.Ad
                 holder.imgPhoto.setImageResource(R.drawable.preassuresensor);
                 break;
         }
-        holder.itemView.setClickable(true);
-        int itemPosition = position;
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemClick(v, itemPosition);
-            }
-        });
     }
 
     public D getItem(int position){

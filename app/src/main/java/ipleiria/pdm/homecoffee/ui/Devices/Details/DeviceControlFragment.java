@@ -212,13 +212,6 @@ public class DeviceControlFragment extends Fragment {
                 customButton.setAlpha(isChecked ? 1.0f : 0.35f);
                 buttonView.setText(isChecked ? R.string.btn_OnDevices : R.string.btn_OffDevices);
 
-                if (!isChecked){
-                    selectedDevice.setValueSaved(((Actuator) selectedDevice).getValue());
-                    ((Actuator) selectedDevice).setDesiredValue(0.0);
-                }else{
-                    ((Actuator) selectedDevice).setDesiredValue(selectedDevice.getValueSaved());
-                }
-
                 customButton.setText(selectedDevice.getValue() == 1.0?
                         getResources().getString(R.string.txt_On) :
                         getResources().getString(R.string.txt_Off));

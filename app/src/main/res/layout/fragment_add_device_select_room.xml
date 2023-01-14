@@ -7,24 +7,31 @@
     android:layout_height="match_parent"
     tools:context=".ui.Devices.Add.AddDeviceSelectRoomFragment" >
 
-    <TextView
-        android:id="@+id/textViewAddDevSelectRoomTitle"
-        style="@style/Title"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:height="50dp"
-        android:fontFamily="@font/days_one"
-        android:text="@string/txt_AddDevSelectRoomTitle"
-        android:textAlignment="center"
-        android:textColor="#8B000000"
-
-        android:textStyle="normal"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textViewAddDevSelectRoomTitle"
+            style="@style/Title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:elegantTextHeight="false"
+            android:fontFamily="@font/days_one"
+            android:paddingStart="20dp"
+
+            android:paddingEnd="20dp"
+            android:text="@string/txt_AddDevSelectRoomTitle"
+            android:textAlignment="center"
+            android:textColor="#8B000000"
+            android:textStyle="normal" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerViewAddDevSelectRoom"
@@ -34,7 +41,7 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewAddDevSelectRoomTitle" >
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -42,6 +49,7 @@
         android:id="@+id/button_devAdd_SelectRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="@string/btn_addDevice"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/RecyclerViewAddDevSelectRoom" />

@@ -55,6 +55,17 @@ public class Actuator extends Device{
         }
     }
 
+    @Override
+    public void setConnectionState(boolean connectionState) {
+        super.setConnectionState(connectionState);
+        if (!connectionState){
+            this.setValueSaved(this.getValue());
+            this.setDesiredValue(0.0);
+        }else{
+            this.setDesiredValue(this.getValueSaved());
+        }
+    }
+
     private boolean sendValueChangeCommand(double newValue){
         // Code for App-ESP32 communication
         if(this.type == DeviceType.DIGITAL || this.type == DeviceType.LUMINOSITY){

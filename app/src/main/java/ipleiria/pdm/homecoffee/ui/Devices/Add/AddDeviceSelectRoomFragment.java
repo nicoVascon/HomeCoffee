@@ -1,8 +1,12 @@
 package ipleiria.pdm.homecoffee.ui.Devices.Add;
 
+import static ipleiria.pdm.homecoffee.Enums.FragmentsEnum.ADD_DEVICES_SELECT_ROOM_FRAGMENT;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,6 +86,9 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
             @Override
             public void onBindViewHolder(@NonNull RoomsHolder holder, int position) {
                 super.onBindViewHolder(holder, position);
+                CardView cardView = holder.itemView.findViewById(R.id.cardViewRoomItem);
+                cardView.setCardBackgroundColor(getResources().getColor(R.color.iconBackgoundRooms2));
+
                 Bundle mbundle = HouseManager.getBundle();
                 if(mbundle.containsKey(RESULT_NEW_DEV_ROOM)){
                     int lastSelectedRoomPosition = mbundle.getInt(RESULT_NEW_DEV_ROOM);
@@ -175,6 +182,7 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        MainActivity.addFragmentViseted(ADD_DEVICES_SELECT_ROOM_FRAGMENT);
     }
 
     @Override

@@ -24,10 +24,8 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectBLEDeviceFragment;
-import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Gateaway.GWConfig_BLEDeviceSelectionFragment;
-import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
 public class DevicesFragment extends Fragment {
     public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
@@ -38,12 +36,11 @@ public class DevicesFragment extends Fragment {
     private TextView txtDevConState;
     private Switch allDevSwitch;
     private Button addDeviceButton;
-    private static boolean devicesEnable;
+    private static boolean devicesEnable = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
-        System.out.println("oiiiiii");
         return inflater.inflate(R.layout.fragment_devices, container, false);
     }
 
@@ -88,9 +85,9 @@ public class DevicesFragment extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 devicesEnable = isChecked;
                 if (isChecked){
-                    houseManager.recoverSavedDeviceConnectionState();
+                    houseManager.recoverSavedActuatorValue();
                 }else{
-                    houseManager.saveDeviceConnectionState();
+                    houseManager.saveActuatorValue();
                 }
 
                 dAdapter.notifyDataSetChanged();
