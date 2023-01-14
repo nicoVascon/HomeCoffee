@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -58,7 +59,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
     public class DevicesHolder extends RecyclerView.ViewHolder {
         public final TextView txtConnectionState;
         public final TextView txtDevName;
-        public final TextView txtNumDev;
+        public final TextView txtDevValue;
         public final Switch switchDev;
         public final ImageView imgPhoto;
         public final CardView cardView_dev;
@@ -69,7 +70,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
 
             txtConnectionState = itemView.findViewById(R.id.textViewConnectionState);
             txtDevName = itemView.findViewById(R.id.textViewDeviceName);
-            txtNumDev = itemView.findViewById(R.id.textViewDevValue);
+            txtDevValue = itemView.findViewById(R.id.textViewDevValue);
             switchDev = itemView.findViewById(R.id.switch_device);
             imgPhoto= itemView.findViewById(R.id.imageViewDevicePhoto);
             cardView_dev = itemView.findViewById(R.id.cardView_dev);
@@ -111,7 +112,7 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             holder.txtConnectionState.setText(getContext().getResources().getString(R.string.txt_DeviceEUICode) +
                     (gatewayName != null && !gatewayName.trim().isEmpty()?
                             houseManager.getGatewayBLEServerDevEuiCode() : ""));
-            holder.txtNumDev.setText("");
+            holder.txtDevValue.setText("");
             holder.switchDev.setVisibility(View.GONE);
             holder.imgPhoto.setImageResource(R.drawable.gateway_icon);
             holder.cardView_dev.setCardBackgroundColor(
@@ -156,7 +157,9 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         holder.switchDev.setVisibility((devCurrent instanceof Actuator)? View.VISIBLE : View.GONE);
 //        holder.switchDev.setVisibility(View.GONE);
         holder.switchDev.setText(devCurrent.isConnectionState() ? R.string.btn_OnDevices : R.string.btn_OffDevices);
-        holder.txtNumDev.setText(String.format("%.2f", devCurrent.getValue()) + " %");
+        holder.txtDevValue.setText((devCurrent.getType() == DeviceType.DIGITAL?
+                String.format("%.0f", devCurrent.getValue()) :
+                String.format("%.2f", devCurrent.getValue())) + " " + devCurrent.getType().getUnit());
         holder.cardView_dev.setCardBackgroundColor(
                 (devCurrent instanceof Sensor) ?
                         context.getResources().getColor(R.color.devIconBackground) :

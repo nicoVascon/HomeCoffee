@@ -80,51 +80,6 @@ public class Room implements Serializable, Comparable<Room> {
         });
     }
 
-//    public void updateRoomDev(){
-//
-//        //Saving to Firebase
-//        FirebaseFirestore db = FirebaseFirestore.getInstance();
-//        String userMail = HouseManager.getInstance().getUser().getEmail();
-//        CollectionReference usersRef = db.collection("users");
-//        Query query = usersRef.whereEqualTo("User_Email", userMail);
-//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    QuerySnapshot result = task.getResult();
-//                    if (!result.isEmpty()) {
-//                        DocumentSnapshot userDoc = result.getDocuments().get(0);
-//                        CollectionReference roomsRef = userDoc.getReference().collection("rooms");
-//                        Query query = roomsRef.whereEqualTo("Room_Name", Room_Name);
-//                        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                            @Override
-//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                if (task.isSuccessful()) {
-//                                    QuerySnapshot roomsSnapshot = task.getResult();
-//                                    if (!roomsSnapshot.isEmpty()) {
-//                                        DocumentSnapshot roomDoc = roomsSnapshot.getDocuments().get(0);
-////                                        roomDoc.getReference().update("Devices", Devices);
-//                                        roomDoc.getReference().update("Sensors", Sensors);
-//                                        roomDoc.getReference().update("Actuators", Actuators);
-//                                    }
-//
-//                                }
-//                            }
-//                        });
-//                    }
-//                }
-//            }
-//        });
-//    }
-
-
-//    public void addDevice(Device dev){
-//        if(Devices.contains(dev)){
-//           return;
-//        }
-//        Devices.add(dev);
-//    }
-
     public void addDevice(Device dev){
         if(dev instanceof Sensor){
             if(Sensors.contains(dev)){
@@ -138,10 +93,6 @@ public class Room implements Serializable, Comparable<Room> {
             Actuators.add((Actuator) dev);
         }
     }
-
-//    public ArrayList<Device> getDevices(){
-//        return Devices;
-//    }
 
     public ArrayList<Device> getDevices(){
         ArrayList<Device> result = new ArrayList<>(Sensors.size() + Actuators.size());
@@ -157,11 +108,6 @@ public class Room implements Serializable, Comparable<Room> {
     public void setRoom_Type(RoomType type) {
         this.Room_Type = type;
     }
-
-//    public void setDevices(ArrayList<Device> devices) {
-//        this.Devices = devices;
-//    }
-
 
     public ArrayList<Sensor> getSensors() {
         return Sensors;
@@ -190,7 +136,7 @@ public class Room implements Serializable, Comparable<Room> {
     }
 
     @Override
-    public int compareTo(Room device) {
-        return 0;
+    public int compareTo(Room room) {
+        return String.CASE_INSENSITIVE_ORDER.compare(this.Room_Name, room.Room_Name);
     }
 }

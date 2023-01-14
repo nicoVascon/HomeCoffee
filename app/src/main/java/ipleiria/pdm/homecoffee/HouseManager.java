@@ -511,14 +511,11 @@ public class HouseManager implements Serializable , Cloneable{
                         for (DocumentSnapshot roomSnapshot : roomsSnapshot) {
                             Room room = roomSnapshot.toObject(Room.class);
                             System.out.println(room.toString());
-                            //addRoom(room);
                             addRoom(room);
                             for(Device device : room.getDevices()){
                                 addDevice(device);
                             }
                         }
-//                        HouseManager.getInstance().setRooms(userRooms);
-//                        HouseManager.getInstance().addInitialDevices();
                         HouseManager.gettingUserRooms = false;
                         adapter.notifyDataSetChanged();
                         loadingDialog.dismisDialog();

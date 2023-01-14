@@ -1,24 +1,30 @@
 package ipleiria.pdm.homecoffee.Enums;
 
 public enum DeviceType {
-    DIGITAL("DI"),
-    ANALOG("AI"),
-    PRESENCE("P"),
-    HUMIDITY("H"),
-    LUMINOSITY("L"),
-    TEMPERATURE("T"),
-    ACCELERATION("A"),
-    PRESSURE("PR");
+    DIGITAL("DI", ""),
+    ANALOG("AI", "%"),
+    PRESENCE("P", ""),
+    HUMIDITY("H", "%"),
+    LUMINOSITY("L", "LUX"),
+    TEMPERATURE("T", "ºC"),
+    ACCELERATION("A", "m/s^2"),
+    PRESSURE("PR", "hPa");
 
-    String Acronym;
+    String acronym;
+    String unit;
 
-    DeviceType(String acronym){
-        this.Acronym = acronym;
+    DeviceType(String acronym, String unit){
+        this.acronym = acronym;
+        this.unit = unit;
+    }
+
+    public String getUnit() {
+        return unit;
     }
 
     public static DeviceType searchByAcronym(String acronym){
         for(DeviceType deviceType : values()){
-            if(deviceType.Acronym.equals(acronym)){
+            if(deviceType.acronym.equals(acronym)){
                 return deviceType;
             }
         }

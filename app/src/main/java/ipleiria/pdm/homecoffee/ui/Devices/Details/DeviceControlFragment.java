@@ -15,10 +15,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.checkerframework.checker.units.qual.A;
-
-import java.util.ArrayList;
-
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
@@ -157,12 +153,7 @@ public class DeviceControlFragment extends Fragment {
             });
         }
 
-        final String unit;
-        if (selectedDevice.getType() == DeviceType.TEMPERATURE){
-            unit = "ºC";
-        }else {
-            unit = "%";
-        }
+        final String unit = selectedDevice.getType().getUnit();
         circleSlider_valueControl.setOnTimeChangedListener(new CircleSliderView.OnTimeChangedListener() {
             @Override
             public void start(String starting) {
@@ -181,20 +172,17 @@ public class DeviceControlFragment extends Fragment {
                     ((Actuator) selectedDevice).setDesiredValue(percentValue);
 
                     //Temp code!!
-                    if(((Actuator) selectedDevice).getAssociatedSensor() != null) {
-                        ((Actuator) selectedDevice).getAssociatedSensor().setValue(percentValue);
-                        textView_actuatorSensorValue.setText(String.format("%.2f", percentValue) + " " + unit);
-                    }
+//                    if(((Actuator) selectedDevice).getAssociatedSensor() != null) {
+//                        ((Actuator) selectedDevice).getAssociatedSensor().setValue(percentValue);
+//                        textView_actuatorSensorValue.setText((selectedDevice.getType() == DeviceType.DIGITAL?
+//                                String.format("%.0f", percentValue) :
+//                                String.format("%.2f", percentValue)) + " " + unit);
+//                    }
                     //
                 }
-
-//                Integer dev_channel = selectedDevice.getChannel();
-//                String dev_name = selectedDevice.getName();
-//                String dev_value = String.format("%.2f",percentValue);
-//
-//                HouseManager.addString_send_ttn(dev_channel,"name:"+dev_name + ",dev_channel:" + dev_channel + ",dev_value:" + dev_value);
-
-                return String.format("%.2f", percentValue) + " " + unit;
+                return (selectedDevice.getType() == DeviceType.DIGITAL?
+                        String.format("%.0f", percentValue) :
+                        String.format("%.2f", percentValue)) + " " + unit;
             }
         });
 
@@ -225,7 +213,9 @@ public class DeviceControlFragment extends Fragment {
     }
 
     public void updateSensorValue(){
-        double measuredValue = ((Actuator) selectedDevice).getMeasuredValue();
-        textView_actuatorSensorValue.setText(String.valueOf(measuredValue));
+        double measuredValue = ((Actuator) selectedDevice).MeasuredValue();
+        textView_actuatorSensorValue.setText((selectedDevice.getType() == DeviceType.DIGITAL?
+                String.format("%.0f", measuredValue) :
+                String.format("%.2f", measuredValue)) + " " + selectedDevice.getType().getUnit());
     }
 }

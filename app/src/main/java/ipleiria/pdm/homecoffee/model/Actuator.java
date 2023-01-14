@@ -1,7 +1,5 @@
 package ipleiria.pdm.homecoffee.model;
 
-import com.jjoe64.graphview.series.DataPoint;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -40,7 +38,7 @@ public class Actuator extends Device{
         return associatedSensor;
     }
 
-    public double getMeasuredValue(){
+    public double MeasuredValue(){
         return this.associatedSensor.getValue();
     }
 
@@ -73,7 +71,6 @@ public class Actuator extends Device{
         }else{
             HouseManager.addString_send_ttn(this.channel, this.channel + "," + newValue );
         }
-
         return true;
     }
 }
