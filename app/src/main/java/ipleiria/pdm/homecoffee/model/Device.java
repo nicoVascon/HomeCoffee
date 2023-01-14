@@ -33,9 +33,10 @@ public abstract class Device implements Serializable, Comparable<Device> {
         this.channel = channel;
         this.name = name;
         this.type = type;
-
+        this.room=room;
         this.notifications = new ArrayList<>();
         this.dataPoints = new ArrayList<>();
+        room.addDevice(this);
     }
 
     public int getChannel() {

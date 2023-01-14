@@ -45,7 +45,7 @@ import ipleiria.pdm.homecoffee.model.Room;
 
 public class HouseManager implements Serializable , Cloneable{
 
-    static final long serialVersionUID = 23L;
+    static final long serialVersionUID = 24L;
 
     public static boolean gettingUserRooms;
     public static boolean userRoomsRefGotten;
@@ -215,11 +215,13 @@ public class HouseManager implements Serializable , Cloneable{
     }
 
     public void addInitialDevices() {
-        if(this.rooms.isEmpty()){
-            this.addRoom(new Room( "Sala (P/ TESTE)", RoomType.LIVING_ROOM));
-        }
+//        if(this.rooms.isEmpty()){
+        Room room=new Room( "Sala(TESTE)", RoomType.LIVING_ROOM);
+            this.addRoom(room);
+//        }
 
-        Room initialRoom = rooms.get(0);
+//        Room initialRoom = rooms.get(0);
+        Room initialRoom = room;
 
         Device dev1 = new Actuator(4, "Alarme de Temperatura", DeviceType.TEMPERATURE, initialRoom);
         Device dev2 = new Sensor(3, "Sensor de Temperatura", DeviceType.TEMPERATURE, initialRoom);
@@ -448,7 +450,7 @@ public class HouseManager implements Serializable , Cloneable{
 
                         }
 //                        HouseManager.getInstance().setRooms(userRooms);
-//                        HouseManager.getInstance().addInitialDevices();
+                        HouseManager.getInstance().addInitialDevices();
                         adapter.notifyDataSetChanged();
                         loadingDialog.dismisDialog();
                     }
