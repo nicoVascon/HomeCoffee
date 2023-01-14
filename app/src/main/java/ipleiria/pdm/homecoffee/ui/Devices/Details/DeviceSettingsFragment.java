@@ -53,16 +53,18 @@ public class DeviceSettingsFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        int devPosition;
-        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
-            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
-            Room room = HouseManager.getInstance().getRoom(roomPosition);
-            devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
-            selectedDevice = room.getDevices().get(devPosition);
-        }else{
-            devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
-            selectedDevice = HouseManager.getInstance().getDevice(devPosition);
-        }
+//        int devPosition;
+//        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+//            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+//            Room room = HouseManager.getInstance().getRoom(roomPosition);
+//            devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
+//            selectedDevice = room.getDevices().get(devPosition);
+//        }else{
+//            devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
+//            selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+//        }
+
+        this.selectedDevice = DeviceDetailsFragment.getSelectedDevice();
 
         txt_devName = getView().findViewById(R.id.textView_DeviceName_SettingsFragment);
         txt_devChannel = getView().findViewById(R.id.textView_DeviceChannel_SettingsFragment);
@@ -88,10 +90,18 @@ public class DeviceSettingsFragment extends Fragment {
                         // The dialog is automatically dismissed when a dialog button is clicked.
                         .setPositiveButton(getResources().getString(R.string.txt_yes), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                HouseManager.getInstance().removeDevice(devPosition);
+                                HouseManager.getInstance().removeDevice(selectedDevice);
                                 MainActivity.clearFragmentsVisitedList();
                                 DeviceDetailsFragment.addAsVisitedFragment = false;
-                                HouseManager.getBundle().remove(DevicesFragment.RESULT_DEV_POSITION);
+                                Bundle bundle = HouseManager.getBundle();
+                                if(bundle != null){
+                                    if(bundle.containsKey(DevicesFragment.RESULT_DEV_POSITION)){
+                                        HouseManager.getBundle().remove(DevicesFragment.RESULT_DEV_POSITION);
+                                    }else if(bundle.containsKey(RoomFragment.RESULT_DEV_POSITION)){
+                                        HouseManager.getBundle().remove(RoomFragment.RESULT_DEV_POSITION);
+                                    }
+                                }
+
                                 ((MainActivity) context).getSupportFragmentManager().beginTransaction().
                                         replace(R.id.fragment_container, new DevicesFragment()).commit();
                             }

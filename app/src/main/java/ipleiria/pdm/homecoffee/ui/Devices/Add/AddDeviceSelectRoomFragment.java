@@ -129,8 +129,10 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
             selectedDevice.setChannel(newDevChannel);
             selectedDevice.setType(newDevType);
             selectedDevice.set_Room(newDevRoom);
+
+            DeviceDetailsFragment.setSelectedDevice(selectedDevice);
             ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
-                    replace(R.id.fragment_container, new DeviceDetailsFragment(deviceArrayList, DeviceDetailsFragment.SETTINGS_TAB_INDEX)).commit();
+                    replace(R.id.fragment_container, new DeviceDetailsFragment(DeviceDetailsFragment.SETTINGS_TAB_INDEX)).commit();
             return;
         }
         Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevRoom, Toast.LENGTH_LONG).show();

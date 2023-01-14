@@ -38,13 +38,14 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class DeviceDetailsFragment extends Fragment implements SaveData {
     public static final int CONTROL_TAB_INDEX = 0;
     public static final int SETTINGS_TAB_INDEX = 3;
     public static boolean addAsVisitedFragment = true;
 
-    private Device selectedDevice;
+    private static Device selectedDevice;
 
     private TabAdapter adapter;
     private TabLayout tabLayout;
@@ -60,11 +61,11 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
             R.drawable.settings_cute_tab_icon
     };
 
-    public DeviceDetailsFragment(ArrayList<Device> devices){
-        this(devices, 0);
+    public DeviceDetailsFragment(){
+        this(0);
     }
 
-    public DeviceDetailsFragment(ArrayList<Device> devices, int initialTab){
+    public DeviceDetailsFragment(int initialTab){
         super();
         this.initialTab = initialTab;
     }
@@ -188,16 +189,25 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
 
     @Override
     public void recoverData() {
-        Bundle bundle = HouseManager.getBundle();
-        int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
+//        Bundle bundle = HouseManager.getBundle();
+//        int selectedDevPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
+//
+//        ArrayList<Device> devicesArrayList = HouseManager.getInstance().getDevices();
+//        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+//            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+//            Room room = HouseManager.getInstance().getRoom(roomPosition);
+//            devicesArrayList = room.getDevices();
+//            selectedDevPosition = bundle.getInt(RoomFragment.RESULT_DEV_POSITION);
+//        }
+//        this.selectedDevice = devicesArrayList.get(selectedDevPosition);
+    }
 
-        ArrayList<Device> devicesArrayList = HouseManager.getInstance().getDevices();
-        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
-            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
-            Room room = HouseManager.getInstance().getRoom(roomPosition);
-            devicesArrayList = room.getDevices();
-        }
-        this.selectedDevice = devicesArrayList.get(selectedDevPosition);
+    public static void setSelectedDevice(Device selectedDevice) {
+        DeviceDetailsFragment.selectedDevice = selectedDevice;
+    }
+
+    public static Device getSelectedDevice() {
+        return selectedDevice;
     }
 
     @Override

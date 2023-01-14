@@ -288,13 +288,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         currentFragment = new AddDeviceSelectRoomFragment();
                         break;
                     case DEVICE_DETAILS_FRAGMENT:
-                        ArrayList<Device> devicesArrayList = HouseManager.getInstance().getDevices();
-                        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
-                            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
-                            Room room = HouseManager.getInstance().getRoom(roomPosition);
-                            devicesArrayList = room.getDevices();
-                        }
-                        currentFragment = new DeviceDetailsFragment(devicesArrayList);
+//                        ArrayList<Device> devicesArrayList = HouseManager.getInstance().getDevices();
+//                        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+//                            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+//                            Room room = HouseManager.getInstance().getRoom(roomPosition);
+//                            devicesArrayList = room.getDevices();
+//                        }
+                        currentFragment = new DeviceDetailsFragment();
                         break;
                     case ADD_DEVICES_SELECT_SENSOR_FRAGMENT:
                         currentFragment = new AddDeviceSelectSensorFragment();

@@ -24,6 +24,7 @@ import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.model.Sensor;
+import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
@@ -59,15 +60,17 @@ public class DeviceControlFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
-            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
-            Room room = HouseManager.getInstance().getRoom(roomPosition);
-            int devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
-            selectedDevice = room.getDevices().get(devPosition);
-        }else{
-            int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
-            selectedDevice = HouseManager.getInstance().getDevice(devPosition);
-        }
+//        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+//            int roomPosition = HouseManager.getBundle().getInt(HomeFragment.RESULT_ROOM_POSITION);
+//            Room room = HouseManager.getInstance().getRoom(roomPosition);
+//            int devPosition = HouseManager.getBundle().getInt(RoomFragment.RESULT_DEV_POSITION);
+//            selectedDevice = room.getDevices().get(devPosition);
+//        }else{
+//            int devPosition = HouseManager.getBundle().getInt(DevicesFragment.RESULT_DEV_POSITION);
+//            selectedDevice = HouseManager.getInstance().getDevice(devPosition);
+//        }
+
+        this.selectedDevice = DeviceDetailsFragment.getSelectedDevice();
 
         TextView textView_CSDesiredValueLabel = getView().findViewById(R.id.textView_CSDesiredValueLabel);
         circleSlider_valueControl = getView().findViewById(R.id.circleSliderView_valueControler);

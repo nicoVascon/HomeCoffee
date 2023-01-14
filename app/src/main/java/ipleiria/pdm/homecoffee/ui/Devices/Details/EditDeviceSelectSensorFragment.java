@@ -98,8 +98,10 @@ public class EditDeviceSelectSensorFragment extends Fragment {
                                     Room room = HouseManager.getInstance().getRoom(roomPosition);
                                     devicesArrayList = room.getDevices();
                                 }
+
+                                DeviceDetailsFragment.setSelectedDevice(EditDeviceSelectSensorFragment.actuatorToAssociate);
                                 ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
-                                        replace(R.id.fragment_container, new DeviceDetailsFragment(devicesArrayList, DeviceDetailsFragment.CONTROL_TAB_INDEX)).commit();
+                                        replace(R.id.fragment_container, new DeviceDetailsFragment(DeviceDetailsFragment.CONTROL_TAB_INDEX)).commit();
                             }
                         })
                         .setNegativeButton(getResources().getString(R.string.txt_no), null)

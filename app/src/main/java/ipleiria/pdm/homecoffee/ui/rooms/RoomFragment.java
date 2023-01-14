@@ -87,14 +87,16 @@ public class RoomFragment extends Fragment {
             @Override
             public void onItemClick(View view, int position) {
                 super.onItemClick(view, position);
-                Bundle bundle = HouseManager.getBundle();
-                if (bundle == null){
-                    bundle = new Bundle();
-                    HouseManager.setBundle(bundle);
-                }
-                bundle.putInt(RESULT_DEV_POSITION, position);
+//                Bundle bundle = HouseManager.getBundle();
+//                if (bundle == null){
+//                    bundle = new Bundle();
+//                    HouseManager.setBundle(bundle);
+//                }
+//                bundle.putInt(RESULT_DEV_POSITION, position);
+                DeviceDetailsFragment.setSelectedDevice(devices.get(position));
+
                 ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new DeviceDetailsFragment(devices)).commit();
+                        replace(R.id.fragment_container, new DeviceDetailsFragment()).commit();
             }
         };
         mRecyclerView.setAdapter(dAdapter);

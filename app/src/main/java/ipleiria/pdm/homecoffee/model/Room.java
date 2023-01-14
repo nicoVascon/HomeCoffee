@@ -83,6 +83,24 @@ public class Room implements Serializable, Comparable<Room> {
 
     }
 
+    public void removeDevice(Device device){
+        if(device instanceof Sensor){
+            if(!Sensors.contains(device)){
+                return;
+            }
+            DocumentReference roomRef = HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name);
+            roomRef.collection("Sensors").document(String.valueOf(device.getChannel())).delete();
+            Sensors.remove((Sensor) device);
+        }else {
+            if(!Actuators.contains(device)){
+                return;
+            }
+            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).
+                    collection("Actuators").document(String.valueOf(device.getChannel())).delete();
+            Actuators.remove((Actuator) device);
+        }
+    }
+
     public void addDevice(Device dev){
 
         dev.set_Room(this);

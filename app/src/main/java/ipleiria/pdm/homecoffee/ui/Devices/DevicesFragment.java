@@ -68,8 +68,11 @@ public class DevicesFragment extends Fragment {
                     HouseManager.setBundle(bundle);
                 }
                 bundle.putInt(RESULT_DEV_POSITION, position);
+
+                DeviceDetailsFragment deviceDetailsFragment = new DeviceDetailsFragment();
+                deviceDetailsFragment.setSelectedDevice(HouseManager.getInstance().getDevice(position));
                 ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new DeviceDetailsFragment(HouseManager.getInstance().getDevices())).commit();
+                        replace(R.id.fragment_container, deviceDetailsFragment).commit();
             }
         };
         mRecyclerView.setAdapter(dAdapter);
