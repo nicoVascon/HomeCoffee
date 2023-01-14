@@ -132,7 +132,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Intent serviceIntent = new Intent(this, MyForegroundService.class);
         startService(serviceIntent);
 
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PahoDemo.getInstance().start_mqtt(MainActivity.this);
+                while(true) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
+                    (MainActivity.this).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            if(GalleryFragment.textLogs!=null){
+                                StringBuilder msgs_received = HouseManager.getInstance().getMsgs_received();
+                                GalleryFragment.textLogs.setText(msgs_received.toString());
+                            }
+                            DeviceActivityFragment.updateValues();
+
+                        }
+                    });
+                }
+            }
+        }) ;
+        thread.start();
 
     }
 
@@ -330,6 +356,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static Fragment getCurrentFragment() {
         return currentFragment;
     }
+
+
 
     public void btn_logout(View view) {
         FirebaseAuth.getInstance().signOut();

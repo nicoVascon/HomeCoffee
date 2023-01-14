@@ -1,6 +1,7 @@
 package ipleiria.pdm.homecoffee.model;
 
-import com.jjoe64.graphview.series.DataPoint;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +16,7 @@ import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 public class Actuator extends Device{
 
     private Sensor associatedSensor;
+    private DocumentReference associateddSensorRef;
 
     public Actuator(){
         this.notifications = new ArrayList<>();
@@ -32,6 +34,16 @@ public class Actuator extends Device{
         if(sensor.getType() == this.type){
             associatedSensor = sensor;
             this.dataPoints = sensor.dataPoints;
+
+//            DocumentReference referenciaSensor = HouseManager.getInstance().getUser().getRoomsRef().
+//                    document(sensor.getRoom().getRoom_Name()).collection("Sensors").
+//                    document(String.valueOf(sensor.getChannel()));
+            CollectionReference refRooms = HouseManager.getInstance().getUser().getRoomsRef();
+            DocumentReference refRealRoom= refRooms.document(sensor.getRoom().getRoom_Name());
+            CollectionReference refSensors = refRealRoom.collection("Sensors");
+            DocumentReference refSensor = refSensors.document(String.valueOf(sensor.getChannel()));
+            setAssociateddSensorRef(refSensor);
+
         }
         return associatedSensor;
     }
@@ -55,6 +67,14 @@ public class Actuator extends Device{
         }
     }
 
+    public DocumentReference getAssociateddSensorRef() {
+        return associateddSensorRef;
+    }
+
+    public void setAssociateddSensorRef(DocumentReference associateddSensorRef) {
+        this.associateddSensorRef = associateddSensorRef;
+    }
+
     private boolean sendValueChangeCommand(double newValue){
         // Code for App-ESP32 communication
         if(this.type == DeviceType.DIGITAL || this.type == DeviceType.LUMINOSITY){
@@ -65,4 +85,6 @@ public class Actuator extends Device{
 
         return true;
     }
+
+
 }

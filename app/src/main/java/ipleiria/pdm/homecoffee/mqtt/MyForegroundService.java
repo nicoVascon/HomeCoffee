@@ -19,6 +19,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 
 public class MyForegroundService extends Service {
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -87,18 +88,18 @@ public class MyForegroundService extends Service {
                         PahoDemo.getInstance().submitMessage();
                     }
 
-                    (MainActivity.getCurrentFragment().getActivity()).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            if(GalleryFragment.textLogs!=null){
-                                StringBuilder msgs_received = HouseManager.getInstance().getMsgs_received();
-                                GalleryFragment.textLogs.setText(msgs_received.toString());
-                            }
-                            DeviceActivityFragment.updateValues();
-
-                        }
-                    });
+//                    (MainActivity.getCurrentFragment().getActivity()).runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//                            if(GalleryFragment.textLogs!=null){
+//                                StringBuilder msgs_received = HouseManager.getInstance().getMsgs_received();
+//                                GalleryFragment.textLogs.setText(msgs_received.toString());
+//                            }
+//                            DeviceActivityFragment.updateValues();
+//
+//                        }
+//                    });
                 }
             }
         }) ;

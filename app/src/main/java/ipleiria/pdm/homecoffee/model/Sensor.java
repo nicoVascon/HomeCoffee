@@ -1,5 +1,6 @@
 package ipleiria.pdm.homecoffee.model;
 
+import com.google.firebase.firestore.DocumentReference;
 import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
@@ -10,6 +11,8 @@ import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
 public class Sensor extends Device{
+
+    private DocumentReference associatedRoomRef;
 
     public Sensor(){
         this.notifications = new ArrayList<>();
@@ -37,5 +40,11 @@ public class Sensor extends Device{
         this.addNotification(new Notification(currentDate, "Novo Valor Recebido: " + String.format("%.2f", value)));
     }
 
+    public DocumentReference getAssociatedRoomRef() {
+        return associatedRoomRef;
+    }
 
+    public void setAssociatedRoomRef(DocumentReference associatedRoomRef) {
+        this.associatedRoomRef = associatedRoomRef;
+    }
 }

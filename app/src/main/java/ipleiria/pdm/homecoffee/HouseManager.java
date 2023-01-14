@@ -11,12 +11,10 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.FileInputStream;
@@ -37,7 +35,6 @@ import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.components.LoadingDialog;
-import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Notification;
 import ipleiria.pdm.homecoffee.model.Sensor;
@@ -263,6 +260,14 @@ public class HouseManager implements Serializable , Cloneable{
         if (!rooms.contains(room)) {
             rooms.add(room);
             Collections.sort(rooms);
+            Map<String, Object> room_map = new HashMap<>();
+            //room.put("User_Email", userMail);
+            room_map.put("Room_Name", room.getRoom_Name());
+            room_map.put("Room_Type", room.getRoom_Type());
+//            room_map.put("Sensors", room.getSensors());
+//            room_map.put("Actuators", room.getSensors());
+            HouseManager.getInstance().getUser().getRoomsRef().document(room.getRoom_Name()).set(room_map);
+
         }
     }
 
@@ -529,7 +534,8 @@ public class HouseManager implements Serializable , Cloneable{
                                                 for (DocumentSnapshot deviceSnapshot : task.getResult()) {
                                                     Sensor sensor = deviceSnapshot.toObject(Sensor.class);
                                                     addDevice(sensor);
-                                                    room.addDevice(sensor);
+                                                    room.addLocalDevice(sensor);
+
                                                     sensor.set_Room(room);
                                                 }
                                             }
@@ -545,8 +551,37 @@ public class HouseManager implements Serializable , Cloneable{
                                             if (task.isSuccessful()) {
                                                 for (DocumentSnapshot deviceSnapshot : task.getResult()) {
                                                     Actuator actuator = deviceSnapshot.toObject(Actuator.class);
+
+                                                    Task<DocumentSnapshot> sensorSnapshot = actuator.getAssociateddSensorRef()
+                                                            .get()
+                                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        Sensor sensor = task.getResult().toObject(Sensor.class);
+//                                                                            Actuator actuator = deviceSnapshot.toObject(Actuator.class);
+
+
+                                                                        sensor.getAssociatedRoomRef()
+                                                                                .get()
+                                                                                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                                                    @Override
+                                                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                                                        if (task.isSuccessful()) {
+                                                                                            Room room_sensor = task.getResult().toObject(Room.class);
+
+                                                                                            sensor.set_Room(room_sensor);
+
+                                                                                            actuator.setAssociatedSensor(sensor);
+
+                                                                                        }
+                                                                                    }
+                                                                                });
+                                                                    }
+                                                                }
+                                                            });
                                                     addDevice(actuator);
-                                                    room.addDevice(actuator);
+                                                    room.addLocalDevice(actuator);
                                                 }
                                             }
                                         }
@@ -706,8 +741,8 @@ public class HouseManager implements Serializable , Cloneable{
 
         if (error){
             INSTANCE = HouseManager.getInstance();
-            INSTANCE.adicionarDadosIniciais();
-            INSTANCE.addInitialDevices();
+//            INSTANCE.adicionarDadosIniciais();
+//            INSTANCE.addInitialDevices();
         }
         HouseManager.modificable = true;
     }

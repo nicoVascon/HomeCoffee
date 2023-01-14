@@ -33,6 +33,14 @@ import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 public class EditDeviceSelectSensorFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecycleDevicesMiniAdapter<Sensor> dAdapter;
+    private static Actuator actuatorToAssociate ;
+
+//
+//    public EditDeviceSelectSensorFragment(ArrayList<Device> devices){
+//        this.devices=devices;
+//    }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +65,7 @@ public class EditDeviceSelectSensorFragment extends Fragment {
         mRecyclerView = getView().findViewById(R.id.recyclerViewSelectSensor);
         Bundle bundle = HouseManager.getBundle();
         int actuatorPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
-        Actuator actuator = (Actuator) houseManager.getDevice(actuatorPosition);
+        Actuator actuator = actuatorToAssociate;
         dAdapter = new RecycleDevicesMiniAdapter<Sensor>(this.getActivity(),
                 houseManager.searchSensors(actuator.getType())){
             @Override
@@ -75,8 +83,7 @@ public class EditDeviceSelectSensorFragment extends Fragment {
                                     bundle = new Bundle();
                                     HouseManager.setBundle(bundle);
                                 }
-                                int actuatorPosition = bundle.getInt(DevicesFragment.RESULT_DEV_POSITION);
-                                Actuator actuator = (Actuator) houseManager.getDevice(actuatorPosition);
+                                Actuator actuator = actuatorToAssociate;
                                 Sensor currentAssociatedSensor = actuator.setAssociatedSensor(sensorToAssociate);
                                 if(currentAssociatedSensor == sensorToAssociate){
                                     Toast.makeText(getContext(), getResources().getString(R.string.toastMessage_AssociateSensorSuccess),
@@ -104,6 +111,14 @@ public class EditDeviceSelectSensorFragment extends Fragment {
         mRecyclerView.setAdapter(dAdapter);
         GridLayoutManager layoutManager = new GridLayoutManager(this.getActivity(), 2);
         mRecyclerView.setLayoutManager(layoutManager);
+    }
+
+    public static Actuator getActuatorToAssociate() {
+        return actuatorToAssociate;
+    }
+
+    public static void setActuatorToAssociate(Actuator actuatorToAssociate) {
+        EditDeviceSelectSensorFragment.actuatorToAssociate = actuatorToAssociate;
     }
 
     @Override

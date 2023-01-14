@@ -119,24 +119,25 @@ public class AddRoomFragment extends Fragment {
 
         Room newRoom = new Room(nome, type);
 
-
-
-        //Getting current user's email
-        String userMail = HouseManager.getInstance().getUser().getEmail();
-
-
-        //Saving room on Firebase's Firestore
-        // Create a new room
-        Map<String, Object> room = new HashMap<>();
-        //room.put("User_Email", userMail);
-        room.put("Room_Name", nome);
-        room.put("Room_Type", type);
-        room.put("Sensors", newRoom.getSensors());
-        room.put("Actuators", newRoom.getSensors());
-
-
-        CollectionReference usersRef = db.collection("users");
-        HouseManager.getInstance().getUser().getRoomsRef().document(nome).set(room);
+//
+//
+//        //Getting current user's email
+//        String userMail = HouseManager.getInstance().getUser().getEmail();
+//
+//
+//        //Saving room on Firebase's Firestore
+//        // Create a new room
+//        Map<String, Object> room = new HashMap<>();
+//        //room.put("User_Email", userMail);
+//        room.put("Room_Name", nome);
+//        room.put("Room_Type", type);
+//        room.put("Sensors", newRoom.getSensors());
+//        room.put("Actuators", newRoom.getSensors());
+//
+//
+//        CollectionReference usersRef = db.collection("users");
+        HouseManager.getInstance().addRoom(newRoom);
+//        HouseManager.getInstance().getUser().getRoomsRef().document(nome).set(room);
 
 //        Query query = usersRef.whereEqualTo("User_Email", userMail);
 //        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

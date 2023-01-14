@@ -1,10 +1,16 @@
 package ipleiria.pdm.homecoffee.model;
 
+import com.google.firebase.firestore.DocumentReference;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.HouseManager;
+import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
 public class Room implements Serializable, Comparable<Room> {
 
@@ -54,29 +60,59 @@ public class Room implements Serializable, Comparable<Room> {
     public void updateRoomDev(){
 
 
-
-
-        for (Sensor sensor : Sensors) {
-
-            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Sensors").document(String.valueOf(sensor.getChannel())).set(sensor);
-        }
+//
+//
+//        for (Sensor sensor : Sensors) {
+//
+//            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Sensors").document(String.valueOf(sensor.getChannel())).set(sensor);
+//        }
 
     }
 
     public void addDevice(Device dev){
+
+        dev.set_Room(this);
+        Map<String, Object> device = new HashMap<>();
+        //room.put("User_Email", userMail);
+        device.put("channel", dev.getChannel());
+        device.put("name", dev.getName());
+        device.put("type", dev.getType());
+        device.put("connectionState", dev.isConnectionState());
+        device.put("connectionStateSaved", dev.isConnectionStateSaved());
+        device.put("dataPoints", dev.getDataPoints());
+        device.put("notifications", dev.getNotifications());
+        device.put("value", dev.getValue());
+        device.put("valueSaved", dev.getValueSaved());
+
+
+//        protected boolean connectionState;
+//        protected boolean connectionStateSaved;
+//        protected DeviceType type;
+//        protected ArrayList<DataPointImpl> dataPoints;
+//        protected ArrayList<Notification> notifications;
+//        protected double value;
+//        protected double valueSaved;
+//        private DocumentReference docRefFirebase;
+
         if(dev instanceof Sensor){
             if(Sensors.contains(dev)){
                 return;
             }
             Sensors.add((Sensor) dev);
-            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name).collection("Sensors").document(String.valueOf(dev.getChannel())).set(dev);
+            DocumentReference roomRef = HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name);
+            device.put("associatedRoomRef",roomRef);
+            roomRef.collection("Sensors").document(String.valueOf(dev.getChannel())).set(device);
 
         }else {
             if(Actuators.contains(dev)){
                 return;
             }
             Actuators.add((Actuator) dev);
-            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Actuators").document(String.valueOf(dev.getChannel())).set(dev);
+
+            device.put("associateddSensorRef", ((Actuator) dev).getAssociateddSensorRef());
+
+
+            HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Actuators").document(String.valueOf(dev.getChannel())).set(device);
 
         }
     }
@@ -127,5 +163,15 @@ public class Room implements Serializable, Comparable<Room> {
     @Override
     public int compareTo(Room device) {
         return 0;
+    }
+
+    public void addLocalDevice(Device dev) {
+
+        if(dev instanceof Sensor){
+            Sensors.add((Sensor) dev);
+        }else{
+            Actuators.add((Actuator) dev);
+        }
+        dev.set_Room(this);
     }
 }

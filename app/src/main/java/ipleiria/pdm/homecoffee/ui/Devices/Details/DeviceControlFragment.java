@@ -151,6 +151,7 @@ public class DeviceControlFragment extends Fragment {
             btn_associateSensor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    EditDeviceSelectSensorFragment.setActuatorToAssociate((Actuator) selectedDevice);
                     ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
                             replace(R.id.fragment_container, new EditDeviceSelectSensorFragment()).commit();
                 }

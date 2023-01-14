@@ -19,7 +19,6 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected ArrayList<Notification> notifications;
     protected double value;
     protected double valueSaved;
-    private DocumentReference docRefFirebase;
     private Room room;
 
 
@@ -85,18 +84,6 @@ public abstract class Device implements Serializable, Comparable<Device> {
     }
 
 
-    public DocumentReference getDocRefFirebase() {
-        return docRefFirebase;
-    }
-
-    public void setDocRefFirebase(DocumentReference docRefFirebase) {
-        this.docRefFirebase = docRefFirebase;
-    }
-//    public void setType(String type) {
-//        this.type = DeviceType.valueOf(type);
-//    }
-
-
     public double getValue() {
         return value;
     }
@@ -132,9 +119,13 @@ public abstract class Device implements Serializable, Comparable<Device> {
     }
 
     public void set_Room(Room room) {
-        room.addDevice(this);
-        room.updateRoomDev();
+//        room.addDevice(this);
+//        room.updateRoomDev();
         this.room=room;
+    }
+
+    public Room getRoom() {
+        return room;
     }
 
     public ArrayList<DataPointImpl> getDataPoints() {
