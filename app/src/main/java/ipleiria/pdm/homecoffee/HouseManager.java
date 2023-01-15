@@ -144,6 +144,23 @@ public class HouseManager implements Serializable , Cloneable{
         return false;
     }
 
+    public boolean isChannelAvailable(int channel, int deviceMode){
+        if (deviceMode == 0){ // Sensor Mode
+            for(Sensor sensor : sensors){
+                if(sensor.getChannel() == channel){
+                    return false;
+                }
+            }
+        }else{ // Actuator Mode
+            for (Actuator actuator : actuators){
+                if(actuator.getChannel() == channel){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public void removeDevice(int position) {
         Device device = devices.get(position);
         removeDevice(device);
@@ -198,9 +215,9 @@ public class HouseManager implements Serializable , Cloneable{
         }
     }
 
-    public int numberOfDevicesConnect(){
+    public int numberOfDevicesConnect(ArrayList<Device> devicesList){
         int devicesConnected = 0;
-        for (Device device : devices){
+        for (Device device : devicesList){
             if (device.isConnectionState()){
                 devicesConnected ++;
             }

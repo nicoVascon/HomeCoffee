@@ -43,6 +43,7 @@ import ipleiria.pdm.homecoffee.components.LoadingDialog;
 import ipleiria.pdm.homecoffee.model.Actuator;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
 
@@ -106,6 +107,9 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
+
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             // Bluetooth is not enabled, prompt the user to enable it
@@ -223,7 +227,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
                 new AlertDialog.Builder(getContext())
                         .setTitle(getResources().getString(R.string.txt_AlertDialog_AddDevicesTitle))
                         .setMessage(getResources().getString(R.string.txt_AlertDialog_AddDevices_Part1) +
-                                devicesDescriptions.length + getResources().getString(R.string.txt_DevicesFragTitle) +
+                                devicesDescriptions.length + " " + getResources().getString(R.string.txt_DevicesFragTitle) +
                                 "\n\n" +
                                 getResources().getString(R.string.txt_AlertDialog_AddDevices_Part2))
                         .setPositiveButton(getResources().getString(R.string.txt_yes), new DialogInterface.OnClickListener() {

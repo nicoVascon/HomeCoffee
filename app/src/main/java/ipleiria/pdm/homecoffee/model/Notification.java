@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Notification implements Serializable {
+public class Notification implements Serializable, Comparable<Notification> {
     private Date date;
     private String description;
+
+    public Notification(){
+
+    }
 
     public Notification(Date date, String description){
         this.date = date;
@@ -36,5 +40,13 @@ public class Notification implements Serializable {
     public String getDateFormatted(){
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return dateFormatter.format(date);
+    }
+
+    @Override
+    public int compareTo(Notification o) {
+        if(o.date.getTime() > this.date.getTime()){
+            return 1;
+        }
+        return -1;
     }
 }

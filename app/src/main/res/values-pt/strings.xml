@@ -94,8 +94,8 @@
     <string name="toastMessage_BLEDiscoverServicesFailed">Tempo Esgotado: Erro ao Descobrir Serviços</string>
     <string name="BLEDevicesFound_title">Dispositivos Encontrados</string>
     <string name="btn_scanBLEDevices">Escanear</string>
-    <string name="txt_AlertDialog_TTNEndDeviceRegistrationTitle">Registo do Dispositivo na TTN</string>
-    <string name="txt_AlertDialog_TTNEndDeviceRegistration">Registe o Dispositivo na Plataforma The Things Network, Preencha os Campos e Pressione em Continuar</string>
+    <string name="txt_AlertDialog_TTNEndDeviceRegistrationTitle">Credenciais de Rede</string>
+    <string name="txt_AlertDialog_TTNEndDeviceRegistration">Introduza as Credenciais de Rede para Conetar o Gateway à Rede.</string>
     <string name="btn_Continue">Continuar</string>
     <string name="btn_Cancel">Cancelar</string>
     <string name="txt_DeviceEUICode">"Código EUI do Dispositivo: "</string>
@@ -124,4 +124,10 @@
     <string name="txt_addRoomName">Insere um nome</string>
     <string name="txt_NameProtection">Insere um nome diferente</string>
     <string name="toastMessage_NoRooms">Ñao tem rooms adicionados</string>
+    <string name="toastMessage_ChannelNotAvailable">Canal Não Disponível</string>
+    <string name="txt_AlertDialog_GWConfig_AppEUILabel">Nome da Rede:</string>
+    <string name="txt_AlertDialog_GWConfig_AppKeyLabel" translatable="false">Palavra-Passe da Rede:</string>
+    <string name="toastMessage_UnreachableServer">Servidor Inalcanzável. Por favor use outra Rede.</string>
+    <string name="toolbar_GWConfigTitle">Configuração do Gateway</string>
+    <string name="toolbar_RoomTitle">Meu Quarto</string>
 </resources>

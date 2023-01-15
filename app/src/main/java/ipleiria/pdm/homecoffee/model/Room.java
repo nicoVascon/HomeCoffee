@@ -42,14 +42,6 @@ public class Room implements Serializable, Comparable<Room> {
         this.Actuators = new ArrayList<>();
     }
 
-//    public Room( String Room_Name, RoomType Room_Type,ArrayList<Device> devices) {
-//
-//        this.Room_Name = Room_Name;
-//        //this.pathPhoto = pathPhoto;
-//        this.Room_Type =Room_Type;
-//        this.Devices =devices;
-//    }
-
     public Room( String Room_Name, RoomType Room_Type,ArrayList<Sensor> sensors, ArrayList<Actuator> actuators) {
 
         this.Room_Name = Room_Name;

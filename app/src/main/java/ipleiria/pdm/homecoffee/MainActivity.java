@@ -47,6 +47,7 @@ import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectSensorFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceControlFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.EditDeviceSelectSensorFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
@@ -134,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                PahoDemo.getInstance().start_mqtt(MainActivity.this);
+//                PahoDemo.getInstance().start_mqtt(MainActivity.this);
                 while(true) {
                     try {
                         Thread.sleep(500);
@@ -151,47 +152,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 GalleryFragment.textLogs.setText(msgs_received.toString());
                             }
                             DeviceActivityFragment.updateValues();
-
+                            DeviceControlFragment.updateSensorValue();
+                            DevicesFragment.updateDevicesValues();
                         }
                     });
                 }
             }
         }) ;
         thread.start();
-
-    }
-
-    private void runForever() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                PahoDemo.getInstance().start_mqtt(MainActivity.this);
-                while(true) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    if (HouseManager.isModificable()){
-                        PahoDemo.getInstance().submitMessage();
-                    }
-
-                    (MainActivity.this).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            if(GalleryFragment.textLogs!=null){
-                                StringBuilder msgs_received = HouseManager.getInstance().getMsgs_received();
-                                GalleryFragment.textLogs.setText(msgs_received.toString());
-                            }
-                            DeviceActivityFragment.updateValues();
-                        }
-                    });
-                }
-            }
-        }) ;
-        thread.start();
-
 
     }
 
@@ -219,12 +187,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("contactos", HouseManager.getInstance());
+//        outState.putSerializable("contactos", HouseManager.getInstance());
     }
     @Override
     protected void onPause() {
         super.onPause();
-        HouseManager.gravarFicheiro(this);
+//        HouseManager.gravarFicheiro(this);
     }
 
     @Override
@@ -319,12 +287,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onDestroy();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.main, menu);
+//        return true;
+//    }
 
     public static void setToolBarTitle(String title){
         toolBarTitle.setText(title);

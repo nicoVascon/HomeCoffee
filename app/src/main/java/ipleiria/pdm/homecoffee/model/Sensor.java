@@ -6,8 +6,11 @@ import com.jjoe64.graphview.series.DataPoint;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
+import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
 
 public class Sensor extends Device{
@@ -34,7 +37,7 @@ public class Sensor extends Device{
 
     // Temporal method
     public void setValue(double value){
-        this.value = value;
+        super.setValue(value);
         Calendar calendar = Calendar.getInstance();
         Date currentDate = calendar.getTime();
         this.addDataPoint(new DataPointImpl(currentDate, value));
@@ -55,5 +58,24 @@ public class Sensor extends Device{
 
     public void setAssociatedRoomRef(DocumentReference associatedRoomRef) {
         this.associatedRoomRef = associatedRoomRef;
+    }
+
+    @Override
+    public void update() {
+        Map<String, Object> device = new HashMap<>();
+        device.put("channel", this.getChannel());
+        device.put("name", this.getName());
+        device.put("type", this.getType());
+        device.put("connectionState", this.isConnectionState());
+        device.put("connectionStateSaved", this.isConnectionStateSaved());
+        device.put("dataPoints", this.getDataPoints());
+        device.put("notifications", this.getNotifications());
+        device.put("value", this.getValue());
+        device.put("valueSaved", this.getValueSaved());
+        DocumentReference roomRef = HouseManager.getInstance().getUser().getRoomsRef().document(this.room.getRoom_Name());
+        device.put("associatedRoomRef",roomRef);
+        HouseManager.getInstance().getUser().getRoomsRef().
+                document(this.room.getRoom_Name()).collection("Sensors").
+                document(String.valueOf(this.getChannel())).set(device);
     }
 }

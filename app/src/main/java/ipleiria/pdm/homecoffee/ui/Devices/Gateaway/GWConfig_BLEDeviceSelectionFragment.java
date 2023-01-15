@@ -112,6 +112,9 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_GWConfigTitle));
+
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             // Bluetooth is not enabled, prompt the user to enable it
@@ -205,8 +208,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                         View viewInflated = LayoutInflater.from(getContext()).inflate(R.layout.alertdialog_gwconfig_layout, (ViewGroup) getView(), false);
                         // Set up the input
                         TextView textViewAlertDialogGWConfig = viewInflated.findViewById(R.id.textViewAlertDialogGWConfig);
-                        textViewAlertDialogGWConfig.setText(getResources().getString(R.string.txt_AlertDialog_TTNEndDeviceRegistration) +
-                                "\n\n" + getResources().getString(R.string.txt_DeviceEUICode) + devEuiCode);
+                        textViewAlertDialogGWConfig.setText(getResources().getString(R.string.txt_AlertDialog_TTNEndDeviceRegistration));
                         final EditText EditTextGWConfigAppEUI = (EditText) viewInflated.findViewById(R.id.EditTextGWConfigAppEUI);
                         final EditText EditTextGWConfigAppKey = (EditText) viewInflated.findViewById(R.id.EditTextGWConfigAppKey);
                         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text

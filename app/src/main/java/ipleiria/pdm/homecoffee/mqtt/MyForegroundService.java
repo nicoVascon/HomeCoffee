@@ -15,6 +15,7 @@ import androidx.core.app.NotificationCompat;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.MainActivity;
 import ipleiria.pdm.homecoffee.R;
+import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceActivityFragment;
 import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 
@@ -77,6 +78,7 @@ public class MyForegroundService extends Service {
             @Override
             public void run() {
                 PahoDemo.getInstance().start_mqtt(MainActivity.getCurrentFragment().getActivity());
+                int i = 0;
                 while(true) {
                     try {
                         Thread.sleep(500);
@@ -86,7 +88,15 @@ public class MyForegroundService extends Service {
 
                     if (HouseManager.isModificable()){
                         PahoDemo.getInstance().submitMessage();
+                        i ++;
+                        if(i==20){
+                            for(Device device : HouseManager.getInstance().getDevices()){
+                                device.update();
+                            }
+                        }
                     }
+
+
 
 //                    (MainActivity.getCurrentFragment().getActivity()).runOnUiThread(new Runnable() {
 //                        @Override

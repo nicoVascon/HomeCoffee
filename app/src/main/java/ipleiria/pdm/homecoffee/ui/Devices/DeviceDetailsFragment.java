@@ -42,7 +42,7 @@ import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
 public class DeviceDetailsFragment extends Fragment implements SaveData {
     public static final int CONTROL_TAB_INDEX = 0;
-    public static final int SETTINGS_TAB_INDEX = 3;
+    public static final int SETTINGS_TAB_INDEX = 2;
     public static boolean addAsVisitedFragment = true;
 
     private static Device selectedDevice;
@@ -218,7 +218,7 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
             return;
         }
         MainActivity.addFragmentViseted(FragmentsEnum.DEVICE_DETAILS_FRAGMENT);
-        if(HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
+        if(HouseManager.getBundle() != null && HouseManager.getBundle().containsKey(HomeFragment.RESULT_ROOM_POSITION)){
             HouseManager.getBundle().remove(HomeFragment.RESULT_ROOM_POSITION);
         }
     }

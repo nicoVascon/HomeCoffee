@@ -6,6 +6,8 @@ import com.google.firebase.firestore.DocumentReference;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -34,6 +36,7 @@ public class Actuator extends Device{
         if(sensor.getType() == this.type){
             associatedSensor = sensor;
             this.dataPoints = sensor.dataPoints;
+            this.notifications = sensor.notifications;
             associatedSensor.setAssociatedActuator(this);
 
             CollectionReference refRooms = HouseManager.getInstance().getUser().getRoomsRef();
@@ -50,7 +53,7 @@ public class Actuator extends Device{
     }
 
     public double MeasuredValue(){
-        return this.associatedSensor.getValue();
+        return this.associatedSensor != null ? this.associatedSensor.getValue() : 0.0;
     }
 
     public void setDesiredValue(double value){
@@ -91,5 +94,23 @@ public class Actuator extends Device{
             HouseManager.addString_send_ttn(this.channel, this.channel + "," + newValue );
         }
         return true;
+    }
+
+    @Override
+    public void update() {
+        Map<String, Object> device = new HashMap<>();
+        device.put("channel", this.getChannel());
+        device.put("name", this.getName());
+        device.put("type", this.getType());
+        device.put("connectionState", this.isConnectionState());
+        device.put("connectionStateSaved", this.isConnectionStateSaved());
+        device.put("dataPoints", this.getDataPoints());
+        device.put("notifications", this.getNotifications());
+        device.put("value", this.getValue());
+        device.put("valueSaved", this.getValueSaved());
+        device.put("associateddSensorRef", this.getAssociateddSensorRef());
+        HouseManager.getInstance().getUser().getRoomsRef().
+                document(this.room.getRoom_Name()).collection("Sensors").
+                document(String.valueOf(this.getChannel())).set(device);
     }
 }

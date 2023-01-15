@@ -181,7 +181,6 @@ public class CircleSliderView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-
         canvas.save();
 
         canvas.drawCircle(mCx, mCy, mRadius - mCircleStrokeWidth / 2 - mGapBetweenCircleAndLine, mNumberPaint);

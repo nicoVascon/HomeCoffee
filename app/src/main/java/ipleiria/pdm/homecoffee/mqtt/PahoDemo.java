@@ -17,6 +17,7 @@ import java.util.Base64;
 import java.util.HashMap;
 
 import ipleiria.pdm.homecoffee.HouseManager;
+import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Sensor;
 
 public class PahoDemo implements MqttCallback, Serializable {
@@ -108,7 +109,9 @@ public class PahoDemo implements MqttCallback, Serializable {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(activity, "PLEASE USE ANOTHER NETWORK", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity,
+                            activity.getResources().getString(R.string.toastMessage_UnreachableServer),
+                            Toast.LENGTH_SHORT).show();
                 }
             });
         }

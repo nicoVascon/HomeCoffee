@@ -32,7 +32,7 @@ public class DevicesFragment extends Fragment {
 
     private HouseManager houseManager;
     private RecyclerView mRecyclerView;
-    private RecycleDevicesAdapter dAdapter;
+    private static RecycleDevicesAdapter dAdapter;
     private TextView txtDevConState;
     private Switch allDevSwitch;
     private Button addDeviceButton;
@@ -140,9 +140,16 @@ public class DevicesFragment extends Fragment {
     }
 
     public void updateDevicesConnectionState(){
-        int numberOfDevicesConnect = houseManager.numberOfDevicesConnect();
+        int numberOfDevicesConnect = houseManager.numberOfDevicesConnect(HouseManager.getInstance().getDevices());
         txtDevConState.setText(numberOfDevicesConnect > 0 ?
                 numberOfDevicesConnect + getResources().getString(R.string.txt_DevicesConnected)  : getResources().getString(R.string.txt_DevicesDisconnected));
+    }
+
+    public static void updateDevicesValues(){
+        if(dAdapter == null){
+            return;
+        }
+        dAdapter.notifyDataSetChanged();
     }
 
     public static boolean isDevicesEnable() {

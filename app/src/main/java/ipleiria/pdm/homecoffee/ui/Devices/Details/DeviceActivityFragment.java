@@ -45,9 +45,10 @@ public class DeviceActivityFragment extends Fragment {
     public static final int X_AXIS_INTERVAL_DAY = 1;
     public static final int X_AXIS_INTERVAL_HOUR = 2;
 
-    private Device selectedDevice;
+    private static Device selectedDevice;
     private static DataPointImpl[] dataPoints1;
     private static String legend;
+    private static int currentInterval;
     //private DataPoint[] dataPoints2;
 
     private static GraphView_Custom lineChart;
@@ -56,7 +57,7 @@ public class DeviceActivityFragment extends Fragment {
     private Button btn_hour;
 
     private RecyclerView mRecyclerView;
-    private RecycleNotificationsAdapter dAdapter;
+    private static RecycleNotificationsAdapter dAdapter;
     private onRecycleviewItemClickListenner listenner;
 
     private static LabelFormatter labelFormatter;
@@ -180,10 +181,11 @@ public class DeviceActivityFragment extends Fragment {
         initGraph(lineChart);
     }
 
-    public void setAxisXInterval(int interval){
+    public static void setAxisXInterval(int interval){
         if(selectedDevice.getDataPoints().size() == 0){
             return;
         }
+        currentInterval = interval;
 
         ArrayList<DataPointImpl> arrayList_dataPoints2 = new ArrayList<>();
         ArrayList<DataPointImpl> arrayList_dataPoints1 = new ArrayList<>();
@@ -236,8 +238,8 @@ public class DeviceActivityFragment extends Fragment {
         if(lineChart == null){
             return;
         }
-        lineChart.init();
-        initGraph(lineChart);
+        setAxisXInterval(currentInterval);
+        dAdapter.notifyDataSetChanged();
     }
 
     public static void initGraph(GraphView graph) {

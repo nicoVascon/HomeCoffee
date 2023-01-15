@@ -99,6 +99,11 @@ public class AddDeviceFragment extends Fragment implements SaveData {
             Toast.makeText(this.getContext(), R.string.toastMessage_MissingDevChannel, Toast.LENGTH_LONG).show();
             return;
         }
+        int channel = Integer.parseInt(newDevChannelAsString);
+        if(!HouseManager.getInstance().isChannelAvailable(channel, deviceModeSpinner.getSelectedItemPosition())){
+            Toast.makeText(this.getContext(), R.string.toastMessage_ChannelNotAvailable, Toast.LENGTH_LONG).show();
+            return;
+        }
         saveData();
 
         if(deviceModeSpinner.getSelectedItemPosition() == 0) {
@@ -157,7 +162,7 @@ public class AddDeviceFragment extends Fragment implements SaveData {
                 newDevChannel = deviceToEdit.getChannel();
                 newDevType = deviceToEdit.getType();
                 newDevMode = (deviceToEdit instanceof Sensor) ? 0 : 1;
-                int selectedDevRoomPosition = HouseManager.getInstance().getRoomIndex(HouseManager.getInstance().searchRoomByDevice(deviceToEdit));
+                int selectedDevRoomPosition = HouseManager.getInstance().getRoomIndex(deviceToEdit.getRoom());
                 bundle.putInt(AddDeviceSelectRoomFragment.RESULT_NEW_DEV_ROOM, selectedDevRoomPosition);
             }
         }

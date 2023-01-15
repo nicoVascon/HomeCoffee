@@ -1,14 +1,8 @@
 package ipleiria.pdm.homecoffee.model;
 
-import com.jjoe64.graphview.series.DataPoint;
-
-import org.checkerframework.checker.units.qual.A;
-
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 
 import ipleiria.pdm.homecoffee.Enums.DeviceType;
 import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
@@ -23,7 +17,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     protected ArrayList<Notification> notifications;
     protected double value;
     protected double valueSaved;
-    private Room room;
+    protected Room room;
 
     public Device(){
     }
@@ -94,6 +88,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
 
     public void setValue(double value) {
         this.value = value;
+//        this.update();
     }
 
     public int getNumNotifications(){
@@ -115,6 +110,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     public void addNotification(Notification newNotification){
         if (newNotification != null){
             notifications.add(newNotification);
+            Collections.sort(notifications);
         }
     }
 
@@ -154,6 +150,10 @@ public abstract class Device implements Serializable, Comparable<Device> {
             }
 
         }
+    }
+
+    public void update() {
+
     }
 
     @Override
