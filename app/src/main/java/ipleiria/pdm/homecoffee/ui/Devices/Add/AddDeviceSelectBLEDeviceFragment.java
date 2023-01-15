@@ -57,21 +57,49 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
      * UUID da característica do tipo de dispositivo BLE
      */
     public static final String CHANNELS_CONFIG_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000000";
+    /**
+     * UUID da característica do nome de dispositivo BLE
+     */
     public static final String BLE_SERVER_NAME_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000001";
+    /**
+     * UUID da característica da informação dos dispositivos
+     */
     public static final String DEVICES_INFO_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000002";
 
+    /**
+     * Vários modos disponiveis para os dispositivos
+     */
     public static final String DEVICE_MODE_SENSOR = "SENSOR";
     public static final String DEVICE_MODE_ACTUATOR = "ACTUATOR";
 
+    /**
+     * CONFIG_OPERATIONS_NUMBER Número de operações de configuração
+     */
     public static final int CONFIG_OPERATIONS_NUMBER = 7;
+    /**
+     * ATTEMPTS_MAX_NUM Número máximo de tentativas
+     */
     public static final int ATTEMPTS_MAX_NUM = 5;
-
+    /**
+     * RESULT_BLE_SERVER_NAME Resultado do nome do servidor BLE
+     */
     public static final String RESULT_BLE_SERVER_NAME = "RESULT_BLE_SERVER_NAME";
+    /**
+     * RESULT_DEVICE_MODE Resultado do modo do dispositivo
+     */
     public static final String RESULT_DEVICE_MODE = "RESULT_DEVICE_MODE";
 
-
+    /**
+     * TIMEOUT Tempo limite para as operações de configuração
+     */
     private static final int TIMEOUT = 10;
+    /**
+     * WRITE_TIME_SLEEP Tempo de espera para escrita
+     */
     private static final int WRITE_TIME_SLEEP = 1;
+    /**
+     * MAX_RANDOM_INTEGER Número inteiro aleatório máximo
+     */
     private static final int MAX_RANDOM_INTEGER = 1000;
     /**
      * Variável que indica se a descoberta de serviços BLE foi bem-sucedida

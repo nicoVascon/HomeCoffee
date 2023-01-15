@@ -98,9 +98,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Atributo mAuth é uma instância de autenticação do Firebase
      */
     private FirebaseAuth mAuth;
+    /**
+     * Código de requisição utilizado para acessar funcionalidades do dispositivo relacionadas ao Bluetooth.
+     */
     private static final int REQUEST_CODE = 101;
-
+    /**
+     * Código de requisição utilizado para solicitar permissões de acesso ao Bluetooth do dispositivo.
+     */
     private static final int REQUEST_CODE_BLUETOOTH_PERMISSIONS = 1;
+    /**
+     * Lista de permissões necessárias para o acesso ao Bluetooth.
+     */
     List<String> permissions;
 
     /**
@@ -461,6 +469,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //finish();
     }
 
+    /**
+     * Método que verifica as permissões dadas e as pede se não as tiver já
+     */
     private void checkBluetoothPermissions() {
         boolean allPermissionsGranted = true;
         for (String permission : permissions) {

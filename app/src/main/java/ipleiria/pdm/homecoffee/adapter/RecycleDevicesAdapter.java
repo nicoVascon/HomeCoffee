@@ -97,12 +97,33 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
      * A classe DevicesHolder é usada para armazenar as views de cada item de dispositivo.
      */
     public class DevicesHolder extends RecyclerView.ViewHolder {
+        /**
+         * TextView que exibe o estado de conexão do dispositivo.
+         */
         public final TextView txtConnectionState;
+        /**
+         * TextView que exibe o nome do dispositivo.
+         */
         public final TextView txtDevName;
+        /**
+         * TextView que exibe o valor atual do dispositivo.
+         */
         public final TextView txtDevValue;
+        /**
+         * Switch que permite habilitar/desabilitar o dispositivo.
+         */
         public final Switch switchDev;
+        /**
+         * ImageView que exibe a imagem do dispositivo.
+         */
         public final ImageView imgPhoto;
+        /**
+         * CardView que contém os elementos de cada item na lista de dispositivos.
+         */
         public final CardView cardView_dev;
+        /**
+         * Adaptador da lista de dispositivos.
+         */
         public final RecycleDevicesAdapter dAdapter;
         /**
          * Construtor da classe DevicesHolder

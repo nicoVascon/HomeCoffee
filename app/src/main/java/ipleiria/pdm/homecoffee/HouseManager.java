@@ -58,8 +58,13 @@ public class HouseManager implements Serializable , Cloneable{
      * Variável estática para garantir a compatibilidade entre as versões da classe durante a serialização.
      */
     static final long serialVersionUID = 23L;
-
+    /**
+     * Variavel "flag" que verifica se os dados ja foram buscados
+     */
     public static boolean gettingUserRooms;
+    /**
+     * Variavel "flag" que verifica que a referencia dos quartos ja foi buscada
+     */
     public static boolean userRoomsRefGotten;
     /**
      * Variável estática que armazena a única instância da classe.
@@ -69,6 +74,9 @@ public class HouseManager implements Serializable , Cloneable{
      * Variável estática que armazena o bundle.
      */
     private static Bundle bundle;
+    /**
+     * Variavel "flag" que verifica que se o housemanager é modificável
+     */
     private static boolean modificable;
     /**
      * Variável que armazena o usuário.
@@ -293,12 +301,19 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return null;
     }
+
+    /**
+     * Método que salva o estado prévio da conexão dos atuadores
+     */
     public void saveActuatorValue(){
         for (Actuator actuator : actuators){
             actuator.setConnectionStateSaved(actuator.isConnectionState());
         }
     }
 
+    /**
+     * Método que salva o estado atual da conexão dos atuadores
+     */
     public void recoverSavedActuatorValue(){
         for (Actuator actuator : actuators){
             actuator.setConnectionState(actuator.isConnectionStateSaved());
@@ -319,6 +334,10 @@ public class HouseManager implements Serializable , Cloneable{
         return devicesConnected;
     }
 
+    /**
+     * Método que muda o estado da conexão dos devices
+     * @param connectionState estado a mudar
+     */
     public void changeDevicesConnectionState(boolean connectionState){
         if (devices != null){
             for (Device device : devices){
@@ -414,15 +433,27 @@ public class HouseManager implements Serializable , Cloneable{
 
     //---------------------ROOM--------------------------------
 
-
+    /**
+     * Método que retorna se o quarto foi removido
+     * @return true se removido, false se não
+     */
     public boolean isRoomRemove() {
         return roomRemove;
     }
 
+    /**
+     * Método que define a flag que diz se o quarto foi removido ou não
+     * @param roomRemove flag a dizer se foi removido ou não
+     */
     public void setRoomRemove(boolean roomRemove) {
         this.roomRemove = roomRemove;
     }
 
+    /**
+     * Adiciona um quarto à lista de quartos existentes, coloca num mapa para escrever esse mesmo mapa na firebase
+     *
+     * @param room : quarto a ser adicionado
+     */
     public void addRoom(Room room) {
         if (!rooms.contains(room)) {
             rooms.add(room);
@@ -438,6 +469,10 @@ public class HouseManager implements Serializable , Cloneable{
         }
     }
 
+    /**
+     * Remove um quarto da lista de quartos existentes
+     * @param room : quarto a ser removido
+     */
     public void removeRoom(Room room) {
         if (!rooms.contains(room)) {
             return;
@@ -489,10 +524,20 @@ public class HouseManager implements Serializable , Cloneable{
         return rooms.indexOf(room);
     }
 
+    /**
+     * Método setRooms() é utilizado para definir uma lista de quartos para a instância atual da classe HouseManager.
+     * @param rooms Lista de quartos a serem adicionados a instância atual da classe HouseManager.
+     */
     public void setRooms(ArrayList<Room> rooms) {
         this.rooms = rooms;
     }
 
+    /**
+     * Método getUserRooms() é utilizado para obter os quartos associados ao usuário atual, através da conexão com o banco de dados.
+     * Este método também limpa a lista de dispositivos e sensores existente na instância atual da classe HouseManager.
+     * @param adapter Adapter de quartos que será atualizado com a lista de quartos obtida.
+     * @param loadingDialog Diálogo de carregamento que será fechado após a conclusão da obtenção dos quartos.
+     */
     public void getUserRooms(RecycleRoomsAdapter adapter,LoadingDialog loadingDialog) {
         //If this function is done getting users's rooms or not
         rooms.clear();
@@ -609,6 +654,12 @@ public class HouseManager implements Serializable , Cloneable{
 
     }
 
+    /**
+     *
+     * Método que busca uma sala pelo dispositivo especificado
+     * @param device O dispositivo para buscar a sala correspondente.
+     * @return A sala correspondente ao dispositivo especificado.
+     */
     public Room searchRoomByDevice(Device device){
 
         for(Room room : rooms){
@@ -625,19 +676,34 @@ public class HouseManager implements Serializable , Cloneable{
 
 
 
-
+    /**
+     * Método que retorna a cor de fundo das salas.
+     * @return A cor de fundo das salas.
+     */
     public int getColor_back_rooms() {
         return color_back_rooms;
     }
 
+    /**
+     * Método que define a cor de fundo das salas.
+     * @param color_back_rooms A nova cor de fundo das salas.
+     */
     public void setColor_back_rooms(int color_back_rooms) {
         this.color_back_rooms = color_back_rooms;
     }
 
+    /**
+     * Método que retorna se a busca pelas salas do usuário foi concluída ou não.
+     * @return Verdadeiro se a busca foi concluída, falso caso contrário
+     */
     public boolean isUsersRoomDone() {
         return usersRoomDone;
     }
 
+    /**
+     * Método que define se a busca pelas salas do usuário foi concluida
+     * @param usersRoomDone true se concluida, false se não
+     */
     public void setUsersRoomDone(boolean usersRoomDone) {
         this.usersRoomDone = usersRoomDone;
     }
@@ -810,6 +876,10 @@ public class HouseManager implements Serializable , Cloneable{
 
     }
 
+    /**
+     * Método que define o utilizador atual
+     * @param currentUser utilizador atual
+     */
     public void setCurrentUser(FirebaseUser currentUser) {
         String user_mail = currentUser.getEmail();
         User user = new User(user_mail);

@@ -71,6 +71,13 @@ public class Room implements Serializable, Comparable<Room> {
 //        this.Devices =devices;
 //    }
 
+    /**
+     *  Construtor da classe Room
+     * @param Room_Name Nome do quarto.
+     * @param Room_Type tipo do quarto.
+     * @param sensors lista de sensores presentes no quarto.
+     * @param actuators lista de atuadores presentes no quarto.
+     */
     public Room( String Room_Name, RoomType Room_Type,ArrayList<Sensor> sensors, ArrayList<Actuator> actuators) {
 
         this.Room_Name = Room_Name;
@@ -89,12 +96,17 @@ public class Room implements Serializable, Comparable<Room> {
 
 
 
-
+    /**
+     * Método que atualiza um dispositivo Sensor específico na coleção "Sensors" do quarto correspondente no banco de dados.
+     * @param sensor o objeto Sensor que será atualizado
+     */
     public void updateRoomDevice(Sensor sensor){
         HouseManager.getInstance().getUser().getRoomsRef().document(this.Room_Name ).collection("Sensors").document(String.valueOf(sensor.getChannel())).set(sensor);
 
     }
-
+    /**
+     * Método que atualiza todos os dispositivos do tipo Sensor contidos na lista de Sensors deste quarto no banco de dados.
+     */
     public void updateRoomDev(){
 
 
@@ -106,7 +118,10 @@ public class Room implements Serializable, Comparable<Room> {
 //        }
 
     }
-
+    /**
+     * Método para remover um dispositivo específico do quarto, tanto de sua lista interna quanto do banco de dados.
+     * @param device o objeto Device a ser removido
+     */
     public void removeDevice(Device device){
         if(device instanceof Sensor){
             if(!Sensors.contains(device)){
@@ -243,6 +258,10 @@ public class Room implements Serializable, Comparable<Room> {
         return String.CASE_INSENSITIVE_ORDER.compare(this.Room_Name, room.Room_Name);
     }
 
+    /**
+     * Método que adiciona um device ao room no array local
+     * @param dev device a adicionar
+     */
     public void addLocalDevice(Device dev) {
 
         if(dev instanceof Sensor){

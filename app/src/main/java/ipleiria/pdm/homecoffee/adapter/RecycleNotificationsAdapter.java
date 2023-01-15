@@ -64,10 +64,25 @@ public class RecycleNotificationsAdapter extends RecyclerView.Adapter<RecycleNot
      * Classe interna que representa o holder de uma notificação
      */
     public class NotificationsHolder extends RecyclerView.ViewHolder {
+        /**
+         * txtNotificationDate é o elemento de texto que exibe a data da notificação
+         */
         public final TextView txtNotificationDate;
+        /**
+         * txtNotificationDescription é o elemento de texto que exibe a descrição da notificação
+         */
         public final TextView txtNotificationDescription;
+        /**
+         * imgPhoto é o elemento de imagem que exibe uma imagem relacionada à notificação
+         */
         public final ImageView imgPhoto;
+        /**
+         * deleteButton é o botão que permite excluir uma notificação
+         */
         public final Button deleteButton;
+        /**
+         * dAdapter é o adaptador da lista de notificações
+         */
         final RecycleNotificationsAdapter dAdapter;
         /**
          * Construtor

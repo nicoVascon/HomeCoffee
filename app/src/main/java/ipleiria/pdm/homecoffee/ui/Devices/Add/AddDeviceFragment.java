@@ -30,6 +30,9 @@ import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
  * Estende a classe Fragment e implementa a interface SaveData
  */
 public class AddDeviceFragment extends Fragment implements SaveData {
+    /**
+     * Keys usadas na bundle para enviar dados entre fragmentos
+     */
     public static final String RESULT_NEW_DEV_NAME = "RESULT_NEW_DEV_NAME";
     public static final String RESULT_NEW_DEV_CHANNEL = "RESULT_NEW_DEV_CHANNEL";
     public static final String RESULT_NEW_DEV_TYPE = "RESULT_NEW_DEV_TYPE";
@@ -38,13 +41,33 @@ public class AddDeviceFragment extends Fragment implements SaveData {
      * Referência do Spinner usado para escolher o modo do dispositivo
      */
     private Spinner deviceTypeSpinner;
+    /**
+     * Referência do Spinner usado para escolher o modo do dispositivo
+     */
     private Spinner deviceModeSpinner;
+    /**
+     * Referência do botão responsável por avançar para a próxima etapa de criação do dispositivo
+     */
     private Button btn_next;
+    /**
+     * Referência do campo de texto para inserir o nome do novo dispositivo
+     */
     private EditText editTextNewDevName;
+    /**
+     * Referência do campo de texto para inserir o canal do novo dispositivo
+     */
     private EditText editTextNewDevChannel;
-
+    /**
+     * Variável para armazenar o nome do novo dispositivo
+     */
     private String newDevName;
+    /**
+     * Variável para armazenar o canal do novo dispositivo
+     */
     private int newDevChannel;
+    /**
+     * Variável para armazenar o tipo do novo dispositivo
+     */
     private DeviceType newDevType = DeviceType.values()[0];
     private int newDevMode = 0;
     /**

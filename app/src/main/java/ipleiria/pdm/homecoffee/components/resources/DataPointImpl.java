@@ -10,7 +10,13 @@ import java.util.Date;
 public class DataPointImpl implements DataPointInterface, Serializable, Comparable<DataPointImpl> {
     private static final long serialVersionUID=1428263322645L;
 
+    /**
+     * valor que representará o x no gráfico
+     */
     private double x;
+    /**
+     * valor que representará o y no gráfico
+     */
     private double y;
 
     public DataPointImpl(){}
