@@ -55,6 +55,7 @@ import ipleiria.pdm.homecoffee.ui.gallery.GalleryFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
+import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
 /**
@@ -196,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             DeviceActivityFragment.updateValues();
                             DeviceControlFragment.updateSensorValue();
                             DevicesFragment.updateDevicesValues();
+                            RoomFragment.updateDevicesValues();
                         }
                     });
                 }

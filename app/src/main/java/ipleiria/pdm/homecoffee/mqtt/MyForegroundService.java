@@ -123,6 +123,7 @@ public class MyForegroundService extends Service {
                         PahoDemo.getInstance().submitMessage();
                         i ++;
                         if(i==20){
+                            i = 0;
                             for(Device device : HouseManager.getInstance().getDevices()){
                                 device.update();
                             }

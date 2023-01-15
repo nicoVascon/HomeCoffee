@@ -193,6 +193,9 @@ public class DevicesFragment extends Fragment {
                 numberOfDevicesConnect + getResources().getString(R.string.txt_DevicesConnected)  : getResources().getString(R.string.txt_DevicesDisconnected));
     }
 
+    /**
+     * Método que atualiza os valores na RecycleView.
+     */
     public static void updateDevicesValues(){
         if(dAdapter == null){
             return;

@@ -58,7 +58,7 @@ public class RoomFragment extends Fragment {
     /**
      * Adaptador para os dispositivos.
      */
-    private RecycleDevicesAdapter dAdapter;
+    private static RecycleDevicesAdapter dAdapter;
     /**
      * Variável para o TextView do estado de conexão dos dispositivos.
      */
@@ -136,9 +136,6 @@ public class RoomFragment extends Fragment {
 
         houseManager = HouseManager.getInstance();
         ArrayList<Device> devices = houseManager.getRoom(room_position).getDevices();
-
-        MainActivity.setCurrentFragment(this);
-        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devicesTitle));
 
         mRecyclerView = getView().findViewById(R.id.recyclerViewDevices);
         dAdapter = new RecycleDevicesAdapter(this.getActivity() ,this,devices){
@@ -225,6 +222,16 @@ public class RoomFragment extends Fragment {
         int numberOfDevicesConnect = houseManager.numberOfDevicesConnect(HouseManager.getInstance().getRoom(room_position).getDevices());
         txtDevConState.setText(numberOfDevicesConnect > 0 ?
                 numberOfDevicesConnect + getResources().getString(R.string.txt_DevicesConnected)  : getResources().getString(R.string.txt_DevicesDisconnected));
+    }
+
+    /**
+     * Método que atualiza os valores na RecycleView.
+     */
+    public static void updateDevicesValues(){
+        if(dAdapter == null){
+            return;
+        }
+        dAdapter.notifyDataSetChanged();
     }
 
     /**
