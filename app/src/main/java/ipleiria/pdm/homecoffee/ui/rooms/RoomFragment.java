@@ -1,9 +1,11 @@
 package ipleiria.pdm.homecoffee.ui.rooms;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,8 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.adapter.RecycleDevicesAdapter;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectBLEDeviceFragment;
+import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectRoomFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DeviceDetailsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
@@ -127,6 +131,9 @@ public class RoomFragment extends Fragment {
     public void onStart() {
         Context context = this.getContext();
         super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_RoomTitle));
+
         houseManager = HouseManager.getInstance();
         ArrayList<Device> devices = houseManager.getRoom(room_position).getDevices();
 
@@ -161,7 +168,7 @@ public class RoomFragment extends Fragment {
         allDevSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                DevicesFragment.setDevicesEnable(isChecked);
+                RoomFragment.setDevicesEnable(isChecked);
                 if (isChecked){
                     houseManager.recoverSavedActuatorValue();
                 }else{
@@ -179,8 +186,31 @@ public class RoomFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DeviceSettingsFragment.editingDevice = false;
-                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new AddDeviceFragment()).commit();
+                new AlertDialog.Builder(getContext())
+                        .setTitle(getResources().getString(R.string.txt_AlertDialog_AddDeviceTitle))
+                        .setMessage(getResources().getString(R.string.txt_AlertDialog_AddDevice))
+                        .setPositiveButton(getResources().getString(R.string.txt_Automatic), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                                        replace(R.id.fragment_container, new AddDeviceSelectBLEDeviceFragment()).commit();
+                            }
+                        })
+                        .setNegativeButton(getResources().getString(R.string.txt_Manual), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                Bundle bundle = HouseManager.getBundle();
+                                if(bundle == null){
+                                    bundle = new Bundle();
+                                }
+
+                                bundle.putInt(AddDeviceSelectRoomFragment.RESULT_NEW_DEV_ROOM, room_position);
+                                ((MainActivity) dAdapter.getContext()).getSupportFragmentManager().beginTransaction().
+                                        replace(R.id.fragment_container, new AddDeviceFragment()).commit();
+                            }
+                        })
+                        .setIcon(R.drawable.add_icon)
+                        .show();
             }
         });
 
@@ -192,7 +222,7 @@ public class RoomFragment extends Fragment {
      * Método que atualiza o estado de conexão dos dispositivos.
      */
     public void updateDevicesConnectionState(){
-        int numberOfDevicesConnect = houseManager.numberOfDevicesConnect();
+        int numberOfDevicesConnect = houseManager.numberOfDevicesConnect(HouseManager.getInstance().getRoom(room_position).getDevices());
         txtDevConState.setText(numberOfDevicesConnect > 0 ?
                 numberOfDevicesConnect + getResources().getString(R.string.txt_DevicesConnected)  : getResources().getString(R.string.txt_DevicesDisconnected));
     }

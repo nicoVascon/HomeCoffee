@@ -105,8 +105,8 @@
     <string name="toastMessage_BLEDiscoverServicesFailed">Timeout: Discover Services Operation Failed</string>
     <string name="BLEDevicesFound_title">Devices Found</string>
     <string name="btn_scanBLEDevices">Scan</string>
-    <string name="txt_AlertDialog_TTNEndDeviceRegistrationTitle">TTN End Device Registration</string>
-    <string name="txt_AlertDialog_TTNEndDeviceRegistration">Regist the End Device on The Things Network Plataform, Fill the Fieds and Click in Continue</string>
+    <string name="txt_AlertDialog_TTNEndDeviceRegistrationTitle">Network Credentials</string>
+    <string name="txt_AlertDialog_TTNEndDeviceRegistration">Introduce the Network Credentials for Connect the Gateway to the Network.</string>
     <string name="btn_Continue">Continue</string>
     <string name="btn_Cancel">Cancel</string>
     <string name="txt_DeviceEUICode">Device EUI Code:</string>
@@ -114,8 +114,8 @@
     <string name="txt_GatewayNotDefined">Gateway Not Defined</string>
     <string name="txt_AlertDialog_DisassociateGatewayTitle">Disassociate Gateway</string>
     <string name="txt_AlertDialog_DisassociateGateway">Are you sure that you want to disassociate Gateway?</string>
-    <string name="txt_AlertDialog_GWConfig_AppEUILabel" translatable="false">App EUI:</string>
-    <string name="txt_AlertDialog_GWConfig_AppKeyLabel" translatable="false">App Key:</string>
+    <string name="txt_AlertDialog_GWConfig_AppEUILabel">Network Name:</string>
+    <string name="txt_AlertDialog_GWConfig_AppKeyLabel">Network Passwork:</string>
     <string name="toastMessage_RemainingFields">Remaining Fields. Try Again</string>
     <string name="general_messages" translatable="false">message</string>
     <string name="general_please_write_some_message" translatable="false">please write message</string>
@@ -143,4 +143,8 @@
     <string name="txt_addRoomName">Insert a name</string>
     <string name="txt_NameProtection">Insert a different name</string>
     <string name="toastMessage_NoRooms">No rooms added</string>
+    <string name="toastMessage_ChannelNotAvailable">Channel Not Available</string>
+    <string name="toastMessage_UnreachableServer">Unreachable Server. Please Use Annoter Network</string>
+    <string name="toolbar_GWConfigTitle">Gateway Configuration</string>
+    <string name="toolbar_RoomTitle">My Room</string>
 </resources>

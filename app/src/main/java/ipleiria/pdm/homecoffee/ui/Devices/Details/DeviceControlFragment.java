@@ -39,15 +39,15 @@ public class DeviceControlFragment extends Fragment {
     /**
      * Variável que representa o dispositivo selecionado.
      */
-    private Device selectedDevice;
+    private static Device selectedDevice;
     /**
      * Variáveis que representam os elementos de visualização do dispositivo.
      */
     private TextView textView_devName;
     private TextView textView_devMode;
-    private TextView textView_actuatorSensorValue;
+    private static TextView textView_actuatorSensorValue;
     private Switch devSwitch;
-    private CircleSliderView circleSlider_valueControl;
+    private static CircleSliderView circleSlider_valueControl;
 
     public DeviceControlFragment(ViewPager2 viewPager2) {
         this.viewPager = viewPager2;
@@ -239,13 +239,34 @@ public class DeviceControlFragment extends Fragment {
             }
         });
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        textView_actuatorSensorValue = null;
+    }
+
     /**
      *Este método atualiza o valor medido do dispositivo sensor no TextView correspondente.
      */
-    public void updateSensorValue(){
-        double measuredValue = ((Actuator) selectedDevice).MeasuredValue();
-        textView_actuatorSensorValue.setText((selectedDevice.getType() == DeviceType.DIGITAL?
-                String.format("%.0f", measuredValue) :
-                String.format("%.2f", measuredValue)) + " " + selectedDevice.getType().getUnit());
+    public static void updateSensorValue(){
+        if(selectedDevice == null){
+            return;
+        }
+        double measuredValue = (selectedDevice instanceof Actuator) ?
+                ((Actuator) selectedDevice).MeasuredValue():
+                selectedDevice.getValue();
+        if(textView_actuatorSensorValue != null){
+            if(((Actuator) selectedDevice).getAssociatedSensor() != null){
+                textView_actuatorSensorValue.setText((selectedDevice.getType() == DeviceType.DIGITAL?
+                        String.format("%.0f", measuredValue) :
+                        String.format("%.2f", measuredValue)) + " " + selectedDevice.getType().getUnit());
+            }
+        }
+        if(circleSlider_valueControl != null){
+            circleSlider_valueControl.setmCurrentTime(selectedDevice.getValue()*3600/100);
+            circleSlider_valueControl.setmCurrentRadian((float) ((selectedDevice.getValue()/100)*2*Math.PI));
+            circleSlider_valueControl.invalidate();
+        }
     }
 }

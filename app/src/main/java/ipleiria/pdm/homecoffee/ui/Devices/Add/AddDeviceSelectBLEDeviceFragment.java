@@ -196,6 +196,8 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        MainActivity.setCurrentFragment(this);
+        MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_addDevTitle));
         /**
          * Recupera o adaptador Bluetooth padrão
          */
@@ -334,7 +336,7 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
                 new AlertDialog.Builder(getContext())
                         .setTitle(getResources().getString(R.string.txt_AlertDialog_AddDevicesTitle))
                         .setMessage(getResources().getString(R.string.txt_AlertDialog_AddDevices_Part1) +
-                                devicesDescriptions.length + getResources().getString(R.string.txt_DevicesFragTitle) +
+                                devicesDescriptions.length + " " + getResources().getString(R.string.txt_DevicesFragTitle) +
                                 "\n\n" +
                                 getResources().getString(R.string.txt_AlertDialog_AddDevices_Part2))
                         .setPositiveButton(getResources().getString(R.string.txt_yes), new DialogInterface.OnClickListener() {

@@ -13,10 +13,13 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import ipleiria.pdm.homecoffee.HouseManager;
+import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Sensor;
 
 /**
@@ -138,7 +141,9 @@ public class PahoDemo implements MqttCallback, Serializable {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(activity, "PLEASE USE ANOTHER NETWORK", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity,
+                            activity.getResources().getString(R.string.toastMessage_UnreachableServer),
+                            Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -196,6 +201,11 @@ public class PahoDemo implements MqttCallback, Serializable {
             System.out.println("Oiiii");
             String textReceived = message.toString();
             System.out.println(textReceived);
+            Calendar currentDate = Calendar.getInstance();
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            String data = dateFormatter.format(currentDate.getTimeInMillis());
+            HouseManager.msgs_received.append("\nDate: " + data + "\n");
+            HouseManager.msgs_received.append("Data: " + textReceived + "\n");
 
             String[] textReceivedSplit = textReceived.split("/");
 

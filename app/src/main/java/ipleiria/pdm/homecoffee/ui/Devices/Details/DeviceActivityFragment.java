@@ -64,7 +64,7 @@ public class DeviceActivityFragment extends Fragment {
     /**
      * Dispositivo selecionado
      */
-    private Device selectedDevice;
+    private static Device selectedDevice;
     /**
      * Dados do gráfico.
      */
@@ -73,6 +73,7 @@ public class DeviceActivityFragment extends Fragment {
      * Legenda do gráfico
      */
     private static String legend;
+    private static int currentInterval;
     //private DataPoint[] dataPoints2;
 
     /**
@@ -100,7 +101,7 @@ public class DeviceActivityFragment extends Fragment {
      * Variável que contém a instância do adapter personalizado (dAdapter)
      * para o RecyclerView de notificações relacionadas ao dispositivo selecionado
      */
-    private RecycleNotificationsAdapter dAdapter;
+    private static RecycleNotificationsAdapter dAdapter;
     /**
      * Variável que contém a instância de uma classe personalizada (listenner) para
      * tratar os eventos de clique do RecyclerView de notificações relacionadas ao dispositivo selecionado
@@ -254,10 +255,11 @@ public class DeviceActivityFragment extends Fragment {
      * as informações do dispositivo são filtradas e atualizadas no gráfico.
      * @param interval inteiro representando o intervalo a ser selecionado
      */
-    public void setAxisXInterval(int interval){
+    public static void setAxisXInterval(int interval){
         if(selectedDevice.getDataPoints().size() == 0){
             return;
         }
+        currentInterval = interval;
 
         ArrayList<DataPointImpl> arrayList_dataPoints2 = new ArrayList<>();
         ArrayList<DataPointImpl> arrayList_dataPoints1 = new ArrayList<>();
@@ -315,8 +317,8 @@ public class DeviceActivityFragment extends Fragment {
         if(lineChart == null){
             return;
         }
-        lineChart.init();
-        initGraph(lineChart);
+        setAxisXInterval(currentInterval);
+        dAdapter.notifyDataSetChanged();
     }
 
     /**

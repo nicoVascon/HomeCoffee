@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Classe Notification, contém as informações de data e descrição de uma notificação.
  */
-public class Notification implements Serializable {
+public class Notification implements Serializable, Comparable<Notification> {
     /**
      * Data da notificação
      */
@@ -16,6 +16,15 @@ public class Notification implements Serializable {
      * Descrição da notificação
      */
     private String description;
+
+    /**
+     * Contrutor sem parâmetros para a criação dos objetos apartir
+     * da Base de Dados.
+     */
+    public Notification(){
+
+    }
+
     /**
      * Construtor que recebe a data e descrição da notificação
      *
@@ -75,5 +84,20 @@ public class Notification implements Serializable {
     public String getDateFormatted(){
         SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         return dateFormatter.format(date);
+    }
+
+    /**
+     * Método que define o resultado da comparação de duas
+     * notificações com o objetivo de ordená-las numa lista.
+     * @param o Instância da Classe Notification como qual o
+     *          esta instância será comparada.
+     * @return resultado da compração.
+     */
+    @Override
+    public int compareTo(Notification o) {
+        if(o.date.getTime() > this.date.getTime()){
+            return 1;
+        }
+        return -1;
     }
 }

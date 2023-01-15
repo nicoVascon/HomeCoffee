@@ -48,7 +48,7 @@ public class DevicesFragment extends Fragment {
     /**
      * Variável para adaptador da lista de dispositivos.
      */
-    private RecycleDevicesAdapter dAdapter;
+    private static RecycleDevicesAdapter dAdapter;
     /**
      * Variável para exibição do estado de conexão dos dispositivos.
      */
@@ -188,9 +188,16 @@ public class DevicesFragment extends Fragment {
      * Método que atualiza o estado de conexão dos dispositivos.
      */
     public void updateDevicesConnectionState(){
-        int numberOfDevicesConnect = houseManager.numberOfDevicesConnect();
+        int numberOfDevicesConnect = houseManager.numberOfDevicesConnect(HouseManager.getInstance().getDevices());
         txtDevConState.setText(numberOfDevicesConnect > 0 ?
                 numberOfDevicesConnect + getResources().getString(R.string.txt_DevicesConnected)  : getResources().getString(R.string.txt_DevicesDisconnected));
+    }
+
+    public static void updateDevicesValues(){
+        if(dAdapter == null){
+            return;
+        }
+        dAdapter.notifyDataSetChanged();
     }
 
     /**

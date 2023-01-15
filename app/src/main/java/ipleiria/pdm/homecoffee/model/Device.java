@@ -219,6 +219,7 @@ public abstract class Device implements Serializable, Comparable<Device> {
     public void addNotification(Notification newNotification){
         if (newNotification != null){
             notifications.add(newNotification);
+            Collections.sort(notifications);
         }
     }
 
@@ -275,6 +276,12 @@ public abstract class Device implements Serializable, Comparable<Device> {
 
         }
     }
+
+    /**
+     * Método abstrato para atualizar o Device na Base de Dados.
+     */
+    public abstract void update();
+
     /**
      * Método para verificar se um objeto é igual a este objeto.
      * @param obj objeto a ser comparado.

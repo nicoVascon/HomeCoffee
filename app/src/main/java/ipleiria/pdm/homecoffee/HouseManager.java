@@ -236,6 +236,24 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return false;
     }
+
+    public boolean isChannelAvailable(int channel, int deviceMode){
+        if (deviceMode == 0){ // Sensor Mode
+            for(Sensor sensor : sensors){
+                if(sensor.getChannel() == channel){
+                    return false;
+                }
+            }
+        }else{ // Actuator Mode
+            for (Actuator actuator : actuators){
+                if(actuator.getChannel() == channel){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     /**
      * Método que remove um dispositivo da lista de dispositivos.
      * @param position int - a posição do dispositivo na lista.
@@ -324,9 +342,9 @@ public class HouseManager implements Serializable , Cloneable{
      * Método que retorna o número de dispositivos conectados.
      * @return int - o número de dispositivos conectados.
      */
-    public int numberOfDevicesConnect(){
+    public int numberOfDevicesConnect(ArrayList<Device> devicesList){
         int devicesConnected = 0;
-        for (Device device : devices){
+        for (Device device : devicesList){
             if (device.isConnectionState()){
                 devicesConnected ++;
             }

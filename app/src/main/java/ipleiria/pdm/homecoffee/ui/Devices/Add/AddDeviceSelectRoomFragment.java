@@ -178,7 +178,10 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
             selectedDevice.setChannel(newDevChannel);
             selectedDevice.setType(newDevType);
             selectedDevice.set_Room(newDevRoom);
+            selectedDevice.update();
 
+            HouseManager.setBundle(null);
+            MainActivity.clearFragmentsVisitedList();
             DeviceDetailsFragment.setSelectedDevice(selectedDevice);
             ((MainActivity) this.getContext()).getSupportFragmentManager().beginTransaction().
                     replace(R.id.fragment_container, new DeviceDetailsFragment(DeviceDetailsFragment.SETTINGS_TAB_INDEX)).commit();
