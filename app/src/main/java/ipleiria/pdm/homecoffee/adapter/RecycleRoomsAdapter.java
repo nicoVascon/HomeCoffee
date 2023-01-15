@@ -59,8 +59,17 @@ public class RecycleRoomsAdapter extends RecyclerView.Adapter<RecycleRoomsAdapte
      * Classe ViewHolder que contém as visualizações do item.
      */
     public class RoomsHolder extends RecyclerView.ViewHolder {
+        /**
+         * TextView que representa o nome do quarto.
+         */
         public final TextView txtName;
+        /**
+         * ImageView que representa a imagem do quarto.
+         */
         public final ImageView imgPhoto;
+        /**
+         * Referência para o adapter da lista de quartos.
+         */
         final RecycleRoomsAdapter mAdapter;
         /**
          * Construtor. Inicializa as visualizações do item.

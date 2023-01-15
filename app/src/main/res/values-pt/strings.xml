@@ -124,4 +124,6 @@
     <string name="txt_addRoomName">Insere um nome</string>
     <string name="txt_NameProtection">Insere um nome diferente</string>
     <string name="toastMessage_NoRooms">Ñao tem rooms adicionados</string>
+    <string name="toastMessage_NoRoomsDevices">Por favor insere um quarto antes de adicionar devices</string>
+
 </resources>

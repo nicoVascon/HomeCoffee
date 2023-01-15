@@ -18,11 +18,6 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-    <fragment
         android:id="@+id/nav_devices"
         android:name="ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment"
         android:label="@string/menu_devices"

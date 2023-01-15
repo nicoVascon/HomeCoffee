@@ -98,9 +98,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Atributo mAuth é uma instância de autenticação do Firebase
      */
     private FirebaseAuth mAuth;
+    /**
+     * Código de requisição utilizado para acessar funcionalidades do dispositivo relacionadas ao Bluetooth.
+     */
     private static final int REQUEST_CODE = 101;
-
+    /**
+     * Código de requisição utilizado para solicitar permissões de acesso ao Bluetooth do dispositivo.
+     */
     private static final int REQUEST_CODE_BLUETOOTH_PERMISSIONS = 1;
+    /**
+     * Lista de permissões necessárias para o acesso ao Bluetooth.
+     */
     List<String> permissions;
 
     /**
@@ -299,9 +307,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_gallery:
                 currentFragment = new GalleryFragment();
                 break;
-            case R.id.nav_slideshow:
-                currentFragment = new SlideshowFragment();
-                break;
+
             case R.id.nav_devices:
                 currentFragment = new DevicesFragment();
                 break;
@@ -346,10 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         navigationView.setCheckedItem(R.id.nav_gallery);
                         currentFragment = new GalleryFragment();
                         break;
-                    case SLIDES_HOW_FRAGMENT:
-                        navigationView.setCheckedItem(R.id.nav_slideshow);
-                        currentFragment = new SlideshowFragment();
-                        break;
+
                     case ADD_DEVICES_SELECT_ROOM_FRAGMENT:
                         currentFragment = new AddDeviceSelectRoomFragment();
                         break;
@@ -461,6 +464,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //finish();
     }
 
+    /**
+     * Método que verifica as permissões dadas e as pede se não as tiver já
+     */
     private void checkBluetoothPermissions() {
         boolean allPermissionsGranted = true;
         for (String permission : permissions) {
@@ -485,25 +491,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    //    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == REQUEST_CODE_BLUETOOTH_PERMISSIONS) {
-//            boolean allGranted = true;
-//            for (int grantResult : grantResults) {
-//                if (grantResult != PackageManager.PERMISSION_GRANTED) {
-//                    allGranted = false;
-//                    break;
-//                }
-//            }
-//            if (allGranted) {
-//                // Permissions were granted, continue with the Bluetooth functionality
-//            } else {
-//                // Permissions were denied, show a message to the user
-//                Toast.makeText(this, "Permissions were denied, Bluetooth features won't work", Toast.LENGTH_SHORT).show();
-//            }
-//        }
-//    }
+    /**
+     * Método responsável por lidar com o resultado de permissões de Bluetooth solicitadas pelo aplicativo.
+     * @param requestCode código de requisição enviado para solicitar permissões
+     * @param permissions lista de permissões solicitadas
+     * @param grantResults resultados das permissões solicitadas (aceito ou negado)
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);

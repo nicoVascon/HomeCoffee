@@ -70,6 +70,9 @@ public class RegisterActivity extends AppCompatActivity {
      * TextView register é um texto exibido na tela que informa ao usuário sobre a necessidade
      */
     private TextView register;
+    /**
+     * Instancia d FirebaseFirestore para serem guardados dados
+     */
     private FirebaseFirestore db;
 
     /**

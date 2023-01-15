@@ -22,8 +22,13 @@ public class Actuator extends Device{
      * Variável privada que armazena o sensor associado a este atuador.
      */
     private Sensor associatedSensor;
+    /**
+     * Variável privada que armazena a referência no firebase do sensor associado a este atuador.
+     */
     private DocumentReference associateddSensorRef;
-
+    /**
+     * Construtor vazio usado no processo que vai buscar dados á firebase
+     */
     public Actuator(){
         this.notifications = new ArrayList<>();
         this.dataPoints = new ArrayList<>();

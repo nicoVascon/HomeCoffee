@@ -1,5 +1,6 @@
 package ipleiria.pdm.homecoffee.ui.Devices;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -101,7 +103,7 @@ public class DevicesFragment extends Fragment {
         houseManager = HouseManager.getInstance();
         MainActivity.setCurrentFragment(this);
         MainActivity.setToolBarTitle(getResources().getString(R.string.toolbar_devicesTitle));
-
+        Context context = this.getActivity();
         mRecyclerView = getView().findViewById(R.id.recyclerViewDevices);
         dAdapter = new RecycleDevicesAdapter(this.getActivity(), this, HouseManager.getInstance().getDevices()){
             @Override
@@ -143,8 +145,19 @@ public class DevicesFragment extends Fragment {
                 buttonView.setText(isChecked ? R.string.btn_enable_dev : R.string.btn_disabled_dev);
             }
         });
-
         addDeviceButton = getView().findViewById(R.id.btn_addDevice);
+
+        if(houseManager.getRooms()==null || houseManager.getRooms().isEmpty()){
+            addDeviceButton.setEnabled(false);
+            Toast.makeText(context,R.string.toastMessage_NoRoomsDevices,Toast.LENGTH_SHORT).show();
+
+        }else{
+            addDeviceButton.setEnabled(true);
+
+        }
+
+
+
         addDeviceButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -193,7 +193,7 @@ public class AddDeviceSelectRoomFragment extends Fragment implements SaveData {
      * Em caso de sucesso na adição do dispositivo, é exibida uma mensagem de sucesso.
      * Em caso de falha, é exibida uma mensagem de falha.
      * Se a sala não foi selecionada, é exibida uma mensagem informando a falta da seleção.
-     * 
+     *
      */
     private void add(){
         if (newDevRoom != null){

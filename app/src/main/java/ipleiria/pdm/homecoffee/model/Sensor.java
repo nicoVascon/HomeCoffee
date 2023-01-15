@@ -15,10 +15,18 @@ import ipleiria.pdm.homecoffee.components.resources.DataPointImpl;
  * Ela é uma extensão da classe Device
  */
 public class Sensor extends Device{
-
+    /**
+     * Referencia no firebase do documento do quarto associado
+     */
     private DocumentReference associatedRoomRef;
+    /**
+     * Atuador associado a este sensor
+     */
     private Actuator associatedActuator;
 
+    /**
+     * Construtor vazio que apenas inicia os arrays usado no processo de reconstruir os dados que recupera da firebase
+     */
     public Sensor(){
         this.notifications = new ArrayList<>();
         this.dataPoints = new ArrayList<>();

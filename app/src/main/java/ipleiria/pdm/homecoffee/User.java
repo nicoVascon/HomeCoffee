@@ -14,6 +14,9 @@ public class User implements Serializable {
      * Atributo que armazena o email do usuário.
      */
     private String email;
+    /**
+     * Referencia na firebase dos quartos do utilizador
+     */
     private CollectionReference roomsRef;
 
     /**

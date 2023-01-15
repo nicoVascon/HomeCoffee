@@ -52,17 +52,34 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 
+/**
+ * Classe que representa o fragmento responsável por adicionar uma nova sala.
+ */
 public class AddRoomFragment extends Fragment {
-
+    /**
+     * Referência da instância do FirebaseFirestore, responsável por acessar e manipular os dados armazenados no banco de dados.
+     */
     FirebaseFirestore db;
-
+    /**
+     * Referência do Spinner usado para escolher o tipo de sala.
+     */
     private Spinner roomTypeSpinner;
 
+    /**
+     * Método chamado quando o fragmento é criado. Ele infla o layout do fragmento e o retorna para ser exibido na tela.
+     * @param inflater Referência do LayoutInflater usado para inflar o layout do fragmento.
+     * @param container Referência da ViewGroup usada como container para o fragmento.
+     * @param savedInstanceState Referência do Bundle contendo o estado salvo da instância do fragmento.
+     * @return A view do fragmento.
+     */
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_add_room, container, false);
     }
 
+    /**
+     * Método chamado quando o fragmento é iniciado. Ele configura o título da toolbar, o spinner de tipo de sala e os eventos de clique dos botões.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -94,6 +111,10 @@ public class AddRoomFragment extends Fragment {
 
     }
 
+    /**
+     * Método para adicionar uma nova sala.
+     * Ele pega o nome e o tipo de sala inseridos pelo usuário, verifica se já existe uma sala com o mesmo nome e adiciona a sala criada no HouseManager.
+     */
     private void addRoom() {
         EditText et_name = getView().findViewById(R.id.editTextRoomName);
         String nome = et_name.getText().toString();
@@ -121,6 +142,9 @@ public class AddRoomFragment extends Fragment {
         ((MainActivity) getActivity()).setInitialFragment();
     }
 
+    /**
+     * Método chamado quando o fragmento é destruído. Ele adiciona o fragmento à lista de fragmentos visitados para uso futuro.
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
