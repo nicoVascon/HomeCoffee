@@ -45,9 +45,17 @@ import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 
-
+/**
+ * Classe que representa um Fragmento para seleção de dispositivos BLE
+ */
 public class AddDeviceSelectBLEDeviceFragment extends Fragment {
+    /**
+     * UUID alvo do serviço BLE
+     */
     public static final String CONFIG_SERVICE_UUID = "00000000-0000-0000-0000-000000000001";
+    /**
+     * UUID da característica do tipo de dispositivo BLE
+     */
     public static final String CHANNELS_CONFIG_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000000";
     public static final String BLE_SERVER_NAME_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000001";
     public static final String DEVICES_INFO_CHARACTERISTIC_UUID = "c0000000-0000-0000-0000-000000000002";
@@ -65,52 +73,111 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
     private static final int TIMEOUT = 10;
     private static final int WRITE_TIME_SLEEP = 1;
     private static final int MAX_RANDOM_INTEGER = 1000;
-
+    /**
+     * Variável que indica se a descoberta de serviços BLE foi bem-sucedida
+     */
     private boolean discoverServicesSucceed = false;
+    /**
+     * Variável que indica se a leitura de características BLE foi bem-sucedida
+     */
     private boolean readCharacteristicsSucceed = false;
+    /**
+     * Variável que indica se a escrita de características BLE foi bem-sucedida
+     */
     private boolean writeCharacteristicsSucceed = false;
+    /**
+     * Variável que indica o estado da conexão com o dispositivo BLE
+     */
     private boolean deviceConnectionState = false;
-
+    /**
+     * Variável que indica se o botão foi pressionado
+     */
     private boolean buttonPressed = false;
+    /**
+     * Variável que indica se a ação de continuar foi pressionada
+     */
     private boolean continuePressed = false;
-
+    /**
+     * Adapter Bluetooth
+     */
     private BluetoothAdapter bluetoothAdapter;
+    /**
+     * Lista de dispositivos BLE encontrados
+     */
     private List<BluetoothDevice> devices;
+    /**
+     * Lista de serviços BLE encontrados
+     */
     private List<BluetoothGattService> services;
+    /**
+     * Dispositivo BLE selecionado
+     */
     private BluetoothDevice selectedDevice;
+    /**
+     * Serviço BLE selecionado
+     */
     private BluetoothGattService selectedService;
+    /**
+     * GATT Bluetooth
+     */
     private BluetoothGatt gatt;
-
+    /**
+     * Dialogo de carregamento
+     */
     LoadingDialog loadingDialog;
 
+    /**
+     * RecyclerView de dispositivos BLE
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Adaptador para o RecyclerView de dispositivos BLE
+     */
     private RecycleBLEDevicesAdapter dAdapter;
 
-
+    /**
+     * Método chamado quando a visualização é criada
+     * @param inflater inflador para inflar o layout do fragmento
+     * @param container container onde o fragmento será adicionado
+     * @param savedInstanceState estado salvo da instância (opcional)
+     * @return a visualização criada
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ble_device_selection, container, false);
     }
-
+    /**
+     * Método chamado quando o fragmento é criado. Ele é usado para realizar inicializações de fragmentos, geralmente chamando super.onCreate() antes de realizar qualquer outra inicialização.
+     * @param savedInstanceState um pacote de dados que contém o estado salvo do fragmento.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
+    /**
+     * Método chamado quando a visualização é destruída
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 //        MainActivity.addFragmentViseted(FragmentsEnum.SLIDES_HOW_FRAGMENT);
     }
-
+    /**
+     * Método chamado quando o fragmento é iniciado
+     */
     @Override
     public void onStart() {
         super.onStart();
+        /**
+         * Recupera o adaptador Bluetooth padrão
+         */
         this.bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
             // Bluetooth is not enabled, prompt the user to enable it
         }
-
+/**
+ * Recupera o botão de varredura BLE e adiciona um listener
+ */
         Button btnScanBLE = getView().findViewById(R.id.btnScanBLE);
         btnScanBLE.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,10 +188,16 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
                 scanLeDevice();
             }
         });
-
+        /**
+         * Inicializa a lista de dispositivos BLE e adiciona o adaptador de RecyclerView
+         */
         devices = new ArrayList<>();
         mRecyclerView = getView().findViewById(R.id.recyclerViewDevices);
         dAdapter = new RecycleBLEDevicesAdapter(getActivity(), devices){
+            /**
+             * Método chamado quando um item da lista é clicado
+             * @param position posição do item clicado na lista
+             */
             @Override
             public void onItemClick(View view, int position) {
                 new Thread(new Runnable() {
@@ -139,7 +212,17 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
         mRecyclerView.setAdapter(dAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
-
+    /**
+     * Called when a BLE device on the list is clicked.
+     * It creates a new instance of LoadingDialog and starts the display, select the clicked BLE device from the devices list
+     * and tries to connect it. If the connection fails or the selected service is null, the dialog is closed and the method returns.
+     * Then it selects the specific BluetoothGattCharacteristic of the device (deviceTypeCharacteristic) according to its UUID.
+     * If the device type characteristic is not found, it displays an error message.
+     * If it is found, reads the value of this characteristic and adds this value to a bundle.
+     * Finally, it displays the AddDeviceFragment fragment.
+     * Closes the loading dialog.
+     * @param position The position of the clicked device on the list
+     */
     public void onBLEDevItemClick(int position){
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog();
@@ -387,7 +470,19 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
         });
         loadingDialog.dismisDialog();
     }
-
+    /**
+     * Escaneia dispositivos BLE
+     * Exibe um diálogo de carregamento enquanto os dispositivos são escaneados.
+     * Verifica se a permissão de escaneamento do bluetooth foi concedida.
+     * Obtém o scanner de dispositivos BLE do adaptador Bluetooth.
+     * Caso o scanner não seja suportado pelo dispositivo, uma mensagem de erro é exibida.
+     * Limpa a lista de dispositivos encontrados.
+     * Utiliza uma callback para lidar com os resultados do escaneamento.
+     * Verifica se a permissão de conexão do bluetooth foi concedida.
+     * Adiciona o dispositivo encontrado à lista de dispositivos encontrados se ele ainda não estiver na lista e o número de dispositivos encontrados for menor que 40.
+     * Notifica o adaptador da lista de dispositivos para atualizar a interface do usuário.
+     * Se a lista de dispositivos encontrados tiver mais de 20 itens ou se o número total de dispositivos escaneados for igual a 40, o escaneamento é interrompido e o diálogo de carregamento é fechado.
+     */
     private void scanLeDevice() {
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.startLoadingDialog();
@@ -430,7 +525,13 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
         };
         bluetoothLeScanner.startScan(scanCallback);
     }
-
+    /**
+     *
+     * Método que é usado para ler uma característica do dispositivo BLE. Ele usa o método read(), para ler a característica desejada
+     * @param targetCharacteristic característica desejada para ser lida.
+     * @param characteristicName nome da característica desejada.
+     * @return retorna o valor da característica lida em formato String.
+     */
     public String readString(BluetoothGattCharacteristic targetCharacteristic, String characteristicName){
         read(targetCharacteristic);
         //        int intValue = targetCharacteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT32, 0);
@@ -446,7 +547,12 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
         }
         return null;
     }
-
+    /**
+     * Método que é usado para ler uma característica do dispositivo BLE.
+     *
+     * @param targetCharacteristic característica desejada para ser lida.
+     * @return retorna o estado da operação de leitura (sucesso ou falha)
+     */
     public void read(BluetoothGattCharacteristic targetCharacteristic) {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
             System.out.println("Oiiiiiiiii Não tem permissão...................");
@@ -479,7 +585,11 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
             System.out.println(e.getMessage());
         }
     }
-
+    /**
+     * Escreve uma string em uma característica do dispositivo BLE.
+     * @param targetCharacteristic a característica a ser escrita
+     * @param stringValue o valor da string a ser escrito
+     */
     public void writeString(BluetoothGattCharacteristic targetCharacteristic, String stringValue, String characteristicName){
         byte[] value = stringValue.getBytes(StandardCharsets.UTF_8);
         write(targetCharacteristic, value);
@@ -489,7 +599,12 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
                     getResources().getString(R.string.txt_loadingDialog_CharacteristicWroten_Part2));
         }
     }
-
+    /**
+     * Escreve em uma característica do dispositivo BLE
+     *
+     * @param targetCharacteristic a característica a ser escrita
+     * @param value o valor a ser escrito
+     */
     public void write(BluetoothGattCharacteristic targetCharacteristic, byte[] value){
 
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
@@ -531,6 +646,19 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
         }
     }
 
+    /**
+     * Método que realiza a conexão com um dispositivo Bluetooth. Ele exibe uma mensagem de carregamento na tela, indicando
+     * que a conexão está sendo estabelecida. Antes de tentar a conexão, é verificado se o dispositivo já não está conectado
+     * e se o usuário possui permissão para se conectar a dispositivos Bluetooth. Em seguida, é chamado o método createBond
+     * do objeto BluetoothDevice para iniciar o processo de emparelhamento. É criado um callback BluetoothGattCallback para
+     * tratar os eventos de mudança de estado de conexão e descoberta de serviços. Caso a conexão seja estabelecida com
+     * sucesso, uma mensagem é exibida na tela indicando que a conexão foi bem-sucedida e é iniciado o processo de
+     * descoberta de serviços. Caso ocorra algum erro durante o processo de descoberta de serviços, uma mensagem é exibida
+     * na tela indicando o erro.
+     *
+     * @param device O dispositivo Bluetooth com o qual se deseja se conectar.
+     */
+
     public void connect(BluetoothDevice device) {
         loadingDialog.setMainText(getResources().getString(R.string.txt_loadingDialog_ConnectingToDevice));
 
@@ -548,6 +676,9 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
             return;
         }
 
+        /**
+         * Callback para mudanças de estado de conexão com o dispositivo Bluetooth
+         */
         BluetoothGattCallback callback = new BluetoothGattCallback(){
             @Override
             public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
@@ -690,6 +821,11 @@ public class AddDeviceSelectBLEDeviceFragment extends Fragment {
 
     }
 
+    /**
+     * Método que converte UUID em uma string legível
+     * @param uuid UUID a ser convertido
+     * @return String legível do UUID
+     */
     public String getUUID_toString(UUID uuid){
         String uuidCode = uuid.toString().replace("-", "");
         StringBuilder strUUID = new StringBuilder();

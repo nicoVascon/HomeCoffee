@@ -43,27 +43,61 @@ import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.model.Device;
 import ipleiria.pdm.homecoffee.model.Room;
 
+/**
+ * Classe HouseManager implementa a interface Serializable e Cloneable
+ *
+ * É responsável por gerenciar as informações de uma casa, como as salas, dispositivos e sensores.
+ * Possui atributos privados estáticos para instância única, bundle, nome do servidor BLE, código de dispositivo eui do servidor BLE,
+ * listas de salas, dispositivos e sensores.
+ * Possui métodos para adicionar e remover salas, dispositivos e sensores, buscar por salas, dispositivos e sensores
+ * pelo nome e tipo de dispositivo, salvar e recuperar o estado de conexão dos dispositivos, mudar o estado de conexão dos dispositivos,
+ * verificar o número de dispositivos conectados e adicionar dispositivos iniciais.
+ */
 public class HouseManager implements Serializable , Cloneable{
-
+    /**
+     * Variável estática para garantir a compatibilidade entre as versões da classe durante a serialização.
+     */
     static final long serialVersionUID = 23L;
 
     public static boolean gettingUserRooms;
     public static boolean userRoomsRefGotten;
-
+    /**
+     * Variável estática que armazena a única instância da classe.
+     */
     private static HouseManager INSTANCE = null;
+    /**
+     * Variável estática que armazena o bundle.
+     */
     private static Bundle bundle;
     private static boolean modificable;
-
+    /**
+     * Variável que armazena o usuário.
+     */
     private static User user;
-
+    /**
+     * Variável que armazena o nome do servidor BLE do gateway.
+     */
     private String GatewayBLEServerName;
+    /**
+     * Variável que armazena o código de EUI do servidor BLE do gateway.
+     */
     private String GatewayBLEServerDevEuiCode;
-
+    /**
+     * Variável que armazena uma lista de objetos Room.
+     */
     private ArrayList<Room> rooms;
+    /**
+     * Variável que armazena uma lista de objetos Device.
+     */
     private ArrayList<Device> devices;
+    /**
+     * Variável que armazena uma lista de objetos Sensor.
+     */
     private ArrayList<Sensor> sensors;
     private ArrayList<Actuator> actuators;
-
+    /**
+     * Variável que indica se o login foi realizado.
+     */
     private boolean loginMade = false;
 
     private boolean usersRoomDone = false;
@@ -72,24 +106,47 @@ public class HouseManager implements Serializable , Cloneable{
     private int color_back_rooms=R.color.iconBackgoundRooms;
 
     //-------------------------------------- TTN ---------------------------------------------
+
+    /**
+     * Método estático sincronizado que retorna o hashmap string_send_ttn.
+     * @return HashMap<Integer, String> - retorna o hashmap string_send_ttn.
+     */
     public static synchronized HashMap<Integer, String> getString_send_ttn() {
         return HouseManager.string_send_ttn;
     }
-
+    /**
+     * Método estático que adiciona uma string ao hashmap string_send_ttn.
+     * @param channel int - o canal a ser adicionado.
+     * @param string_to_add String - a string a ser adicionada.
+     */
     public static void addString_send_ttn(int channel, String string_to_add) {
         HouseManager.getString_send_ttn().put(channel, string_to_add);
     }
-
+    /**
+     * Variável estática que armazena o hashmap de strings a serem enviadas para o TTN.
+     */
     private static HashMap<Integer, String> string_send_ttn = new HashMap<Integer, String>();
 
+    /**
+     * Variável estática que armazena as mensagens recebidas pelo TTN.
+     */
     public static StringBuilder msgs_received = new StringBuilder();
 
+    /**
+     * Método que retorna as mensagens recebidas pelo TTN.
+     * @return StringBuilder - retorna o objeto StringBuilder que armazena as mensagens recebidas.
+     */
     public StringBuilder getMsgs_received() {
         return msgs_received;
     }
 
 
     // ------------------------------------- Sensors -------------------------------------
+
+    /**
+     * Método que adiciona um sensor a lista de sensores. Ele não adiciona o sensor se ele já existe na lista.
+     * @param sensor Sensor - o sensor a ser adicionado.
+     */
     public void addSensor(Sensor sensor) {
         if (sensors.isEmpty() || !sensors.contains(sensor)) {
             sensors.add(sensor);
@@ -97,18 +154,36 @@ public class HouseManager implements Serializable , Cloneable{
         }
     }
 
+    /**
+     * Método que remove um sensor da lista de sensores.
+     * @param pos int - a posição do sensor na lista.
+     */
     public void removeSensor(int pos) {
         sensors.remove(pos);
     }
 
+    /**
+     * Método que retorna um sensor de acordo com sua posição na lista.
+     * @param pos int - a posição do sensor na lista.
+     * @return Sensor - o sensor encontrado.
+     */
     public Sensor getSensor(int pos) {
         return sensors.get(pos);
     }
 
+    /**
+     * Método que retorna a lista completa de sensores.
+     * @return ArrayList<Sensor> - a lista de sensores.
+     */
     public ArrayList<Sensor> getSensors() {
         return sensors;
     }
 
+    /**
+     * Método que procura sensores de acordo com um nome específico e retorna uma lista com os sensores encontrados.
+     * @param name String - o nome do sensor a ser procurado.
+     * @return ArrayList<Sensor> - a lista de sensores encontrados.
+     */
     public ArrayList<Sensor> searchSensors(String name) {
         ArrayList<Sensor> result = new ArrayList<>();
         for (Sensor sensor : sensors) {
@@ -118,6 +193,11 @@ public class HouseManager implements Serializable , Cloneable{
         return result;
     }
 
+    /**
+     * Método que procura sensores de acordo com um tipo de dispositivo específico e retorna uma lista com os sensores encontrados.
+     * @param deviceType DeviceType - o tipo de dispositivo do sensor a ser procurado.
+     * @return ArrayList<Sensor> - a lista de sensores encontrados.
+     */
     public ArrayList<Sensor> searchSensors(DeviceType deviceType) {
         ArrayList<Sensor> result = new ArrayList<>();
         for (Sensor sensor : sensors) {
@@ -128,6 +208,11 @@ public class HouseManager implements Serializable , Cloneable{
     }
 
     // ------------------------------------- Devices -------------------------------------
+
+    /**
+     * Método que adiciona um dispositivo a lista de dispositivos. Ele não adiciona o dispositivo se ele já existe na lista.
+     * @param device Device - o dispositivo a ser adicionado.
+     */
     public boolean addDevice(Device device) {
         if (device != null && (devices.isEmpty() || !devices.contains(device))) {
             devices.add(device);
@@ -143,7 +228,10 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return false;
     }
-
+    /**
+     * Método que remove um dispositivo da lista de dispositivos.
+     * @param position int - a posição do dispositivo na lista.
+     */
     public void removeDevice(int position) {
         Device device = devices.get(position);
         removeDevice(device);
@@ -161,15 +249,28 @@ public class HouseManager implements Serializable , Cloneable{
             actuators.remove(device);
         }
     }
-
+    /**
+     * Método que retorna um dispositivo de acordo com sua posição na lista.
+     * @param pos int - a posição do dispositivo na lista.
+     * @return Device - o dispositivo encontrado.
+     */
     public Device getDevice(int pos) {
         return devices.get(pos);
     }
 
+    /**
+     * Método que retorna a lista completa de dispositivos.
+     * @return ArrayList<Device> - a lista de dispositivos.
+     */
     public ArrayList<Device> getDevices() {
         return devices;
     }
 
+    /**
+     * Método que procura dispositivos de acordo com um nome específico e retorna uma lista com os dispositivos encontrados.
+     * @param name String - o nome do dispositivo a ser procurado.
+     * @return ArrayList<Device> - a lista de dispositivos encontrados.
+     */
     public ArrayList<Device> searchDevices(String name) {
         ArrayList<Device> result = new ArrayList<>();
         for (Device device : devices) {
@@ -178,6 +279,12 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return result;
     }
+
+    /**
+     * Método que procura um sensor específico através do canal.
+     * @param channel int - o canal do sensor a ser procurado.
+     * @return Sensor - o sensor encontrado.
+     */
     public Sensor searchSensorByChannel(int channel) {
         for (Sensor sensor : sensors) {
             if(sensor.getChannel()==channel){
@@ -198,6 +305,10 @@ public class HouseManager implements Serializable , Cloneable{
         }
     }
 
+    /**
+     * Método que retorna o número de dispositivos conectados.
+     * @return int - o número de dispositivos conectados.
+     */
     public int numberOfDevicesConnect(){
         int devicesConnected = 0;
         for (Device device : devices){
@@ -215,7 +326,11 @@ public class HouseManager implements Serializable , Cloneable{
             }
         }
     }
-
+    /**
+     *Método que adiciona dispositivos iniciais ao sistema.
+     * Este método cria novos objetos de dispositivos e os adiciona ao sistema, incluindo sensores e atuadores.
+     * Ele também adiciona notificações a um dispositivo específico e gera dados de exemplo para os dispositivos.
+     */
     public void addInitialDevices() {
         if(this.rooms.isEmpty()){
             this.addRoom(new Room( "Sala (P/ TESTE)", RoomType.LIVING_ROOM));
@@ -332,7 +447,9 @@ public class HouseManager implements Serializable , Cloneable{
         rooms.remove(room);
         Collections.sort(rooms);
     }
-
+    /**
+     * Método que adiciona dados iniciais à lista de salas.
+     */
     public void adicionarDadosIniciais() {
         Room c1 = new Room( "Sala",RoomType.LIVING_ROOM);
         Room c2 = new Room( "Cozinha",RoomType.KITCHEN);
@@ -346,13 +463,28 @@ public class HouseManager implements Serializable , Cloneable{
         addRoom(c5);
     }
 
+    /**
+     * Método que retorna a sala em uma determinada posição na lista de salas.
+     * @param pos - A posição da sala na lista.
+     * @return A sala na posição especificada.
+     */
     public Room getRoom(int pos) {
         return rooms.get(pos);
     }
+
+    /**
+     * Método que retorna a lista de salas.
+     * @return A lista de salas.
+     */
     public ArrayList<Room> getRooms() {
         return rooms;
     }
 
+    /**
+     * Método que retorna o indice da sala na lista de salas.
+     * @param room - A sala procurada.
+     * @return o indice da sala na lista de salas.
+     */
     public int getRoomIndex(Room room){
         return rooms.indexOf(room);
     }
@@ -512,12 +644,21 @@ public class HouseManager implements Serializable , Cloneable{
 
     // ------------------------------------- House Manager -------------------------------------
     //Código adicionado para garantir que há só uma instância da classe HouseManager
+
+    /**
+     * Método getInstance, responsável por garantir uma instância única da classe.
+     * @return instância única da classe HouseManager.
+     */
     public static synchronized HouseManager getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new HouseManager();
         }
         return INSTANCE;
     }
+
+    /**
+     * Construtor privado da classe HouseManager, inicializando os atributos.
+     */
     private HouseManager() {
         rooms = new ArrayList<>();
         devices = new ArrayList<>();
@@ -526,26 +667,50 @@ public class HouseManager implements Serializable , Cloneable{
         bundle = new Bundle();
     }
 
+    /**
+     * Método getGatewayBLEServerName, responsável por retornar o nome do servidor BLE gateway.
+     * @return o nome do servidor BLE gateway.
+     */
     public String getGatewayBLEServerName() {
         return GatewayBLEServerName;
     }
 
+    /**
+     * Método responsável por setar o nome do gateway BLE Server.
+     * @param gatewayBLEServerName nome do gateway BLE Server.
+     */
     public void setGatewayBLEServerName(String gatewayBLEServerName) {
         GatewayBLEServerName = gatewayBLEServerName;
     }
 
+    /**
+     * Método responsável por retornar o código DevEui do gateway BLE Server.
+     * @return código DevEui do gateway BLE Server.
+     */
     public String getGatewayBLEServerDevEuiCode() {
         return GatewayBLEServerDevEuiCode;
     }
 
+    /**
+     * Método responsável por setar o código DevEui do gateway BLE Server.
+     * @param gatewayBLEServerDevEuiCode código DevEui do gateway BLE Server.
+     */
     public void setGatewayBLEServerDevEuiCode(String gatewayBLEServerDevEuiCode) {
         GatewayBLEServerDevEuiCode = gatewayBLEServerDevEuiCode;
     }
 
+    /**
+     * Método responsável por retornar o objeto Bundle.
+     * @return objeto Bundle.
+     */
     public static synchronized Bundle getBundle() {
         return bundle;
     }
 
+    /**
+     * Método responsável por setar o objeto Bundle.
+     * @param bundle objeto Bundle.
+     */
     public static synchronized void setBundle(Bundle bundle) {
         HouseManager.bundle = bundle;
     }
@@ -553,7 +718,10 @@ public class HouseManager implements Serializable , Cloneable{
     public static boolean isModificable() {
         return modificable;
     }
-
+    /**
+     * Método toString da classe HouseManager, retorna uma string com as informações de todas as salas adicionadas.
+     * @return String com as informações de todas as salas adicionadas.
+     */
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
@@ -562,6 +730,11 @@ public class HouseManager implements Serializable , Cloneable{
         }
         return str.toString();
     }
+
+    /**
+     * Método para gravar as informações da classe HouseManager em um arquivo binário no dispositivo.
+     * @param context Contexto da aplicação.
+     */
     public static void gravarFicheiro(Context context) {
         HouseManager.modificable = false;
         try {
@@ -578,6 +751,11 @@ public class HouseManager implements Serializable , Cloneable{
         }
         HouseManager.modificable = true;
     }
+
+    /**
+     * Método que lê o ficheiro houseManager.bin e atualiza a instância de HouseManager.
+     * @param context Contexto da aplicação
+     */
     public static void lerFicheiro(Context context) {
         HouseManager.modificable = false;
         boolean error = false;
@@ -609,10 +787,18 @@ public class HouseManager implements Serializable , Cloneable{
         HouseManager.modificable = true;
     }
 
+    /**
+     * Método que obtém o utilizador atualmente associado a HouseManager.
+     * @return O objeto User atualmente associado a HouseManager
+     */
     public User getUser() {
         return user;
     }
 
+    /**
+     * Método que atribui um utilizador a HouseManager.
+     * @param user O objeto User a ser associado a HouseManager
+     */
     public void setUser(User user) {
         HouseManager.userRoomsRefGotten = false;
         this.user = user;
@@ -632,10 +818,18 @@ public class HouseManager implements Serializable , Cloneable{
 
     //---------------------LOGIN-------------------------
 
+    /**
+     * Método que verifica se o login foi feito
+     * @return true se o login foi feito, false caso contrário
+     */
     public boolean isLoginMade() {
         return loginMade;
     }
 
+    /**
+     * Método que define se o login foi feito
+     * @param loginMade boolean indicando se o login foi feito
+     */
     public void setLoginMade(boolean loginMade) {
         this.loginMade = loginMade;
     }

@@ -25,15 +25,43 @@ import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.model.Sensor;
 import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
-
+/**
+ * Classe RecycleDevicesAdapter é um adapter personalizado para o RecyclerView que contém itens de dispositivos.
+ * Ele extende RecyclerView.Adapter e usa DevicesHolder como seu ViewHolder.
+ * Ele possui dois construtores para ser usado tanto para DevicesFragment quanto para RoomFragment.
+ *
+ */
 public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAdapter.DevicesHolder> {
+    /**
+     * Atributo que contém a instância do objeto que gerencia as casas.
+     */
     private HouseManager houseManager;
+    /**
+     * Atributo que contém a instância do objeto contexto da aplicação.
+     */
     private Context context;
+    /**
+     * Atributo que contém a instância do objeto que é responsável por inflar os layouts de itens de lista.
+     */
     private LayoutInflater mInflater;
+    /**
+     * Atributo que contém a instância do fragmento de dispositivos.
+     */
     private DevicesFragment devicesFragment;
+    /**
+     * Atributo que contém a instância do fragmento de quartos.
+     */
     private RoomFragment roomFragment;
+    /**
+     * Atributo que contém uma lista de objetos do tipo Device.
+     */
     private ArrayList<Device> devices;
-
+    /**
+     * Construtor para a classe RecycleDevicesAdapter, ele é usado no DevicesFragment
+     * @param context contexto da aplicação
+     * @param devicesFragment fragmento onde será usado o RecyclerView
+     * @param devices lista de dispositivos que será usada no adapter
+     */
     public RecycleDevicesAdapter(Context context, DevicesFragment devicesFragment, ArrayList<Device> devices){
         mInflater = LayoutInflater.from(context);
         this.houseManager = HouseManager.getInstance();
@@ -41,7 +69,12 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         this.devicesFragment = devicesFragment;
         this.devices=devices;
     }
-
+    /**
+     * Construtor para a classe RecycleDevicesAdapter, ele é usado no RoomFragment
+     * @param context contexto da aplicação
+     * @param roomFragment fragmento onde será usado o RecyclerView
+     * @param devices lista de dispositivos que será usada no adapter
+     */
     public RecycleDevicesAdapter(Context context,RoomFragment roomFragment, ArrayList<Device> devices){
         mInflater = LayoutInflater.from(context);
         this.houseManager = HouseManager.getInstance();
@@ -49,13 +82,20 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         this.devices=devices;
         this.roomFragment=roomFragment;
     }
-
+    /**
+     * onCreateViewHolder é um método que cria o ViewHolder e infla o layout de item de dispositivo.
+     * @param parent o ViewGroup onde o ViewHolder será adicionado.
+     * @param viewType o tipo da View.
+     * @return um novo DevicesHolder contendo a View infladada.
+     */
     public RecycleDevicesAdapter.DevicesHolder onCreateViewHolder(@NonNull ViewGroup parent, int
             viewType) {
         View mItemView = mInflater.inflate(R.layout.item_device_layout,parent, false);
         return new DevicesHolder(mItemView, this);
     }
-
+    /**
+     * A classe DevicesHolder é usada para armazenar as views de cada item de dispositivo.
+     */
     public class DevicesHolder extends RecyclerView.ViewHolder {
         public final TextView txtConnectionState;
         public final TextView txtDevName;
@@ -64,7 +104,11 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
         public final ImageView imgPhoto;
         public final CardView cardView_dev;
         public final RecycleDevicesAdapter dAdapter;
-
+        /**
+         * Construtor da classe DevicesHolder
+         * @param itemView view do item de dispositivo
+         * @param adapter adaptador que contém esses itens
+         */
         public DevicesHolder(@NonNull View itemView,  RecycleDevicesAdapter adapter) {
             super(itemView);
 
@@ -76,6 +120,10 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             cardView_dev = itemView.findViewById(R.id.cardView_dev);
             this.dAdapter = adapter;
 
+
+            /**
+             * Implementa a mudança de estado do Switch para habilitar ou desabilitar o dispositivo e atualiza a interface
+             */
             switchDev.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -98,11 +146,19 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             });
         }
 
+        /**
+         * Método que é usado para ir buscar o dispositivo correspondente á posição clicada
+         * @return Dispositivo na posição clicada
+         */
         public Device getDevice(){
             return houseManager.getDevice(this.getLayoutPosition() - 1);
         }
     }
-
+    /**
+     * Vincula os dados de um dispositivo às views do item de dispositivo, ou seja atualiza os dados exibidos pelo item
+     * @param holder holder que contém as views do item
+     * @param position a posição do dispositivo na lista de dispositivos
+     */
     @Override
     public void onBindViewHolder(@NonNull RecycleDevicesAdapter.DevicesHolder holder, int position) {
         if (position == 0){
@@ -120,6 +176,9 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             holder.itemView.setLongClickable(true);
             holder.itemView.setClickable(true);
 
+            /**
+             * Mostra um dialogo de confirmação para desassociar o gateway BLE
+             */
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -200,15 +259,27 @@ public class RecycleDevicesAdapter extends RecyclerView.Adapter<RecycleDevicesAd
             }
         });
     }
-
+    /**
+     * Método chamado quando um item é clicado
+     * @param view a view do item clicado
+     * @param position a posição do item clicado na lista
+     */
     public void onItemClick(View view, int position){
     }
 
+    /**
+     * Retorna o número de itens na lista de dispositivos.
+     * Adiciona 1 ao tamanho da lista para contar o item "gateway"
+     * @return inteiro representando o número de itens na lista
+     */
     @Override
     public int getItemCount() {
         return devices.size() +1;
     }
-
+    /**
+     * Retorna o contexto da aplicação
+     * @return contexto da aplicação
+     */
     public Context getContext() {
         return context;
     }

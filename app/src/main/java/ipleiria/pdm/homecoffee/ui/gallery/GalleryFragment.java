@@ -27,7 +27,11 @@ import ipleiria.pdm.homecoffee.MainActivity;
 
 import ipleiria.pdm.homecoffee.R;
 import ipleiria.pdm.homecoffee.mqtt.PahoDemo;
-
+/**
+ * Classe GalleryFragment é responsável por criar e gerenciar a interface de usuário para o fragmento de galeria.
+ *
+ * Ela também é responsável por gerenciar a comunicação entre o dispositivo Android e o gateway da casa (lopy).
+ */
 public class GalleryFragment extends Fragment {
     public static TextView textLogs;
 

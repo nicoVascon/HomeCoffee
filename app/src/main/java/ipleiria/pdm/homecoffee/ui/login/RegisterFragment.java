@@ -28,19 +28,47 @@ import ipleiria.pdm.homecoffee.User;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
-
+/**
+ * Esta classe está encarregada de registar os utilizadores
+ */
 public class RegisterFragment extends Fragment {
 
-
+    /**
+     * Adaptador da lista de salas
+     */
     private RecycleRoomsAdapter mAdapter;
-
+    /**
+     * Botão de login
+     */
     private Button loginButton;
+    /**
+     * Campo de texto para o nome de utilizador
+     */
     private EditText username;
+    /**
+     * Campo de texto para a password
+     */
     private EditText password;
+    /**
+     * Campo de texto para a confirmação da password
+     */
     private EditText password2;
+    /**
+     * Autenticação do Firebase
+     */
     FirebaseAuth firebaseAuth;
+    /**
+     * TextView para o registo
+     */
     private TextView register;
 
+    /**
+     * Cria a view do fragmento de registo
+     * @param inflater inflater do layout
+     * @param container container do layout
+     * @param savedInstanceState estado anterior da instância
+     * @return view do fragmento
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -49,7 +77,9 @@ public class RegisterFragment extends Fragment {
     }
 
 
-
+    /**
+     * Método chamado quando o fragmento é iniciado
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -75,7 +105,9 @@ public class RegisterFragment extends Fragment {
 
     }
 
-
+    /**
+     * Método que regista um novo utilizador na base de dados
+     */
     private void sign_up() {
         String email = username.getText().toString();
         String pwd = password.getText().toString();
@@ -126,7 +158,9 @@ public class RegisterFragment extends Fragment {
 
     }
 
-
+    /**
+     * Método que é chamado na destruição do fragmento
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

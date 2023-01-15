@@ -19,19 +19,40 @@ import java.util.Map;
 import ipleiria.pdm.homecoffee.Enums.RoomType;
 import ipleiria.pdm.homecoffee.HouseManager;
 
+/**
+ * Classe que representa uma sala. Possui um nome, tipo de sala e uma lista de dispositivos associados.
+ *
+ * Implementa a interface Serializable para permitir que sua instância seja salva em arquivo e comparável.
+ */
 public class Room implements Serializable, Comparable<Room> {
-
+    /**
+     * Nome da sala.
+     */
     private String Room_Name;
-    //private String pathPhoto;
+    /**
+     * Tipo de sala.
+     */
     private RoomType Room_Type;
-//    private ArrayList<Device> Devices;
+    /**
+     * Lista de dispositivos sensores associados à sala.
+     */
     private ArrayList<Sensor> Sensors;
+    /**
+     * Lista de dispositivos atuadores associados à sala.
+     */
     private ArrayList<Actuator> Actuators;
+
     public Room() {
         // Default constructor required for calls to DataSnapshot.toObject(Room.class)
         this.Sensors = new ArrayList<>();
         this.Actuators = new ArrayList<>();
     }
+    /**
+     * Cria uma instância de sala com nome e tipo especificados.
+     *
+     * @param Room_Name Nome da sala.
+     * @param Room_Type Tipo de sala.
+     */
     public Room( String Room_Name, RoomType Room_Type) {
 
         this.Room_Name = Room_Name;
@@ -58,7 +79,10 @@ public class Room implements Serializable, Comparable<Room> {
         this.Sensors =sensors;
         this.Actuators = actuators;
     }
-
+    /**
+     * Obtém o nome da sala.
+     * @return Nome da sala.
+     */
     public String getRoom_Name() {
         return Room_Name;
     }
@@ -101,6 +125,10 @@ public class Room implements Serializable, Comparable<Room> {
         }
     }
 
+    /**
+     * Adiciona um dispositivo à sala.
+     * @param dev Dispositivo a ser adicionado.
+     */
     public void addDevice(Device dev){
 
         dev.set_Room(this);
@@ -148,18 +176,27 @@ public class Room implements Serializable, Comparable<Room> {
 
         }
     }
-
+    /**
+     * Obtém a lista de dispositivos associados à sala.
+     * @return Lista de dispositivos associados à sala.
+     */
     public ArrayList<Device> getDevices(){
         ArrayList<Device> result = new ArrayList<>(Sensors.size() + Actuators.size());
         result.addAll(Sensors);
         result.addAll(Actuators);
         return result;
     }
-
+    /**
+     * Retorna o tipo de sala.
+     * @return room_type tipo de sala
+     */
     public RoomType getRoom_Type() {
         return Room_Type;
     }
-
+    /**
+     * Define o tipo de sala.
+     * @param type tipo de sala
+     */
     public void setRoom_Type(RoomType type) {
         this.Room_Type = type;
     }
@@ -179,17 +216,28 @@ public class Room implements Serializable, Comparable<Room> {
     public void setActuators(ArrayList<Actuator> actuators) {
         this.Actuators = actuators;
     }
-
+    /**
+     * Compara objetos Room.
+     * @param obj objeto a ser comparado
+     * @return true se nomes de sala forem iguais, false caso contrário.
+     */
     @Override
     public boolean equals(Object obj) {
         return this.Room_Name == ((Room) obj).Room_Name;
     }
-
+    /**
+     * Retorna a representação string do objeto Room.
+     * @return string representando nome e tipo de sala.
+     */
     @Override
     public String toString() {
         return Room_Name + " - " + Room_Type;
     }
-
+    /**
+     * Compara objetos Room.
+     * @param room objeto a ser comparado
+     * @return 0, pois não há critério de ordenação estabelecido para o objeto Room.
+     */
     @Override
     public int compareTo(Room room) {
         return String.CASE_INSENSITIVE_ORDER.compare(this.Room_Name, room.Room_Name);

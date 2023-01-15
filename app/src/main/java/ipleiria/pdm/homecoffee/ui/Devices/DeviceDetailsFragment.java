@@ -40,20 +40,44 @@ import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
+/**
+ * Classe DeviceDetailsFragment que herda de Fragment e implementa a interface SaveData.
+ * Essa classe é responsável por exibir os detalhes de um dispositivo selecionado, usando uma aba de navegação para exibir diferentes informações sobre o dispositivo.
+ */
 public class DeviceDetailsFragment extends Fragment implements SaveData {
     public static final int CONTROL_TAB_INDEX = 0;
     public static final int SETTINGS_TAB_INDEX = 3;
     public static boolean addAsVisitedFragment = true;
-
+    /**
+     * Guarda o dispositivo selecionado;
+     */
     private static Device selectedDevice;
 
+    /**
+     * TabAdapter adapter: adaptador para a exibição das abas;
+     */
     private TabAdapter adapter;
+    /**
+     * TabLayout tabLayout: gerencia as abas;
+     */
     private TabLayout tabLayout;
+    /**
+     * ViewPager2 viewPager: gerencia a exibição das abas;
+     */
     private ViewPager2 viewPager;
+    /**
+     * int initialTab: guarda a aba inicial que será exibida;
+     */
     private int initialTab;
 
 //    private String[] tabsTitles = {"Control", "Activity", "Schedule", "Settings"};
+    /**
+     * String[] tabsTitles: guarda os títulos das abas;
+     */
     private String[] tabsTitles = {"Control", "Activity", "Settings"};
+    /**
+     * int[] tabsSelectedIcon: guarda os ícones selecionados das abas.
+     */
     private int[] tabsSelectedIcon = {
             R.drawable.camera_tab_icon2,
             R.drawable.statistics_tab_icon,
@@ -61,20 +85,38 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
             R.drawable.settings_cute_tab_icon
     };
 
+    /**
+     * Construtor padrão para a classe DeviceDetailsFragment.
+     */
     public DeviceDetailsFragment(){
         this(0);
     }
 
+    /**
+     * Construtor que permite definir a tab inicial que será exibida ao abrir o fragment.
+     * @param initialTab índice da tab inicial que será exibida.
+     */
     public DeviceDetailsFragment(int initialTab){
         super();
         this.initialTab = initialTab;
     }
 
+    /**
+     * Método chamado quando a view é criada, recupera os dados necessários para exibir o fragment.
+     * @param savedInstanceState - Bundle contendo o estado salvo da instância anterior do fragmento.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Método chamado para criar a view do fragment.
+     * @param inflater objeto para inflar o layout do fragment.
+     * @param container ViewGroup onde o fragment será adicionado.
+     * @param savedInstanceState dados salvos do fragment.
+     * @return view criada para o fragment.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -82,6 +124,18 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         return inflater.inflate(R.layout.fragment_device_details, container, false);
     }
 
+    /**
+     * Este método é chamado quando este fragmento é criado.
+     * Ele herda o método da classe mãe e o sobrescreve
+     * com sua implementação específica. Ele seta o fragmento atual para este e seta o título da toolbar para
+     * "devDetails" que é recuperado a partir dos recursos. Ele também imprime todos os pontos de dados selecionados
+     * do dispositivo. Ele instancia e configura o viewPager, tabLayout, e o adapter. Ele também adiciona três fragmentos
+     * DeviceControlFragment, DeviceActivityFragment, DeviceSettingsFragment ao adapter. Ele configura a cor de fundo do
+     * tabLayout, a cor da guia selecionada, a cor do texto das guias, a cor do ícone das guias e adiciona um listener
+     * ao tabLayout para controlar a cor do ícone da guia selecionada. Ele também adiciona uma descrição de conteúdo
+     * opcional para o tabLayout e para a primeira guia. Ele verifica se há notificações para o dispositivo selecionado
+     * e adiciona uma badge (contador) à segunda guia se houver.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -181,12 +235,19 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         super.onPause();
         saveData();
     }
-
+    /**
+     * Classe responsável por salvar os dados do dispositivo.
+     * @override Sobrescreve o método saveData() da classe pai
+     */
     @Override
     public void saveData() {
         initialTab = viewPager.getCurrentItem();
     }
 
+    /**
+     * Classe responsável por recuperar os dados do dispositivo.
+     * @override Sobrescreve o método recoverData() da classe pai.
+     */
     @Override
     public void recoverData() {
 //        Bundle bundle = HouseManager.getBundle();
@@ -210,6 +271,10 @@ public class DeviceDetailsFragment extends Fragment implements SaveData {
         return selectedDevice;
     }
 
+    /**
+     * Classe responsável por destruir a view do dispositivo.
+     * @override Sobrescreve o método onDestroyView() da classe pai.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

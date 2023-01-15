@@ -46,13 +46,30 @@ import ipleiria.pdm.homecoffee.model.Room;
 import ipleiria.pdm.homecoffee.ui.rooms.AddRoomFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
+/**
+ * Classe responsável pelo fragmento da tela inicial da aplicação.
+ */
 public class HomeFragment extends Fragment  {
+    /**
+     * Chave para passar a posição do quarto selecionado na lista para outras telas.
+     */
     public static final String RESULT_ROOM_POSITION = "RESULT_ROOM_POSITION";
     //private FragmentHomeBinding binding;
+    /**
+     * Variável para exibir a lista de quartos.
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Variável para controlar a exibição dos itens na lista de quartos.
+     */
     private RecycleRoomsAdapter mAdapter;
+    /**
+     * Variável para exibir a temperatura atual.
+     */
     private TextView textViewTemp;
-
+    /**
+     * Variável para controlar o botão de adicionar quarto.
+     */
     private FloatingActionButton addRoomButton;
     private FloatingActionButton fbButtonRemove;
     private FloatingActionButton fbButtonEdit;
@@ -63,13 +80,27 @@ public class HomeFragment extends Fragment  {
     private Animation toBottom;
     private Boolean btnEditClicked;
 
-
+    /**
+     * Método chamado para mostrar o layout do fragmento home
+     *
+     * @param inflater utilizado para inflar o layout do fragmento.
+     * @param container container onde o fragmento será adicionado.
+     * @param savedInstanceState estado salvo da instância anterior.
+     * @return view do fragmento de Home.
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
+    /**
+     * Método chamado quando o fragmento começa.
+     * Inicializa a instância de HouseManager, define o fragmento atual e o título da toolbar como o nome da aplicação.
+     * Inicializa o RecyclerView, o adapter e o layout manager.
+     * Inicializa o botão de adicionar sala e configura o listener para abrir o fragmento de adicionar salas
+     * Chama o método getSensorData.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -237,6 +268,14 @@ public class HomeFragment extends Fragment  {
         //binding = null;
     }
 
+    /**
+     * Método que faz uma requisição GET para obter dados de sensores da plataforma The Things Network.
+     * Cria uma fila de requisições utilizando a biblioteca Volley.
+     * Define o ID da aplicação e a chave de acesso da plataforma The Things Network.
+     * Define a URL para o endpoint da API HTTP da plataforma.
+     * Define os headers da requisição, incluindo a autorização e o tipo de conteúdo.
+     * Faz a requisição e trata a resposta, imprimindo os dados obtidos no console.
+     */
     public void getSensorData(){
 
         Context context = this.getActivity();

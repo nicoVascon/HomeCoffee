@@ -25,12 +25,28 @@ import ipleiria.pdm.homecoffee.ui.Devices.DevicesFragment;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.rooms.RoomFragment;
 
+/**
+ * Este fragmento é responsável por exibir as configurações de um dispositivo selecionado. Ele contém elementos de interface para mostrar o nome, canal, tipo e sala do dispositivo selecionado.
+ * Ele também contém elementos de interface para editar essas informações.
+ */
 public class DeviceSettingsFragment extends Fragment {
+    /**
+     * Variável de estado para indicar se o dispositivo está sendo editado ou não.
+     */
     public static boolean editingDevice;
 
+    /**
+     * Instância do dispositivo selecionado.
+     */
     private Device selectedDevice;
 
+    /**
+     * Elementos de interface para exibir informações do dispositivo, como nome, canal e tipo.
+     */
     private TextView txt_devName;
+    /**
+     * Elementos de interface para exibir informações da sala do dispositivo.
+     */
     private TextView txt_devChannel;
     private TextView txt_devTypeName;
     private ImageView imageView_devType;
@@ -38,17 +54,32 @@ public class DeviceSettingsFragment extends Fragment {
     private TextView txt_devRoomName;
     private ImageView imageView_devRoom;
 
+    /**
+     * Este método é chamado quando o fragmento é criado. Ele inicializa as variáveis e configurações necessárias.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Este método é chamado quando a visualização do fragmento é criada.
+     * Ele infla o layout do fragmento, que contém elementos de interface para mostrar e editar as configurações do dispositivo selecionado.
+     * @param inflater O objeto LayoutInflater que pode ser usado para inflar o layout do fragmento
+     * @param container O contêiner que contém o fragmento.
+     * @param savedInstanceState Um objeto Bundle que pode conter informações sobre o estado anterior do fragmento.
+     * @return o layout a ser mostrado
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_device_settings, container, false);
     }
 
+    /**
+     * Este método é chamado quando o fragmento é iniciado. Ele configura a exibição das configurações do dispositivo selecionado, incluindo seu nome, canal, tipo e sala.
+     * Ele também configura os botões de edição e exclusão do dispositivo.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -126,6 +157,11 @@ public class DeviceSettingsFragment extends Fragment {
         initRoomLayout();
     }
 
+    /**
+     * Método responsável por inicializar o layout de tipo de dispositivo.
+     *
+     * Ele atualiza o nome e canal do dispositivo selecionado, além de definir a imagem de acordo com o tipo de dispositivo.
+     */
     public void initDevTypeLayout(){
         txt_devName.setText(selectedDevice.getName());
         txt_devChannel.setText(String.valueOf(selectedDevice.getChannel()));
@@ -163,6 +199,9 @@ public class DeviceSettingsFragment extends Fragment {
         }
     }
 
+    /**
+     * Este método atribui a imagem correspondente ao tipo de quarto do device que a chamou
+     */
     public void initRoomLayout(){
         Room devRoom = HouseManager.getInstance().searchRoomByDevice(selectedDevice);
         if(devRoom == null){

@@ -19,22 +19,39 @@ import java.util.HashMap;
 import ipleiria.pdm.homecoffee.HouseManager;
 import ipleiria.pdm.homecoffee.model.Sensor;
 
+/**
+ * Classe PahoDemo que implementa a interface MqttCallback e Serializable, para exemplificar o uso da biblioteca Paho
+ * para se comunicar com o protocolo MQTT
+ */
 public class PahoDemo implements MqttCallback, Serializable {
     public static PahoDemo INSTANCE;
 
+    /**
+     * Atributo que armazena uma conexão com um cliente MQTT
+     */
     private MqttClient client;
 
-
+    /**
+     * Construtor padrão da classe
+     */
     public PahoDemo() {}
 
     //Código adicionado para garantir que há só uma instância da classe HouseManager
+    /**
+     * Método que garante que existe apenas uma instância da classe PahoDemo.
+     * @return Instância atual da classe PahoDemo
+     */
     public static synchronized PahoDemo getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new PahoDemo();
         }
         return INSTANCE;
     }
-
+    /**
+     * Inicia o cliente MQTT.
+     * @param  activity a actividade onde é executado
+     * @throws MqttException caso ocorra algum erro ao iniciar o cliente
+     */
     public void start_mqtt(Activity activity) {
         try {
             INSTANCE = new PahoDemo();
@@ -45,11 +62,18 @@ public class PahoDemo implements MqttCallback, Serializable {
         }
     }
 
+    /**
+     * Envia uma mensagem para o tópico especificado.
+     * A mensagem é obtida a partir do método getString_send_ttn() da classe HouseManager.
+     */
     public synchronized void submitMessage() {
         INSTANCE.doDemo(HouseManager.getString_send_ttn());
     }
 
-
+    /**
+     * Método que envia a mensagem para o tópico mqtt especificado.
+     * @param payload_to_send HashMap com os payloads a serem enviados.
+     */
     public void doDemo(HashMap<Integer, String> payload_to_send) {
         if (payload_to_send == null || payload_to_send.isEmpty()){
             return;
@@ -85,7 +109,13 @@ public class PahoDemo implements MqttCallback, Serializable {
             System.out.println(e);
         }
     }
-
+    /**
+     * Método responsável por inicializar a conexão com o MQTT Broker
+     * utilizando o protocolo MQTT.
+     *
+     * @param topic Tópico ao qual deseja se inscrever para receber mensagens
+     * @throws MqttException Exceção lançada em caso de erro ao se conectar ao MQTT Broker
+     */
     public void initDemo(Activity activity, String topic) throws MqttException {
         try {
 
@@ -114,7 +144,13 @@ public class PahoDemo implements MqttCallback, Serializable {
         }
     }
 
-
+    /**
+     * Codifica uma mensagem para o formato TTN (The Things Network)
+     *
+     * @param token o token de autenticação
+     * @param payload o conteúdo da mensagem
+     * @return o array de bytes codificado
+     */
     public byte[] encodeTtnMessage(byte[] token, byte[] payload) {
         // Allocate a buffer with enough space for the header and the payload
         ByteBuffer buffer = ByteBuffer.allocate(4 + token.length + payload.length);
@@ -131,13 +167,25 @@ public class PahoDemo implements MqttCallback, Serializable {
         // Return the encoded data
         return buffer.array();
     }
-
+    /**
+     * Este método é chamado quando a conexão é perdida.
+     * Ele imprime a mensagem de erro da causa da perda de conexão.
+     *
+     * @param cause a causa da perda de conexão
+     */
     @Override
     public void connectionLost(Throwable cause) {
         System.out.println("Conexao morreu por:" + cause.getMessage());
 
     }
-
+    /**
+     * Este método é chamado quando uma mensagem é recebida.
+     * Ele processa a mensagem recebida, separando-a em diferentes valores e atualizando os sensores correspondentes.
+     *
+     * @param topic Tópico que a mensagem foi publicada
+     * @param message Conteúdo da mensagem publicada
+     * @throws Exception se ocorrer algum erro durante o processamento da mensagem
+     */
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         if (!HouseManager.isModificable()){
@@ -170,7 +218,12 @@ public class PahoDemo implements MqttCallback, Serializable {
 
 
     }
-
+    /**
+     * Este método é chamado quando a entrega de uma mensagem publicada é completa.
+     * Ele é geralmente usado para limpar qualquer estado relacionado à entrega ou para notificar o usuário que a entrega foi concluída.
+     *
+     * @param token token relacionado a publicação
+     */
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
 

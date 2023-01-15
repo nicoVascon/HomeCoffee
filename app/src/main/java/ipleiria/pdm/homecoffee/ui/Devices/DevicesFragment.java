@@ -27,29 +27,74 @@ import ipleiria.pdm.homecoffee.ui.Devices.Add.AddDeviceSelectBLEDeviceFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Details.DeviceSettingsFragment;
 import ipleiria.pdm.homecoffee.ui.Devices.Gateaway.GWConfig_BLEDeviceSelectionFragment;
 
+/**
+ * Classe que representa o Fragmento de dispositivos.
+ * Responsável por exibir os dispositivos conectados e permitir o gerenciamento deles
+ */
 public class DevicesFragment extends Fragment {
+    /**
+     * Constante para armazenar a posição do dispositivo selecionado.
+     */
     public static final String RESULT_DEV_POSITION = "RESULT_DEV_POSITION";
 
+    /**
+     * Variável para gestão da casa.
+     */
     private HouseManager houseManager;
+    /**
+     * Variável para exibição da lista de dispositivos.
+     */
     private RecyclerView mRecyclerView;
+    /**
+     * Variável para adaptador da lista de dispositivos.
+     */
     private RecycleDevicesAdapter dAdapter;
+    /**
+     * Variável para exibição do estado de conexão dos dispositivos.
+     */
     private TextView txtDevConState;
+    /**
+     * Variável para habilitar/desabilitar todos os dispositivos.
+     */
     private Switch allDevSwitch;
+    /**
+     * Variável para botão para adicionar novo dispositivo.
+     */
     private Button addDeviceButton;
+    /**
+     * Variável para definir se o dispositivo está ligado ou não
+     */
     private static boolean devicesEnable = true;
 
+    /**
+     * Método chamado quando a view é criada. Ele infla o layout e retorna a view criada.
+     * @param inflater o LayoutInflater utilizado para inflar o layout
+     * @param container o container que a view será adicionada
+     * @param savedInstanceState o estado salvo anteriormente
+     * @return a view criada
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup
             container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_devices, container, false);
     }
 
+    /**
+     * Método chamado quando a view é destruída. Adiciona o fragmento ao histórico do MainActivity.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         MainActivity.addFragmentViseted(FragmentsEnum.DEVICES_FRAGMENT);
     }
 
+    /**
+     * Método chamado quando o fragmento é iniciado.
+     *
+     * Ele inicializa os atributos, configura o gerenciador de casa, configura a barra de títulos e configura os elementos da interface.
+     *
+     * Ele também configura os listeners para os botões e switches, e atualiza o estado de conexão dos dispositivos.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -139,16 +184,27 @@ public class DevicesFragment extends Fragment {
         updateDevicesConnectionState();
     }
 
+    /**
+     * Método que atualiza o estado de conexão dos dispositivos.
+     */
     public void updateDevicesConnectionState(){
         int numberOfDevicesConnect = houseManager.numberOfDevicesConnect();
         txtDevConState.setText(numberOfDevicesConnect > 0 ?
                 numberOfDevicesConnect + getResources().getString(R.string.txt_DevicesConnected)  : getResources().getString(R.string.txt_DevicesDisconnected));
     }
 
+    /**
+     * Método que retorna o estado atual de todos os dispositivos.
+     * @return boolean devicesEnable.
+     */
     public static boolean isDevicesEnable() {
         return devicesEnable;
     }
 
+    /**
+     * Método que seta o estado atual de todos os dispositivos.
+     * @param devicesEnable estado atual dos dispositivos.
+     */
     public static void setDevicesEnable(boolean devicesEnable) {
         DevicesFragment.devicesEnable = devicesEnable;
     }

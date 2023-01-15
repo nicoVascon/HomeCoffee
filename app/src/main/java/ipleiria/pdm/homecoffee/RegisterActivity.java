@@ -32,24 +32,61 @@ import java.util.Map;
 import ipleiria.pdm.homecoffee.adapter.RecycleRoomsAdapter;
 import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 
+/**
+ * Classe RegisterActivity é responsável por criar uma tela de registo de usuário.
+ *
+ * Ela herda de AppCompatActivity e é utilizada para criar uma interface para o usuário
+ * realizar o registro na aplicação.
+ */
 public class RegisterActivity extends AppCompatActivity {
 
-
+    /**
+     * RecycleRoomsAdapter mAdapter é uma instância da classe RecycleRoomsAdapter
+     * que irá adaptar a lista de salas para o RecyclerView.
+     */
     private RecycleRoomsAdapter mAdapter;
-
+    /**
+     * Button loginButton é um botão que é utilizado para realizar o registro do usuário.
+     */
     private Button loginButton;
+    /**
+     * EditText username é um campo de texto onde o usuário irá inserir o nome de usuário.
+     */
     private EditText username;
+    /**
+     * EditText password é um campo de texto onde o usuário irá inserir a senha de acesso.
+     */
     private EditText password;
+    /**
+     * EditText password2 é um campo de texto onde o usuário irá confirmar a senha de acesso.
+     */
     private EditText password2;
+    /**
+     * FirebaseAuth firebaseAuth é uma instância da classe FirebaseAuth que é utilizada
+     * para realizar o registro do usuário no banco de dados do Firebase.
+     */
     FirebaseAuth firebaseAuth;
+    /**
+     * TextView register é um texto exibido na tela que informa ao usuário sobre a necessidade
+     */
     private TextView register;
     private FirebaseFirestore db;
 
+    /**
+     * Método onCreate é chamado quando a activity é criada. Ele é responsável por
+     * inicializar as views e configurar os listeners dos botões.
+     * @param savedInstanceState é o estado salvo anteriormente da activity (opcional).
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
     }
+
+    /**
+     * Método chamado quando a activity começa. Nela é inicializado o adapter,
+     * a instância do firebaseAuth e os listeners dos botões e campos de texto.
+     */
     @Override
     public void onStart() {
         super.onStart();
@@ -75,6 +112,10 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Método que é executado ao clicar no botão de registo, que verifica se os dados inseridos são válidos e se estão de acordo com as regras de registo.
+     * Se os dados estiverem corretos, é criada uma conta de utilizador com os dados fornecidos e é iniciada a MainActivity
+     */
     private void sign_up() {
         String email = username.getText().toString();
         String pwd = password.getText().toString();
@@ -155,7 +196,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Método que é chamado na destruição da actividade
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();

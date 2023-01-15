@@ -56,23 +56,58 @@ import ipleiria.pdm.homecoffee.ui.home.HomeFragment;
 import ipleiria.pdm.homecoffee.ui.login.LoginActivity;
 import ipleiria.pdm.homecoffee.ui.slideshow.SlideshowFragment;
 
+/**
+ * Classe MainActivity é a classe principal da aplicação onde é iniciado a aplicação.
+ * É responsável por gerenciar a navegação entre as diferentes telas (fragments) da aplicação.
+ */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
+    /**
+     * Atributo toolBarTitle é um TextView responsável por armazenar o título da toolbar.
+     */
     private static TextView toolBarTitle;
+    /**
+     * Atributo lastsFragmentsOpened é uma LinkedList que armazena os últimos fragments abertos.
+     */
     private static LinkedList<FragmentsEnum> lastsFragmentsOpened = new LinkedList<>();;
+    /**
+     * Atributo wasBackPressed indica se o botão de voltar foi pressionado.
+     */
     private static boolean wasBackPressed;
+    /**
+     * Atributo wasRotated indica se a tela foi rotacionada.
+     */
     private static boolean wasRotated;
+    /**
+     * Atributo currentFragment armazena o fragmento atual.
+     */
     private static Fragment currentFragment;
-
+    /**
+     * Atributo drawer é um DrawerLayout responsável por gerenciar a exibição do menu lateral.
+     */
     private DrawerLayout drawer;
+    /**
+     * Atributo navigationView é um NavigationView responsável por gerenciar as opções do menu lateral.
+     */
     private NavigationView navigationView;
+    /**
+     * Atributo houseManager é uma instância da classe HouseManager responsável por gerenciar os dados da aplicação.
+     */
+    private HouseManager houseManager;
 
+    /**
+     * Atributo mAuth é uma instância de autenticação do Firebase
+     */
     private FirebaseAuth mAuth;
     private static final int REQUEST_CODE = 101;
 
     private static final int REQUEST_CODE_BLUETOOTH_PERMISSIONS = 1;
     List<String> permissions;
 
-
+    /**
+     * Método onCreate da classe MainActivity, é chamado quando a classe é instanciada. Recebe como argumento um objeto do tipo Bundle que contém informações sobre o estado da aplicação.
+     *
+     * @param savedInstanceState objeto do tipo Bundle que contém informações sobre o estado da aplicação.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -194,7 +229,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     }
-
+    /**
+     *
+     * Utilizado para definir o utilizador atual autenticado na aplicação.
+     * É atribuida uma instância de FirebaseUser com o utilizador atual e é atribuido o endereço de email a uma nova instância de User.
+     * Esse objeto User é adicionado à instância de HouseManager para uso futuro.
+     */
     private void setCurrentUser() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         String user_mail = currentUser.getEmail();
@@ -202,13 +242,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         HouseManager.getInstance().setUser(user);
 
     }
-
+    /**
+     * Utilizado para definir o fragmento inicial mostrado na aplicação.
+     * O fragmento HomeFragment é adicionado ao container de fragmentos e o item de navegação correspondente é marcado como selecionado.
+     */
     public void setInitialFragment() {
         getSupportFragmentManager().beginTransaction().replace(
                 R.id.fragment_container, new HomeFragment()).commit();
         navigationView.setCheckedItem(R.id.nav_home);
     }
 
+    /**
+     * Utilizado para definir o fragmento de login na aplicação.
+     * É iniciada uma nova atividade para o LoginActivity e a atividade atual é finalizada.
+     */
     public void setLoginFragment() {
         System.out.println("Estou a ir para o Login, LoginFragment()");
         Intent switchActivityIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -216,17 +263,32 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         finish();
     }
 
+    /**
+     * Ele salva o estado atual da aplicação para que possa ser restaurado quando a atividade for criada novamente.
+     * @param outState Objeto Bundle onde o estado atual da aplicação é salvo.
+     */
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable("contactos", HouseManager.getInstance());
     }
+
+    /**
+     * Método onPause é chamado quando a atividade está prestes a ser pausada.
+     * Ele é usado para salvar o estado atual da aplicação em um arquivo.
+     */
     @Override
     protected void onPause() {
         super.onPause();
         HouseManager.gravarFicheiro(this);
     }
 
+    /**
+     * Método onNavigationItemSelected é chamado quando um item de navegação é selecionado.
+     * Ele é usado para navegar entre os fragmentos da aplicação.
+     * @param item Objeto MenuItem que representa o item selecionado.
+     * @return true se a navegação foi bem-sucedida, false caso contrário.
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Bundle bundle = currentFragment.getArguments();
@@ -252,6 +314,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Verifica se o Drawer está aberto e o fecha, caso contrário verifica se o fragmento atual é o HomeFragment,
+     * se não for, é verificado o último fragmento aberto na stack e é mostrado esse fragmento.
+     */
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -314,11 +380,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    /**
+     * Método de destruição da classe.
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
+    /**
+     * Método chamado quando o menu é criado. Infla o menu com os itens presentes na action bar.
+     * @param menu O menu que será criado.
+     * @return Retorna true se o menu for criado com sucesso.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -326,10 +400,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+    /**
+     * Método para mudar o título da toolbar.
+     * @param title O novo título da toolbar.
+     */
     public static void setToolBarTitle(String title){
         toolBarTitle.setText(title);
     }
 
+    /**
+     * Método para adicionar um fragmento visitado à lista de fragmentos visitados.
+     * @param fragment O fragmento visitado.
+     */
     public static void addFragmentViseted(FragmentsEnum fragment){
         if (wasBackPressed){
             wasBackPressed = false;
@@ -342,19 +424,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         lastsFragmentsOpened.addFirst(fragment);
     }
 
+    /**
+     * Método para limpar a lista de fragmentos visitados.
+     */
     public static void clearFragmentsVisitedList(){
         lastsFragmentsOpened.clear();
         lastsFragmentsOpened.addFirst(FragmentsEnum.HOME_FRAGMENT);
     }
 
+    /**
+     * Método para definir o fragmento atual.
+     * @param currentFragment O fragmento atual.
+     */
     public static void setCurrentFragment(Fragment currentFragment) {
         MainActivity.currentFragment = currentFragment;
     }
 
+    /**
+     * Método para obter o fragmento atual
+     * @return o fragmento atual
+     */
     public static Fragment getCurrentFragment() {
         return currentFragment;
     }
 
+    /**
+     * Método que é chamado quando o botão de logout é pressionado.
+     * Ele desconecta o usuário atual do FirebaseAuth, chama o método setLoginFragment para mudar para a tela de login,
+     * fecha o menu lateral e finaliza a atividade atual.
+     * @param view O objeto da view associado ao botão de logout
+     */
     public void btn_logout(View view) {
         FirebaseAuth.getInstance().signOut();
         setLoginFragment();
