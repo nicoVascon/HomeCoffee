@@ -165,7 +165,6 @@ public class RegisterActivity extends AppCompatActivity {
                         Map<String, Object> user = new HashMap<>();
                         user.put("User_Email", email);
 
-
                         // Add a new document with a generated ID
                         db.collection("users")
                                 .document(email)

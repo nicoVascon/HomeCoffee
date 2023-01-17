@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.FileInputStream;
@@ -109,7 +108,6 @@ public class HouseManager implements Serializable , Cloneable{
     private boolean loginMade = false;
 
     private boolean usersRoomDone = false;
-    private boolean roomRemove = FALSE;
 
     private int color_back_rooms=R.color.iconBackgoundRooms;
 
@@ -269,10 +267,18 @@ public class HouseManager implements Serializable , Cloneable{
         devices.remove(device);
         if(device instanceof Sensor){
             sensors.remove(device);
-            ((Sensor) device).getAssociatedActuator().setAssociatedSensor(null);
-            ((Sensor) device).getAssociatedActuator().setAssociateddSensorRef(null);
+            for(Actuator associatedActuator : ((Sensor) device).getAssociatedActuatorsList()){
+                associatedActuator.setAssociatedSensor(null);
+                associatedActuator.setAssociateddSensorRef(null);
+            }
+//            ((Sensor) device).getAssociatedActuator().setAssociatedSensor(null);
+//            ((Sensor) device).getAssociatedActuator().setAssociateddSensorRef(null);
         }else{
             actuators.remove(device);
+            Sensor associatedSensor = ((Actuator) device).getAssociatedSensor();
+            if(associatedSensor != null){
+                associatedSensor.getAssociatedActuatorsList().remove(device);
+            }
         }
     }
     /**
@@ -452,22 +458,6 @@ public class HouseManager implements Serializable , Cloneable{
     //---------------------ROOM--------------------------------
 
     /**
-     * Método que retorna se o quarto foi removido
-     * @return true se removido, false se não
-     */
-    public boolean isRoomRemove() {
-        return roomRemove;
-    }
-
-    /**
-     * Método que define a flag que diz se o quarto foi removido ou não
-     * @param roomRemove flag a dizer se foi removido ou não
-     */
-    public void setRoomRemove(boolean roomRemove) {
-        this.roomRemove = roomRemove;
-    }
-
-    /**
      * Adiciona um quarto à lista de quartos existentes, coloca num mapa para escrever esse mesmo mapa na firebase
      *
      * @param room : quarto a ser adicionado
@@ -496,8 +486,12 @@ public class HouseManager implements Serializable , Cloneable{
             return;
         }
 
+        for(Device device : room.getDevices()){
+            removeDevice(device);
+        }
         HouseManager.getInstance().getUser().getRoomsRef().document(room.getRoom_Name()).delete();
         rooms.remove(room);
+
         Collections.sort(rooms);
     }
     /**

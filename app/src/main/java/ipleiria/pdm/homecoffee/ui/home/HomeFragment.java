@@ -1,5 +1,7 @@
 package ipleiria.pdm.homecoffee.ui.home;
 
+import static java.lang.Boolean.FALSE;
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,6 +70,10 @@ public class HomeFragment extends Fragment  {
      */
     private TextView textViewTemp;
     /**
+     * Estado para remover
+     */
+    private boolean roomRemove = FALSE;
+    /**
      * Variável para controlar o botão de adicionar quarto.
      */
     private FloatingActionButton addRoomButton;
@@ -120,11 +126,11 @@ public class HomeFragment extends Fragment  {
             @Override
             public void onItemClick(View v, int position) {
 
-                if (HouseManager.getInstance().isRoomRemove()) {
+                if (roomRemove) {
                     Room room_remove=HouseManager.getInstance().getRoom(position);
                     HouseManager.getInstance().removeRoom(room_remove);
                     mAdapter.notifyDataSetChanged();
-                    HouseManager.getInstance().setRoomRemove(false);
+                    roomRemove = false;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         HouseManager.getInstance().setColor_back_rooms(getContext().getColor(R.color.iconBackgoundRooms));
                     }
@@ -179,8 +185,8 @@ public class HomeFragment extends Fragment  {
             @Override
             public void onClick(View view) {
 
-                if (HouseManager.getInstance().isRoomRemove()) {
-                    HouseManager.getInstance().setRoomRemove(false);
+                if (roomRemove) {
+                    roomRemove = false;
                     Toast.makeText(getContext(), R.string.ELiminateMode, Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         HouseManager.getInstance().setColor_back_rooms(getContext().getColor(R.color.iconBackgoundRooms));
@@ -188,7 +194,7 @@ public class HomeFragment extends Fragment  {
                     mAdapter.notifyDataSetChanged();
 
                 } else {
-                    HouseManager.getInstance().setRoomRemove(true);
+                    roomRemove = true;
                     Toast.makeText(getContext(), R.string.SelectRoomEliminate, Toast.LENGTH_SHORT).show();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         HouseManager.getInstance().setColor_back_rooms(getContext().getColor(R.color.RoomRemoveMode));

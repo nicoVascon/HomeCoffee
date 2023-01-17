@@ -64,9 +64,9 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
      */
     public static final String ADVERT_NAME_CHARACTERISTIC_UUID = "c000000000000002";
     /**
-     * UUID da característica do código EUI do dispositivo
+     * UUID da característica do User ID
      */
-    public static final String DEVICE_EUI_CODE_CHARACTERISTIC_UUID = "c000000000000003";
+    public static final String USER_ID_CHARACTERISTIC_UUID = "c000000000000003";
     /**
      * UUID da característica do código EUI da aplicação
      */
@@ -121,6 +121,8 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
      * Representa o tempo de espera para conexão com o TTN
      */
     private static final int TTN_JOIN_TIME_SLEEP = 3000;
+
+    private static final int ATTEMPS_MAX_NUM = 5;
 
     /**
      * Atributo booleano que indica se a descoberta de serviços foi bem sucedida
@@ -311,22 +313,39 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
         }
         List<BluetoothGattCharacteristic> characteristics = selectedService.getCharacteristics();
 
-        BluetoothGattCharacteristic devEuiCodeCharacteristic = null;
+        BluetoothGattCharacteristic userIDCharacteristic = null;
         for (BluetoothGattCharacteristic characteristic : characteristics) {
             System.out.println("Characteristic: " + getUUID_toString(characteristic.getUuid()));
             switch (getUUID_toString(characteristic.getUuid())){
-                case DEVICE_EUI_CODE_CHARACTERISTIC_UUID:
-                    devEuiCodeCharacteristic = characteristic;
+                case USER_ID_CHARACTERISTIC_UUID:
+                    userIDCharacteristic = characteristic;
                     break;
             }
         }
         configOperationsCounter = 0;
-        if (devEuiCodeCharacteristic == null) {
+        if (userIDCharacteristic == null) {
             System.out.println("Target Device Eui Code characteristic not found");
             loadingDialog.dismisDialog();
         }else{
-            devEuiCode = readString(devEuiCodeCharacteristic, "Device Eui Code");
-            if (readCharacteristicsSucceed){
+//            devEuiCode = readString(userIDCharacteristic, "User ID");
+            int attemptsNum = 0;
+            do{
+                attemptsNum++;
+                try {
+                    String stringValue = HouseManager.getInstance().getUser().getId();
+                    writeString(userIDCharacteristic, stringValue, "User ID");
+                    if (writeCharacteristicsSucceed){
+                        configOperationsCounter++;
+                    }
+                }catch (Exception e){
+                    System.out.println("Exception: " + e.getMessage());
+                }
+            }while (!writeCharacteristicsSucceed && attemptsNum < ATTEMPS_MAX_NUM);
+            if(!writeCharacteristicsSucceed){
+                loadingDialog.dismisDialog();
+                return;
+            }
+            if (writeCharacteristicsSucceed){
                 configOperationsCounter++;
                 loadingDialog.dismisDialog();
 
@@ -445,7 +464,6 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
             }
         }
 
-        int attemptsMaxNum = 5;
         int attemptsNum = 0;
         if (deviceTypeCharacteristic == null) {
             System.out.println("Target Device Type characteristic not found");
@@ -471,7 +489,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 }catch (Exception e){
                     System.out.println("Exception: " + e.getMessage());
                 }
-            }while (!writeCharacteristicsSucceed && attemptsNum < attemptsMaxNum);
+            }while (!writeCharacteristicsSucceed && attemptsNum < ATTEMPS_MAX_NUM);
         }
 
         if (appEuiCodeCharacteristic == null) {
@@ -489,7 +507,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 }catch (Exception e){
                     System.out.println("Exception: " + e.getMessage());
                 }
-            }while (!writeCharacteristicsSucceed && attemptsNum < attemptsMaxNum);
+            }while (!writeCharacteristicsSucceed && attemptsNum < ATTEMPS_MAX_NUM);
         }
 
         if (appKeyCodeCharacteristic == null) {
@@ -507,7 +525,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 }catch (Exception e){
                     System.out.println("Exception: " + e.getMessage());
                 }
-            }while (!writeCharacteristicsSucceed && attemptsNum < attemptsMaxNum);
+            }while (!writeCharacteristicsSucceed && attemptsNum < ATTEMPS_MAX_NUM);
         }
 
         if (bleServerNameCharacteristic == null) {
@@ -531,7 +549,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 } catch (Exception e) {
                     System.out.println("Exception: " + e.getMessage());
                 }
-            }while ((value == null || !value.equals(TTN_JOINED_STATE)) && attemptsNum < attemptsMaxNum);
+            }while ((value == null || !value.equals(TTN_JOINED_STATE)) && attemptsNum < ATTEMPS_MAX_NUM);
             if(readCharacteristicsSucceed){
                 configOperationsCounter++;
             }
@@ -549,11 +567,11 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                 } catch (Exception e) {
                     System.out.println("Exception: " + e.getMessage());
                 }
-            }while ((value == null || !value.equals(CONFIGURATION_READY_STATE)) && attemptsNum < attemptsMaxNum);
+            }while ((value == null || !value.equals(CONFIGURATION_READY_STATE)) && attemptsNum < ATTEMPS_MAX_NUM);
 
             int configOperationsCounter_temp = configOperationsCounter;
             String GateWayName = gatewayName;
-            String GateWayEuiCode = devEuiCode;
+//            String GateWayEuiCode = devEuiCode;
             String value_2 = value;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -563,7 +581,7 @@ public class GWConfig_BLEDeviceSelectionFragment extends Fragment {
                                 getResources().getString(R.string.toastMessage_BLEDeviceConfigurationSucceeded),
                                 Toast.LENGTH_LONG).show();
                         HouseManager.getInstance().setGatewayBLEServerName(GateWayName);
-                        HouseManager.getInstance().setGatewayBLEServerDevEuiCode(GateWayEuiCode);
+//                        HouseManager.getInstance().setGatewayBLEServerDevEuiCode(GateWayEuiCode);
                         ((MainActivity) getContext()).getSupportFragmentManager().beginTransaction().
                                 replace(R.id.fragment_container, new DevicesFragment()).commit();
                     }else{

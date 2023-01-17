@@ -1,7 +1,6 @@
 package ipleiria.pdm.homecoffee.model;
 
 import com.google.firebase.firestore.DocumentReference;
-import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,7 +24,7 @@ public class Sensor extends Device{
     /**
      * Atuador associado a este sensor
      */
-    private Actuator associatedActuator;
+    private ArrayList<Actuator> associatedActuatorsList;
 
     /**
      * Construtor vazio que apenas inicia os arrays usado no processo de reconstruir os dados que recupera da firebase
@@ -33,6 +32,7 @@ public class Sensor extends Device{
     public Sensor(){
         this.notifications = new ArrayList<>();
         this.dataPoints = new ArrayList<>();
+        this.associatedActuatorsList = new ArrayList<>();
     }
     /**
      * Construtor da classe Sensor
@@ -43,6 +43,7 @@ public class Sensor extends Device{
      */
     public Sensor(int channel, String name, DeviceType type, Room room) {
         super(channel, name, type, room);
+        this.associatedActuatorsList = new ArrayList<>();
     }
 
     /**
@@ -74,12 +75,14 @@ public class Sensor extends Device{
         return associatedRoomRef;
     }
 
-    public Actuator getAssociatedActuator() {
-        return associatedActuator;
+    public ArrayList<Actuator> getAssociatedActuatorsList() {
+        return associatedActuatorsList;
     }
 
-    public void setAssociatedActuator(Actuator associatedActuator) {
-        this.associatedActuator = associatedActuator;
+    public void addAssociatedActuator(Actuator associatedActuator) {
+        if(associatedActuatorsList != null && !associatedActuatorsList.contains(associatedActuator)){
+            this.associatedActuatorsList.add(associatedActuator);
+        }
     }
 
     public void setAssociatedRoomRef(DocumentReference associatedRoomRef) {

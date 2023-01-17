@@ -58,7 +58,9 @@ public class PahoDemo implements MqttCallback, Serializable {
     public void start_mqtt(Activity activity) {
         try {
             INSTANCE = new PahoDemo();
-            INSTANCE.initDemo(activity,"messagesFromCroatia/data");
+//            INSTANCE.initDemo(activity,"messagesFromCroatia/data");
+            INSTANCE.initDemo(activity,"HOMECOFFEE/" + HouseManager.getInstance().getUser().getId().substring(0, 5) +
+                    "/data");
         } catch (MqttException e) {
             e.printStackTrace();
             System.out.println("\n\n\n\nException: " + e.getMessage());
@@ -107,7 +109,9 @@ public class PahoDemo implements MqttCallback, Serializable {
         byte[] jsonPayload = to_send.toString().getBytes();
         message.setPayload(jsonPayload);
         try {
-            client.publish("messagesFromCroatia/commands", message);
+//            client.publish("messagesFromCroatia/commands", message);
+            client.publish("HOMECOFFEE/" + HouseManager.getInstance().getUser().getId().substring(0, 5) +
+                    "/commands", message);
         } catch (MqttException e) {
             System.out.println(e);
         }

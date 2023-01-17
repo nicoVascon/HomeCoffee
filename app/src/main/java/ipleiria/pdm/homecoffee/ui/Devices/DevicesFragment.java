@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ipleiria.pdm.homecoffee.Enums.FragmentsEnum;
 import ipleiria.pdm.homecoffee.HouseManager;
@@ -149,6 +150,10 @@ public class DevicesFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DeviceSettingsFragment.editingDevice = false;
+                if(houseManager.getRooms()==null || houseManager.getRooms().isEmpty()){
+                    Toast.makeText(getContext(),R.string.toastMessage_NoRoomsDevices,Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 new AlertDialog.Builder(getContext())
                         .setTitle(getResources().getString(R.string.txt_AlertDialog_AddDeviceTitle))

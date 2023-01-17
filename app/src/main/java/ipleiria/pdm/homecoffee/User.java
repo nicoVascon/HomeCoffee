@@ -3,6 +3,7 @@ package ipleiria.pdm.homecoffee;
 import com.google.firebase.firestore.CollectionReference;
 
 import java.io.Serializable;
+import java.util.Random;
 
 /**
  * Classe User que representa um usuário do aplicativo.
@@ -18,6 +19,10 @@ public class User implements Serializable {
      * Referencia na firebase dos quartos do utilizador
      */
     private CollectionReference roomsRef;
+    /**
+     * User Id
+     */
+    private String id;
 
     /**
      * Construtor vazio da classe User.
@@ -31,6 +36,8 @@ public class User implements Serializable {
      */
     public User(String email) {
         this.email = email;
+//        Random random = new Random();
+//        this.id = random.nextInt(1000);
     }
 
     /**
@@ -39,6 +46,22 @@ public class User implements Serializable {
      */
     public String getEmail() {
         return email;
+    }
+
+    /**
+     * Método para obter o User ID
+     * @return User ID
+     */
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Método para definir o User ID
+     * @param id User Id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**

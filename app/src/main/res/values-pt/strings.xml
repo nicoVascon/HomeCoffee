@@ -130,4 +130,5 @@
     <string name="toastMessage_UnreachableServer">Servidor Inalcanzável. Por favor use outra Rede.</string>
     <string name="toolbar_GWConfigTitle">Configuração do Gateway</string>
     <string name="toolbar_RoomTitle">Meu Quarto</string>
+    <string name="toastMessage_NoRoomsDevices">Por favor insere um quarto antes de adicionar devices</string>
 </resources>

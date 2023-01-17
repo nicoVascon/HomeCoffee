@@ -147,4 +147,5 @@
     <string name="toastMessage_UnreachableServer">Unreachable Server. Please Use Annoter Network</string>
     <string name="toolbar_GWConfigTitle">Gateway Configuration</string>
     <string name="toolbar_RoomTitle">My Room</string>
+    <string name="toastMessage_NoRoomsDevices">Please insert a room before adding devices</string>
 </resources>

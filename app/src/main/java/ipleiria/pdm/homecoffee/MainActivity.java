@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toolBarTitle.setText(getResources().getString(R.string.app_name));
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        HouseManager.lerFicheiro(this);
+//        HouseManager.lerFicheiro(this);
 
         //Permissions to ask for
         permissions = new ArrayList<>();
@@ -167,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        TextView textHeader = header.findViewById(R.id.textViewUser);
         TextView textEmailUser = header.findViewById(R.id.textViewUserEmail);
         textEmailUser.setText(mAuth.getCurrentUser().getEmail());
+        HouseManager.getInstance().getUser().setId(mAuth.getCurrentUser().getUid().substring(0, 5));
         setInitialFragment();
 
 
@@ -179,12 +180,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                int i = 0;
                 while(true) {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+//                    if (HouseManager.isModificable()){
+                        PahoDemo.getInstance().submitMessage();
+                        i ++;
+                        if(i==20){
+                            i = 0;
+                            for(Device device : HouseManager.getInstance().getDevices()){
+                                device.update();
+                            }
+                        }
+//                    }
 
                     (MainActivity.this).runOnUiThread(new Runnable() {
                         @Override

@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
+
         if(user != null){
             HouseManager.getInstance().setLoginMade(true);
             Toast.makeText(this, "You are Logged in", Toast.LENGTH_SHORT).show();

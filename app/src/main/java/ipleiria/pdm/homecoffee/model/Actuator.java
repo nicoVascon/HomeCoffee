@@ -58,7 +58,7 @@ public class Actuator extends Device{
         if(sensor.getType() == this.type){
             associatedSensor = sensor;
             this.dataPoints = sensor.dataPoints;
-            associatedSensor.setAssociatedActuator(this);
+            associatedSensor.addAssociatedActuator(this);
 
             CollectionReference refRooms = HouseManager.getInstance().getUser().getRoomsRef();
             DocumentReference refRealRoom= refRooms.document(sensor.getRoom().getRoom_Name());
