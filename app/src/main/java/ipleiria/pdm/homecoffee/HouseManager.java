@@ -881,9 +881,9 @@ public class HouseManager implements Serializable , Cloneable{
         HouseManager.userRoomsRefGotten = false;
         this.user = user;
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference usersRef = db.collection("users").document(user.getEmail()).collection("rooms");
+        CollectionReference userRoomsRef = db.collection("users").document(user.getEmail()).collection("rooms");
 
-        HouseManager.getInstance().getUser().setRoomsRef(usersRef);
+        HouseManager.getInstance().getUser().setRoomsRef(userRoomsRef);
         HouseManager.userRoomsRefGotten=true;
 
     }

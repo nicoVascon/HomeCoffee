@@ -131,4 +131,17 @@
     <string name="toolbar_GWConfigTitle">Configuração do Gateway</string>
     <string name="toolbar_RoomTitle">Meu Quarto</string>
     <string name="toastMessage_NoRoomsDevices">Por favor insere um quarto antes de adicionar devices</string>
+    <string name="txt_Send">Enviar</string>
+    <string name="txt_msg">Mensagem</string>
+    <string name="txt_AddRoom">Adicionar Quarto</string>
+    <string name="txt_InsertName">Inserir Nome</string>
+    <string name="txt_Name">Nome</string>
+    <string name="txt_SelectRoomType">Selecionar Tipo de Quarto</string>
+    <string name="roomType_Bedroom">Dormitório</string>
+    <string name="roomType_Kitchen">Cozinha</string>
+    <string name="roomType_LivingRoom">Sala</string>
+    <string name="roomType_Office">Oficina</string>
+    <string name="roomType_Bathroom">Casa de Banho</string>
+    <string name="txt_Welcome">Bem-vindo à tua Case</string>
+    <string name="txt_YourRooms">Os Teus Quartos</string>
 </resources>

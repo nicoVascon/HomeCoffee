@@ -197,9 +197,9 @@ public class PahoDemo implements MqttCallback, Serializable {
      */
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        if (!HouseManager.isModificable()){
-            return;
-        }
+//        if (!HouseManager.isModificable()){
+//            return;
+//        }
 
         try{
             System.out.println("Oiiii");

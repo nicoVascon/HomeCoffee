@@ -89,11 +89,28 @@ public class AddRoomFragment extends Fragment {
         roomTypeSpinner = getView().findViewById(R.id.roomType_spinner);
         db = FirebaseFirestore.getInstance();
         ArrayList<String> arrayList = new ArrayList<>();
-        for (DeviceType deviceType : DeviceType.values()) {
-            arrayList.add(deviceType.toString());
+        for (RoomType roomType : RoomType.values()) {
+
+            switch (roomType){
+                case BEDROOM:
+                    arrayList.add(getResources().getString(R.string.roomType_Bedroom));
+                    break;
+                case KITCHEN:
+                    arrayList.add(getResources().getString(R.string.roomType_Kitchen));
+                    break;
+                case LIVING_ROOM:
+                    arrayList.add(getResources().getString(R.string.roomType_LivingRoom));
+                    break;
+                case OFFICE:
+                    arrayList.add(getResources().getString(R.string.roomType_Office));
+                    break;
+                case BATHROOM:
+                    arrayList.add(getResources().getString(R.string.roomType_Bathroom));
+                    break;
+            }
         }
 
-        ArrayAdapter<RoomType> adapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1, RoomType.values());
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this.getContext(), android.R.layout.simple_list_item_1, arrayList);
         roomTypeSpinner.setAdapter(adapter);
 
 
@@ -120,7 +137,8 @@ public class AddRoomFragment extends Fragment {
         String nome = et_name.getText().toString();
 
         Spinner type_spinner = getView().findViewById(R.id.roomType_spinner);
-        RoomType type = RoomType.valueOf(type_spinner.getSelectedItem().toString());
+//        RoomType type = RoomType.valueOf(type_spinner.getSelectedItem().toString());
+        RoomType type = RoomType.values()[type_spinner.getSelectedItemPosition()];
 
         if (nome.trim().isEmpty()) {
             Toast.makeText(this.getActivity(), R.string.txt_addRoomName,Toast.LENGTH_LONG).show();

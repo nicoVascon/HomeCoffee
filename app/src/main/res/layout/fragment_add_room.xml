@@ -19,7 +19,7 @@
         android:autoText="true"
         android:elegantTextHeight="true"
         android:fontFamily="@font/days_one"
-        android:text="Select a room type"
+        android:text="@string/txt_SelectRoomType"
         android:textColor="#6A000000"
 
         app:autoSizeMinTextSize="20dp"
@@ -40,7 +40,7 @@
         android:autoText="true"
         android:elegantTextHeight="true"
         android:fontFamily="@font/days_one"
-        android:hint="name"
+        android:hint="@string/txt_Name"
 
         android:textColor="#6A000000"
         app:layout_constraintEnd_toEndOf="parent"
@@ -60,7 +60,7 @@
         android:autoText="true"
         android:elegantTextHeight="true"
         android:fontFamily="@font/days_one"
-        android:text="Insert a name"
+        android:text="@string/txt_InsertName"
         android:textColor="#81000000"
         android:textStyle="normal"
         app:autoSizeMinTextSize="20dp"
@@ -81,7 +81,7 @@
         android:layout_marginEnd="10dp"
         android:height="50dp"
         android:fontFamily="@font/days_one"
-        android:text="Add a room"
+        android:text="@string/txt_AddRoom"
         android:textAlignment="center"
         android:textColor="#8B000000"
 
@@ -106,14 +106,14 @@
     <Button
         android:id="@+id/buttonAddRoom_w_values"
         style="@style/Button.LightBlue"
-        android:layout_width="88dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
 
 
         android:layout_marginTop="20dp"
         android:foregroundGravity="center"
         android:gravity="center"
-        android:text="Add"
+        android:text="@string/btn_addDevice"
         android:textAlignment="center"
         android:theme="@style/Button.LightBlue"
         app:cornerRadius="15dp"
